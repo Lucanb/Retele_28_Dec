@@ -10,6 +10,7 @@
 #include <iostream>
 #include <string>
 #include<vector>
+
 using namespace std;
 
 string returningStr;
@@ -24,7 +25,6 @@ void parsing(string s, vector<string> &result) {
             copy += s[i];
 
         if (s[i] == '\n') {
-            cout<<copy<<'\n';
             result.push_back(copy);
             copy = "";
         }
@@ -67,10 +67,10 @@ struct HandlerUserDB {
         }
 
         // TODO: VERIFICA DACA USERNAME-ul nu e luat
-        string sqlVerif ;
-         sqlVerif =
-                  "SELECT userName FROM Users WHERE userName=" +
-                    string("\'") + user.userName + string("\'");
+        string sqlVerif;
+        sqlVerif =
+                "SELECT userName FROM Users WHERE userName=" +
+                string("\'") + user.userName + string("\'");
         string sqlQuery =
                 "INSERT INTO Users (isAdmin,userName,firstname,lastname,birthday,accountCreationDate,profileDescription) VALUES(" +
                 to_string(user.isAdmin) + "," +
@@ -80,38 +80,36 @@ struct HandlerUserDB {
                 "\'" + user.birthday + "\'," +
                 "\'" + user.accountCreationDate + "\'," +
                 "\'" + user.profileDescription + "\')";
-       cout<<sqlVerif;
 
         rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
 
-        if (rc != SQLITE_OK)
-        {
+        if (rc != SQLITE_OK) {
             fprintf(stderr, "Select doesn't work %s\n", err_msg);
             return 0;
         } else {
 
             vector<string> s;
             parsing(returningStr, s);
-              if (int(s.size()) == 1) {
+            if (int(s.size()) == 1) {
 
-                  rc = sqlite3_exec(db, sqlQuery.c_str(), 0, 0, &err_msg);
-                  if (rc != SQLITE_OK) {
+                rc = sqlite3_exec(db, sqlQuery.c_str(), 0, 0, &err_msg);
+                if (rc != SQLITE_OK) {
 
-                      fprintf(stderr, "SQL error on insert user: %s\n", err_msg);
+                    fprintf(stderr, "SQL error on insert user: %s\n", err_msg);
 
-                      sqlite3_free(err_msg);
-                      sqlite3_close(db);
-                      return 0;
-                  } else {
-                      cout << "User Created!" << '\n';
-                      return 1;
-                  }
-              } else {
-                  fprintf(stderr, "SQL error on user already exists: %s\n");
-                  sqlite3_close(db);
-                  return 0;
-              }
-          }
+                    sqlite3_free(err_msg);
+                    sqlite3_close(db);
+                    return 0;
+                } else {
+                    cout << "User Created!" << '\n';
+                    return 1;
+                }
+            } else {
+                fprintf(stderr, "SQL error on user already exists: %s\n");
+                sqlite3_close(db);
+                return 0;
+            }
+        }
     }
 
     User getUser(int id) {
@@ -131,73 +129,59 @@ struct HandlerUserDB {
             return User(-1, -1, "Error Open Data Base", "Error", "Error", "Error", "Error", "Error");
         }
 
-        /// Aici trebuie sa vad daca exista utilizatorul meu. Altfel returnez iar cv
 
-        string sqlVerif = "SELECT EXISTS(SELECT id FROM Users WHERE id=" + to_string(id) +
-                          ")"; /// cauta dupa id.(eu cautam dupa userName)
+        string sqlVerif = "SELECT id FROM Users WHERE id=" + to_string(id);
 
-        rc = sqlite3_exec(db, sqlVerif.c_str(), 0, 0, &err_msg);
-        /// Ar trb in loc de 0 sa bag si functia callback ca sa iau din acel select cv
+        rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
 
-        /// Test : nu prea e oke
-        /*
-                if(rc!=SQLITE_OK)
-                {
-                    fprintf(stderr, "Cannot use existance select: %s\n", sqlite3_errmsg(db));
-                    sqlite3_close(db);
-                    return User(-2,-2,"Error at SELECT EXISTANCE","Error","Error","Error","Error","Error");
-                }
-                else
-                {
-                    int exists=sqlite3_column_int(stmt,0); ///Atentie ca asta cred ca retureaza mereu 0 si daca pun callnack-ul
-                   if(exists == 0) {
-                       fprintf(stderr, "Cannot find the user: %s\n", sqlite3_errmsg(db));
-                       sqlite3_close(db);
-                       return User(-3, -3, "Error User Doesn't Exists", "Error", "Error", "Error", "Error", "Error");
-                   }
-                   else  ///Am gasit userul
-                   {
-                   */
-        sqlVerif = "SELECT * FROM Users WHERE id=" + id;
-        // sqlVerif = "SELECT * FROM Users WHERE id = Users.id"; /// cauta dupa id in loc de userName.
-        //  era int rc
-        rc = sqlite3_exec(db, sqlVerif.c_str(), 0, 0, &err_msg); /// Callback
         if (rc != SQLITE_OK) {
-            ///!!!!!AICI SE BLOCHEAZA PRIMA FUNCTIE
-            fprintf(stderr, "Select comand doesn t work: %s\n", sqlite3_errmsg(db));
+            fprintf(stderr, "Cannot use existance select: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
-            return User(-5, -5, "Error using select", "Error", "Error", "Error", "Error", "Error");
+            return User(-2, -2, "Error at SELECT EXISTANCE", "Error", "Error", "Error", "Error", "Error");
         } else {
-            int admin = sqlite3_column_int(stmt, 0);
-            const unsigned char *userN = sqlite3_column_text(stmt, 1);
-            const unsigned char *firstN = sqlite3_column_text(stmt, 2);
-            const unsigned char *lastN = sqlite3_column_text(stmt, 3);
-            const unsigned char *birth = sqlite3_column_text(stmt, 4);
-            const unsigned char *accountDate = sqlite3_column_text(stmt, 5);
-            const unsigned char *profileDesc = sqlite3_column_text(stmt, 6);
-            bool isAdmin;
-            std::string userName;
-            std::string firstname;
-            std::string lastname;
-            std::string birthday;
-            std::string accountCreationDate;
-            std::string profileDescription;
-            /*
-             isAdmin = bool(admin);    /// REINTERPRET_CAST TRB SA-I DAU
-             userName  = userN;
-             firstname = firstN;
-             lastname  = lasrN;
-             birthday  = birth;
-             accountCreationDate = accountDate;
-             profileDescription = profileDesc;
-          */
-            cout << "User Getted!" << '\n';
-            return User(id, isAdmin, userName, firstname, lastname, birthday, accountCreationDate, profileDescription);
-        }
-    }
-    //   }
+            vector<string> s;
+            parsing(returningStr, s);
+            if (s.size() < 1) {
+                fprintf(stderr, "Cannot find the user: %s\n", sqlite3_errmsg(db));
+                sqlite3_close(db);
+                return User(-3, -3, "Error User Doesn't Exists", "Error", "Error", "Error", "Error", "Error");
+            } else
+            {
 
-    // }
+                string sqlQuery =
+                        "SELECT isAdmin,userName,firstname,lastname,birthday,accountCreationDate FROM Users WHERE id=" +
+                        to_string(id);
+
+                rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
+                if (rc != SQLITE_OK) {
+                    fprintf(stderr, "Select comand doesn t work: %s\n", sqlite3_errmsg(db));
+                    sqlite3_close(db);
+                    return User(-5, -5, "Error using select", "Error", "Error", "Error", "Error", "Error");
+                } else {
+                    vector<string> s;
+                    parsing(returningStr, s);
+                    bool isAdmin;
+
+                    if(s[0]=="0")
+                        isAdmin=0;
+                    else
+                        isAdmin=1;
+                    std::string userName=s[1];
+                    std::string firstname=s[2];
+                    std::string lastname=s[3];
+                    std::string birthday=s[4];
+                    std::string accountCreationDate=s[5];
+                    std::string profileDescription=s[6];
+
+                    cout << "User Getted!" << '\n';
+                    return User(id, isAdmin, userName, firstname, lastname, birthday, accountCreationDate,
+                                profileDescription);
+                }
+            }
+        }
+
+    }
+
     /*
            functia primeste ca si parametru un User object
            faci update in Users table unde id din parametru = id din tabel

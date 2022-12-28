@@ -23,12 +23,10 @@ int main()
 
     HandlerUserDB handler;
     handler.createUser(user);
-
-    /*
     User userGet = handler.getUser(1);
-    cout << userGet.userName;
-    cout << userGet.lastname;
-
+    cout << userGet.userName<<'\n';
+    cout << userGet.lastname<<'\n';
+/*
     userGet.userName = "updated username";
     handler.updateUser(userGet);
     userGet = handler.getUser(1);
