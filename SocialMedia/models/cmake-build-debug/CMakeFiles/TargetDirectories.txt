@@ -1,0 +1,3 @@
+/home/lolluckestar/Desktop/Retele/Proiect/SocialMedia/models/cmake-build-debug/CMakeFiles/models.dir
+/home/lolluckestar/Desktop/Retele/Proiect/SocialMedia/models/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/lolluckestar/Desktop/Retele/Proiect/SocialMedia/models/cmake-build-debug/CMakeFiles/rebuild_cache.dir
