@@ -16,18 +16,24 @@ struct HandlerUserDB
 
     HandlerUserDB() = default;
 
-    static int callback(void *data, int argc, char **argv, char **azColName)
+    static string callback(void *data, int argc, char **argv, char **azColName)
     {
         int i;
         fprintf(stderr, "%s: ", (const char *)data);
-
+        string returningStr = "";
         for (i = 0; i < argc; i++)
         {
-            printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+            returningStr += azColName[i];
+            returningStr += "=";
+            returningStr += argv[i] ? argv[i] : "NULL";
+            returningStr += "\n";
+
+            // printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
         }
+        return returningStr;
 
         printf("\n");
-        return 0;
+        return "";
     }
 
     int createUser(

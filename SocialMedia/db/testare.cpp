@@ -13,6 +13,33 @@ using namespace std;
 
 int main()
 {
+    User user;
+    user.userName = "test username";
+    user.firstname = "test firstname";
+    user.lastname = "test lastname";
+    user.userName = "test username";
+    user.userName = "test username";
+    // create the rest of the user
+
+    HandlerUserDB handler;
+    handler.createUser(user);
+
+    User userGet = handler.getUser(1);
+    cout << userGet.userName;
+    cout << userGet.lastname;
+
+    userGet.userName = "updated username";
+    handler.updateUser(userGet);
+    userGet = handler.getUser(1);
+    cout << userGet.userName;
+
+    handler.deleteUser(1);
+    User userGet = handler.getUser(1);
+}
+
+/*
+int main()
+{
     string userName = "";
     string firstName = "";
     string lastName = "ioana";
@@ -70,3 +97,4 @@ int main()
     f.updateNews(news);
     // std::cout<<"It works!"<<'\n';
 }
+*/
