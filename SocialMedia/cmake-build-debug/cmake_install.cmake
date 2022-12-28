@@ -1,4 +1,4 @@
-# Install script for directory: /home/lolluckestar/Desktop/Retele/Proiect/SocialMedia
+# Install script for directory: /home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/lolluckestar/Desktop/Retele/Proiect/SocialMedia/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

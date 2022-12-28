@@ -1,4 +1,4 @@
-/snap/clion/219/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/snap/clion/219/bin/ninja/linux/ninja -G Ninja -S /home/lolluckestar/Desktop/Retele/Proiect/SocialMedia -B /home/lolluckestar/Desktop/Retele/Proiect/SocialMedia/cmake-build-debug
+/snap/clion/219/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/snap/clion/219/bin/ninja/linux/ninja -G Ninja -S /home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia -B /home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/lolluckestar/Desktop/Retele/Proiect/SocialMedia/cmake-build-debug
+-- Build files have been written to: /home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug
