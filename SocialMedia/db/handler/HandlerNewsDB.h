@@ -5,7 +5,7 @@
 #ifndef SOCIALMEDIA_HANDLERNEWSDB_H
 #define SOCIALMEDIA_HANDLERNEWSDB_H
 
-#include "GlobalFunction.h"
+//#include "GlobalFunction.h"
 #include "../../models/News.h"
 #include <iostream>
 #include <string>

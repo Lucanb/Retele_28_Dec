@@ -7,7 +7,7 @@
 #include "../../models/FriendRequest.h"
 #include<iostream>
 #include<string>
-#include"GlobalFunction.h"
+//#include"GlobalFunction.h"
 
 using namespace std;
 

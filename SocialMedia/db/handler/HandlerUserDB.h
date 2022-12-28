@@ -9,46 +9,56 @@
 #include "../../db/mydb/sqlite3.h"
 #include <iostream>
 #include <string>
+#include<vector>
 using namespace std;
 
-struct HandlerUserDB
-{
+string returningStr;
+
+void parsing(string s, vector<string> &result) {
+    string copy = "";
+    for (int i = 0; i < s.size(); i++) {
+        if (s[i] == '=') {
+            copy = "";
+        }
+        if (s[i] != '=' && s[i] != '\n')
+            copy += s[i];
+
+        if (s[i] == '\n') {
+            cout<<copy<<'\n';
+            result.push_back(copy);
+            copy = "";
+        }
+    }
+
+}
+
+static int callback(void *data, int argc, char **argv, char **azColName) {
+    returningStr = ""; //Aici initializez global ul;
+    int i;
+
+    for (i = 0; i < argc; i++) {
+        returningStr += azColName[i];
+        returningStr += "=";
+        returningStr += argv[i] ? argv[i] : "NULL";
+        returningStr += "\n";
+    }
+    return 0;
+}
+
+struct HandlerUserDB {
 
     HandlerUserDB() = default;
 
-    static string callback(void *data, int argc, char **argv, char **azColName)
-    {
-        int i;
-        fprintf(stderr, "%s: ", (const char *)data);
-        string returningStr = "";
-        for (i = 0; i < argc; i++)
-        {
-            returningStr += azColName[i];
-            returningStr += "=";
-            returningStr += argv[i] ? argv[i] : "NULL";
-            returningStr += "\n";
-
-            // printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-        }
-        return returningStr;
-
-        printf("\n");
-        return "";
-    }
-
     int createUser(
-        struct User user)
-    {
-        // Incercare_nu stiu daca asa trebuie sau e cv asemanator
+            struct User user) {
 
         sqlite3 *db;
         char *err_msg = 0;
         sqlite3_stmt *res;
 
-        int rc = sqlite3_open("mydb.db", &db); // aici am schimbat din database.db in mydb.db
+        int rc = sqlite3_open("mydb.db", &db);
 
-        if (rc != SQLITE_OK)
-        {
+        if (rc != SQLITE_OK) {
 
             fprintf(stderr, "Cannot open database on insert user: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
@@ -57,69 +67,54 @@ struct HandlerUserDB
         }
 
         // TODO: VERIFICA DACA USERNAME-ul nu e luat
-        // HINT: faci un select pt username-ul ales si daca count-ul pe select e mai mare de 0, atunci e luat
+        string sqlVerif ;
+         sqlVerif =
+                  "SELECT userName FROM Users WHERE userName=" +
+                    string("\'") + user.userName + string("\'");
+        string sqlQuery =
+                "INSERT INTO Users (isAdmin,userName,firstname,lastname,birthday,accountCreationDate,profileDescription) VALUES(" +
+                to_string(user.isAdmin) + "," +
+                "\'" + user.userName + "\'," +
+                "\'" + user.firstname + "\'," +
+                "\'" + user.lastname + "\'," +
+                "\'" + user.birthday + "\'," +
+                "\'" + user.accountCreationDate + "\'," +
+                "\'" + user.profileDescription + "\')";
+       cout<<sqlVerif;
 
-        string sqlVerif = "SELECT count(*) WHERE EXISTS(SELECT userName FROM Users WHERE userName = users.userName)"; // aici trebuia doar val de user. nu users
+        rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
 
-        string sqlQuery = "INSERT INTO Users (isAdmin,userName,firstname,lastname,birthday,accountCreationDate,profileDescription) VALUES(" + to_string(user.isAdmin) + "," +
-                          "\'" + user.userName + "\'," +
-                          "\'" + user.firstname + "\'," +
-                          "\'" + user.lastname + "\'," +
-                          "\'" + user.birthday + "\'," +
-                          "\'" + user.accountCreationDate + "\'," +
-                          "\'" + user.profileDescription + "\')";
-
-        rc = sqlite3_exec(db, sqlVerif.c_str(), 0, 0, &err_msg); // ar trbui sa pun acel callback
-        // Cam asa ar trb   rc =sqlite3_exec(db,sqlVerif.c_str(),callback,0,&err_msg);
-
-        if (rc != SQLITE_OK) // Ca practice la userName nu stiu daca e oke aici.
+        if (rc != SQLITE_OK)
         {
             fprintf(stderr, "Select doesn't work %s\n", err_msg);
             return 0;
-        }
-        else
-        {
-            int selectUser;
-            selectUser = sqlite3_column_int(res, 0);
-            if (selectUser == 0)
-            {
+        } else {
 
-                rc = sqlite3_exec(db, sqlQuery.c_str(), 0, 0, &err_msg);
-                if (rc != SQLITE_OK)
-                {
+            vector<string> s;
+            parsing(returningStr, s);
+              if (int(s.size()) == 1) {
 
-                    fprintf(stderr, "SQL error on insert user: %s\n", err_msg);
+                  rc = sqlite3_exec(db, sqlQuery.c_str(), 0, 0, &err_msg);
+                  if (rc != SQLITE_OK) {
 
-                    sqlite3_free(err_msg);
-                    sqlite3_close(db);
-                    return 0;
-                }
-                else
-                {
-                    cout << "User Created!" << '\n';
-                    return 1;
-                }
-            }
-            else
-            {
-                fprintf(stderr, "SQL error on user already exists: %s\n");
-                sqlite3_close(db);
-                return 0;
-            }
-        }
-        sqlite3_close(db);
-        cout << "User Created" << '\n';
-        return 1;
+                      fprintf(stderr, "SQL error on insert user: %s\n", err_msg);
+
+                      sqlite3_free(err_msg);
+                      sqlite3_close(db);
+                      return 0;
+                  } else {
+                      cout << "User Created!" << '\n';
+                      return 1;
+                  }
+              } else {
+                  fprintf(stderr, "SQL error on user already exists: %s\n");
+                  sqlite3_close(db);
+                  return 0;
+              }
+          }
     }
-    /*
-        functia primeste ca parametru un id
-        faci select in Users table unde id=id
-        rezultatul il parsezi si il pui intr-un User struct si il returnezi
-        daca da fail, returnezi un user empty
-    */
 
-    User getUser(int id)
-    {
+    User getUser(int id) {
 
         sqlite3 *db;
         sqlite3_stmt *stmt;
@@ -127,10 +122,9 @@ struct HandlerUserDB
         char *err_msg = 0;
         sqlite3_stmt *res;
 
-        int rc = sqlite3_open("mydb.db", &db); // aici am schimbat din database.db in mydb.db
+        int rc = sqlite3_open("mydb.db", &db);
 
-        if (rc != SQLITE_OK)
-        {
+        if (rc != SQLITE_OK) {
 
             fprintf(stderr, "Cannot open database on get user: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
@@ -139,7 +133,8 @@ struct HandlerUserDB
 
         /// Aici trebuie sa vad daca exista utilizatorul meu. Altfel returnez iar cv
 
-        string sqlVerif = "SELECT EXISTS(SELECT id FROM Users WHERE id=" + to_string(id) + ")"; /// cauta dupa id.(eu cautam dupa userName)
+        string sqlVerif = "SELECT EXISTS(SELECT id FROM Users WHERE id=" + to_string(id) +
+                          ")"; /// cauta dupa id.(eu cautam dupa userName)
 
         rc = sqlite3_exec(db, sqlVerif.c_str(), 0, 0, &err_msg);
         /// Ar trb in loc de 0 sa bag si functia callback ca sa iau din acel select cv
@@ -167,15 +162,12 @@ struct HandlerUserDB
         // sqlVerif = "SELECT * FROM Users WHERE id = Users.id"; /// cauta dupa id in loc de userName.
         //  era int rc
         rc = sqlite3_exec(db, sqlVerif.c_str(), 0, 0, &err_msg); /// Callback
-        if (rc != SQLITE_OK)
-        {
+        if (rc != SQLITE_OK) {
             ///!!!!!AICI SE BLOCHEAZA PRIMA FUNCTIE
             fprintf(stderr, "Select comand doesn t work: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
             return User(-5, -5, "Error using select", "Error", "Error", "Error", "Error", "Error");
-        }
-        else
-        {
+        } else {
             int admin = sqlite3_column_int(stmt, 0);
             const unsigned char *userN = sqlite3_column_text(stmt, 1);
             const unsigned char *firstN = sqlite3_column_text(stmt, 2);
@@ -211,8 +203,7 @@ struct HandlerUserDB
            faci update in Users table unde id din parametru = id din tabel
            daca reuseste, returneaza 1, daca da fail, returneaza 0
   */
-    int updateUser(User users)
-    {
+    int updateUser(User users) {
         sqlite3 *db;
         sqlite3_stmt *stmt;
 
@@ -221,8 +212,7 @@ struct HandlerUserDB
 
         int rc = sqlite3_open("mydb.db", &db); // aici am schimbat din database.db in mydb.db
 
-        if (rc != SQLITE_OK)
-        {
+        if (rc != SQLITE_OK) {
 
             fprintf(stderr, "Cannot open database on update users: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
@@ -255,16 +245,14 @@ struct HandlerUserDB
                 {
                 */
         /// AICI FAC SET-UL   ; l comment i am pus strig sqlVerif si la rc am scus int rc.
-        string sqlVerif = "UPDATE Users SET isAdmin = " + to_string(users.isAdmin) + ", userName = " + users.userName + ", firstname = users.firstname , lastname = users.lastname , birthday = users.birthday , accountCreationDate = users.accountCreationDate , profileDescription = users.profileDescription WHERE id = users.id";
+        string sqlVerif = "UPDATE Users SET isAdmin = " + to_string(users.isAdmin) + ", userName = " + users.userName +
+                          ", firstname = users.firstname , lastname = users.lastname , birthday = users.birthday , accountCreationDate = users.accountCreationDate , profileDescription = users.profileDescription WHERE id = users.id";
         rc = sqlite3_exec(db, sqlVerif.c_str(), 0, 0, &err_msg); /// Callback
-        if (rc != SQLITE_OK)
-        {
+        if (rc != SQLITE_OK) {
             fprintf(stderr, "Select comand doesn t work: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
             return 0;
-        }
-        else
-        {
+        } else {
             cout << "User Updated!" << '\n';
             return 1;
         }
@@ -276,8 +264,7 @@ struct HandlerUserDB
          stergi din tabel user-ul cu id-ul ala
          daca reuseste, returneaza 1, daca da fail, returneaza 0
      */
-    int deleteUser(int id)
-    {
+    int deleteUser(int id) {
 
         sqlite3 *db;
         sqlite3_stmt *stmt;
@@ -287,8 +274,7 @@ struct HandlerUserDB
 
         int rc = sqlite3_open("mydb.db", &db); // aici am schimbat din database.db in mydb.db
 
-        if (rc != SQLITE_OK)
-        {
+        if (rc != SQLITE_OK) {
 
             fprintf(stderr, "Cannot open database on delete user: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
@@ -323,14 +309,11 @@ struct HandlerUserDB
                         */
         sqlVerif = "DELETE FROM Users WHERE Users.id = id";      /// Atentie trebuia users (corrected)
         rc = sqlite3_exec(db, sqlVerif.c_str(), 0, 0, &err_msg); /// Callback
-        if (rc != SQLITE_OK)
-        {
+        if (rc != SQLITE_OK) {
             fprintf(stderr, "Delete comand doesn t work: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
             return 0;
-        }
-        else
-        {
+        } else {
             cout << "User Deleted!" << '\n';
             return 1;
         }
