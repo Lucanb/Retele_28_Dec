@@ -249,7 +249,7 @@ struct HandlerUserDB
                 {
                 */
         /// AICI FAC SET-UL   ; l comment i am pus strig sqlVerif si la rc am scus int rc.
-        string sqlVerif = "UPDATE Users SET isAdmin = users.isAdmin , userName = users.userName , firstname = users.firstname , lastname = users.lastname , birthday = users.birthday , accountCreationDate = users.accountCreationDate , profileDescription = users.profileDescription WHERE id = users.id";
+        string sqlVerif = "UPDATE Users SET isAdmin = " + to_string(users.isAdmin) + ", userName = " + users.userName + ", firstname = users.firstname , lastname = users.lastname , birthday = users.birthday , accountCreationDate = users.accountCreationDate , profileDescription = users.profileDescription WHERE id = users.id";
         rc = sqlite3_exec(db, sqlVerif.c_str(), 0, 0, &err_msg); /// Callback
         if (rc != SQLITE_OK)
         {
