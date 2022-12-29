@@ -5,30 +5,35 @@
 #ifndef PROIECT_FRIEND_H
 #define PROIECT_FRIEND_H
 
-#include<iostream>
-#include<string>
+#include <iostream>
+#include <string>
 
-struct Friend {
+struct Friend
+{
+    int id;
     int id1;
     int id2;
 
     std::string type;
 
-    Friend(){
+    Friend()
+    {
+        this->id = 0;
         this->id1 = 0;
         this->id2 = 0;
         this->type = "";
     }
 
     Friend(
-            int id1,
-            int id2,
-            std::string type
-    ){
+        int id,
+        int id1,
+        int id2,
+        std::string type)
+    {
+        this->id = id;
         this->id1 = id1;
         this->id2 = id2;
         this->type = type;
     }
-
 };
-#endif //PROIECT_FRIEND_H
+#endif // PROIECT_FRIEND_H

@@ -5,17 +5,20 @@
 #ifndef PROIECT_FRIENDREQUEST_H
 #define PROIECT_FRIENDREQUEST_H
 
-#include<iostream>
-#include<string>
+#include <iostream>
+#include <string>
 
-struct FriendRequest {
+struct FriendRequest
+{
+    int id;
     int id1;
     int id2;
     std::string type;
     bool accepted;
 
-
-    FriendRequest(){
+    FriendRequest()
+    {
+        this->id = 0;
         this->id1 = 0;
         this->id2 = 0;
         this->type = "";
@@ -23,12 +26,13 @@ struct FriendRequest {
     }
 
     FriendRequest(
-            int id1,
-            int id2,
-            std::string type,
-            bool accepted
-    ){
-
+        int id,
+        int id1,
+        int id2,
+        std::string type,
+        bool accepted)
+    {
+        this->id = id;
         this->id1 = id1;
         this->id2 = id2;
         this->type = type;
@@ -36,4 +40,4 @@ struct FriendRequest {
     }
 };
 
-#endif //PROIECT_FRIENDREQUEST_H
+#endif // PROIECT_FRIENDREQUEST_H
