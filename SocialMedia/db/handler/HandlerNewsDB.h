@@ -1,11 +1,12 @@
 //
 // Created by lolluckestar on 15.12.2022.
 //
-
+#pragma once
 #ifndef SOCIALMEDIA_HANDLERNEWSDB_H
 #define SOCIALMEDIA_HANDLERNEWSDB_H
 
-//#include "GlobalFunction.h"
+#include "GlobalFunction.h"
+
 #include "../../models/News.h"
 #include <iostream>
 #include <string>

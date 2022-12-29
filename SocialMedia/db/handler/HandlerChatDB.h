@@ -9,7 +9,7 @@
 #include<iostream>
 #include<string>
 #include <sstream>
-//#include"GlobalFunction.h"
+#include"GlobalFunction.h"
 
 using namespace std;
 

@@ -1,48 +1,16 @@
 //
 // Created by lolluckestar on 11.12.2022.
 //
-
+#pragma once
 #ifndef SOCIALMEDIA_HANDLERUSERDB_H
 #define SOCIALMEDIA_HANDLERUSERDB_H
-
+#include"GlobalFunction.h"
 #include "../../models/User.h"
 #include "../../db/mydb/sqlite3.h"
 #include <iostream>
 #include <string>
 #include<vector>
 using namespace std;
-
-string returningStr;
-
-void parsing(string s, vector<string> &result) {
-    string copy = "";
-    for (int i = 0; i < s.size(); i++) {
-        if (s[i] == '=') {
-            copy = "";
-        }
-        if (s[i] != '=' && s[i] != '\n')
-            copy += s[i];
-
-        if (s[i] == '\n') {
-            result.push_back(copy);
-            copy = "";
-        }
-    }
-
-}
-
-static int callback(void *data, int argc, char **argv, char **azColName) {
-    returningStr = ""; //Aici initializez global ul;
-    int i;
-
-    for (i = 0; i < argc; i++) {
-        returningStr += azColName[i];
-        returningStr += "=";
-        returningStr += argv[i] ? argv[i] : "NULL";
-        returningStr += "\n";
-    }
-    return 0;
-}
 
 struct HandlerUserDB {
 
@@ -90,7 +58,7 @@ struct HandlerUserDB {
 
             vector<string> s;
             parsing(returningStr, s);
-            cout<<s.size();
+           // cout<<s.size();
             if ( int(s.size()) < 1 ) {    //daca ==1 inseamna ca a gasit un user deci exista deja.
 
                 rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
@@ -159,7 +127,7 @@ struct HandlerUserDB {
                 } else {
                     vector<string> s;
                     parsing(returningStr, s);
-                    cout<<returningStr;
+                    //cout<<returningStr;
                     bool isAdmin;
 
                     if (s[0] == "0")
