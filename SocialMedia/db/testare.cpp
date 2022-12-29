@@ -90,7 +90,7 @@ HandlerFriendDB handler;
 handler.createFriend(friendd);
 handler.getFriend(1,0);
 handler.updateFriend(friendd);
-handler.deleteFriend(1,0);
+//handler.deleteFriend(1,0);
  }
 
 /*

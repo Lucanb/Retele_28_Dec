@@ -193,7 +193,7 @@ struct HandlerUserDB {
                         ", accountCreationDate =" + string("\'")
                         + users.accountCreationDate + string("\'") + ", profileDescription =" + string("\'") +
                         users.profileDescription + string("\'") +
-                        " WHERE id = users.id";
+                        " WHERE id =" + to_string(users.id);
                 rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg); /// Callback
                 if (rc != SQLITE_OK) {
                     fprintf(stderr, "Select comand doesn t work: %s\n", sqlite3_errmsg(db));
