@@ -43,7 +43,7 @@ int main()
     handler.deleteUser(1);
     userGet = handler.getUser(1);
     cout<<userGet.id;
-*/
+
 News news;
 news.type="avs";
 news.content="asd";
@@ -59,7 +59,16 @@ handler.updateNews(getNews);
 News test = handler.getNews(1,0);
 cout<<test.title<<'\n';
 //handler.deleteNews(1,2);
-}
+*/
+Message message;
+message.chatId=0;
+HandlerMessageDB handler;
+
+handler.createMessage(message);
+handler.getMessage(1,0);
+handler.updateMessage(message);
+handler.deleteMessage(1,0);
+ }
 
 /*
 int main()
