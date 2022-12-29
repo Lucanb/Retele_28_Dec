@@ -16,7 +16,7 @@ using namespace std;
 
 struct HandlerChatDB {
 
-    HandlerChatDB()=default;
+    HandlerChatDB() = default;
 
 
     int CreateChat(Chat chat) {
@@ -24,7 +24,7 @@ struct HandlerChatDB {
         char *err_msg = 0;
         sqlite3_stmt *res;
 
-        int rc = sqlite3_open("mydb.db", &db); //aici am schimbat din database.db in mydb.db
+        int rc = sqlite3_open("mydb.db", &db);
 
         if (rc != SQLITE_OK) {
             fprintf(stderr, "Cannot open database on insert Chat: %s\n", sqlite3_errmsg(db));
@@ -32,133 +32,133 @@ struct HandlerChatDB {
             return 0;
         }
 
-///chatId nu sunt sigur daca trb inserat.
-          ///Aici trebuie conversie din vector<int> in string:
-           string strMessages;
-           string strId;
+        string strMessages;
+        string strId;
 
-        for(auto it =chat.idMessages.begin();it!=chat.idMessages.end();it++)
-        {
-            if(it != chat.idMessages.begin())
-            {
-               strMessages+="";
+        for (auto it = chat.idMessages.begin(); it != chat.idMessages.end(); it++) {
+            if (it != chat.idMessages.begin()) {
+                strMessages += "";
             }
-            strMessages+= to_string(*it);
+            strMessages += to_string(*it);
         }
 
-        for(auto it =chat.idList.begin();it!=chat.idList.end();it++)
-        { if(it != chat.idList.begin())
-            {
-              strId+="";
+        for (auto it = chat.idList.begin(); it != chat.idList.end(); it++) {
+            if (it != chat.idList.begin()) {
+                strId += "";
             }
-            strId+=to_string(*it);
+            strId += to_string(*it);
         }
 
-     ///GATA Conversia si acum pot insera linistit.
 
-        string sqlQuery = "INSERT INTO Chat (idList,idMessages,title) VALUES(" + strMessages + "," +
-                          "\'" + strId + "\'," +
-                          "\'" + chat.title + "\')";
+        string sqlVerif = "Select idChat FROM Chat WHERE idChat = " + to_string(chat.idChat);
 
+        rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
 
-        rc = sqlite3_exec(db, sqlQuery.c_str(), 0, 0, &err_msg);
         if (rc != SQLITE_OK) {
-
-            fprintf(stderr, "SQL error on create Chat: %s\n", err_msg);
+            fprintf(stderr, "SQL error on create Chat can't say about id existance: %s\n", err_msg);
             sqlite3_free(err_msg);
             sqlite3_close(db);
             return 0;
         } else {
-            sqlite3_close(db);
-            cout << "Chat Inserted" << '\n';
-            return 1;
-        }
+            vector<string> s;
+            parsing(returningStr, s);
+            if (s.size() != 0) {
+                fprintf(stderr, "This id exist in Chat: %s\n", sqlite3_errmsg(db));
+                sqlite3_close(db);
+                return 0;
+            } else {
+                string sqlQuery = "INSERT INTO Chat (idList,idMessages,title) VALUES(" + string("\'") + strMessages
+                                  + string("\'") + string(",") +
+                                  "\'" + strId + "\'," +
+                                  "\'" + chat.title + "\')";
+                rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
+                if (rc != SQLITE_OK) {
 
+                    fprintf(stderr, "SQL error on create Chat: %s\n", err_msg);
+                    sqlite3_free(err_msg);
+                    sqlite3_close(db);
+                    return 0;
+                } else {
+                    sqlite3_close(db);
+                    cout << "Chat Inserted" << '\n';
+                    return 1;
+                }
+            }
+        }
     }
 
-    Chat getChat(int idChat)
-    {
+    Chat getChat(int idChat) {
         sqlite3 *db;
         sqlite3_stmt *stmt;
 
         char *err_msg = 0;
         sqlite3_stmt *res;
 
-        int rc = sqlite3_open("mydb.db", &db); //aici am schimbat din database.db in mydb.db
+        int rc = sqlite3_open("mydb.db", &db);
 
         if (rc != SQLITE_OK) {
 
             fprintf(stderr, "Cannot open database on get Chat: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
-            vector<int>v1,v2;
-            string s="Error";
-            return Chat(-1,v1,v2,s);
+            vector<int> v1, v2;
+            string s = "Error";
+            return Chat(-1, v1, v2, s);
         }
 
-        /// Aici trebuie sa vad daca exista utilizatorul meu. Altfel returnez iar cv ; trb rez ca la userHandler
-/*
-        string sqlVerif = "SELECT EXISTS(SELECT idChat FROM Chat WHERE idChat = Chat.idChat)";
 
-        rc = sqlite3_exec(db, sqlVerif.c_str(), 0, 0, &err_msg);
-        ///Ar trb in loc de 0 sa bag si functia callback ca sa iau din acel select cv
+        string sqlVerif = "SELECT idChat FROM Chat WHERE idChat = " + to_string(idChat);
 
-/// Test : nu prea e oke
+        rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
+
         if (rc != SQLITE_OK) {
             fprintf(stderr, "Cannot use existance select: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
-            vector<int v1,v2>
+            vector<int> v1, v2;
             return Chat(-2, v1, v2, "Error at selection existance");
         } else {
-            int exists = sqlite3_column_int(stmt,
-                                            0); ///Atentie ca asta cred ca retureaza mereu 0 si daca pun callnack-ul
-            if (exists == 0) {
+            vector<string> s;
+            parsing(returningStr, s);
+            if (s.size() == 0) {
                 fprintf(stderr, "Cannot find the user: %s\n", sqlite3_errmsg(db));
                 sqlite3_close(db);
+                vector<int> v1, v2;
                 return Chat(-3, v1, v2, "Error at existance");
-            } else
-            {
-            */
-        string sqlVerif = "SELECT idList,idMessages,title FROM Chat WHERE idChat = Chat.idChat";
-        rc = sqlite3_exec(db, sqlVerif.c_str(), 0, 0, &err_msg);
-        if (rc != SQLITE_OK) {
+            } else {
 
-            fprintf(stderr, "Select comand doesn t work: %s\n", sqlite3_errmsg(db));
-            sqlite3_close(db);
-            vector<int>v1,v2;
-            string s="Error";
-            return Chat(-3,v1,v2,s);
+                string sqlQuery = "SELECT idList,idMessages,title FROM Chat WHERE idChat = " + to_string(idChat);
+                rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
+                if (rc != SQLITE_OK) {
 
-        } else {
-            vector<int>v1,v2;
-            const unsigned char *idLists = sqlite3_column_text(stmt, 0);
-            const unsigned char *idMess  = sqlite3_column_text(stmt, 1);
-            const unsigned char *titles  = sqlite3_column_text(stmt, 2);
+                    fprintf(stderr, "Select comand doesn t work: %s\n", sqlite3_errmsg(db));
+                    sqlite3_close(db);
+                    vector<int> v1, v2;
+                    return Chat(-3, v1, v2, "Error");
 
-            std::string idList;
-            std::string idMessages;
-            std::string title;
+                } else {
+                    vector<int> v1, v2;
+                    std::string idList = s[0];
+                    std::string idMessages = s[1];
+                    std::string title = s[2];
 
-            /*
-                   idList = idLists;    /// REINTERPRET_CAST TRB SA-I DAU
-                   idMessages = idMess;
-                   title = titles;
+                    ///Start Coversion from string to vector<int> :
 
-                   ///Start Coversion from string to vector<int> :
+                    std::stringstream iss(idList);
+                    std::stringstream iss2(idMessages);
+                    int number;
+                    while (iss >> number)
+                        v1.push_back(number);
 
-                            std::stringstream iss( idList );
-                            std::stringstream iss2(idMessages);
-                            int number;
-                            while ( iss >> number )
-                            v1.push_back( number );
+                    while (iss2 >> number)
+                        v2.push_back(number);
 
-                            while ( iss2 >> number )
-                            v2.push_back( number );
-                */
-                   return Chat(idChat,v1,v2,title);
+                    cout << "Chat Getted!" << '\n';
+                    return Chat(idChat, v1, v2, title);
 
-            cout << "Chat getted!" << '\n';
+
+                }
+
+            }
         }
-
     }
 
     int updateChat(Chat chat) {
@@ -168,7 +168,7 @@ struct HandlerChatDB {
         char *err_msg = 0;
         sqlite3_stmt *res;
 
-        int rc = sqlite3_open("mydb.db", &db); //aici am schimbat din database.db in mydb.db
+        int rc = sqlite3_open("mydb.db", &db);
 
         if (rc != SQLITE_OK) {
 
@@ -177,70 +177,59 @@ struct HandlerChatDB {
             return 0;
         }
 
-        /// Aici trebuie sa vad daca exista utilizatorul meu. Altfel returnez iar cv
-        /*
-            string sqlVerif="SELECT EXISTS(SELECT idChat FROM Chat WHERE idChat = Chat.idChat)"; //
+        string sqlVerif = "SELECT idChat FROM Chat WHERE idChat = " + to_string(chat.idChat);
 
-            rc = sqlite3_exec(db,sqlVerif.c_str(),0,0,&err_msg);
-            ///Ar trb in loc de 0 sa bag si functia callback ca sa iau din acel select cv
-
-    /// Test : nu prea e oke
-            if(rc!=SQLITE_OK)
-            {
-                fprintf(stderr, "Cannot check id existance select: %s\n", sqlite3_errmsg(db));
-                sqlite3_close(db);
-                return 0;
-            }
-            else
-            {
-                int exists=sqlite3_column_int(stmt,0); ///Atentie ca asta cred ca retureaza mereu 0 si daca pun callnack-ul
-                if(exists == 0) {
-                    fprintf(stderr, "Cannot find the id: %s\n", sqlite3_errmsg(db));
-                    sqlite3_close(db);
-                    return 0;
-                }
-                else  ///Am gasit id-ul
-                {
-                */
-
-        ///Problem : Sa fac conversia din vector<int> in string
-        string strMessages;
-        string strId;
-
-        for(auto it =chat.idMessages.begin();it!=chat.idMessages.end();it++)
-        {
-            if(it != chat.idMessages.begin())
-            {
-                strMessages+="";
-            }
-            strMessages+= to_string(*it);
-        }
-
-        for(auto it =chat.idList.begin();it!=chat.idList.end();it++)
-        { if(it != chat.idList.begin())
-            {
-                strId+="";
-            }
-            strId+=to_string(*it);
-        }
-
-///Aici ar trb alea convertite dar cred ca e alta pb(mai jos merge ca face chat ca fiind tabela nu oiectul meu)
-
-        string sqlVerif = "UPDATE Chat SET idList = chat.idList , idMessages = chat.idMessages , title = chat.title WHERE chat.idChat = Chat.idChat";
-        rc = sqlite3_exec(db, sqlVerif.c_str(), 0, 0, &err_msg); ///Callback
+        rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
         if (rc != SQLITE_OK) {
-            fprintf(stderr, "Set comand doesn t work on Chat: %s\n", sqlite3_errmsg(db));
+            fprintf(stderr, "Cannot check id existance select: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
             return 0;
-
         } else {
-            cout << "Chat Updated" << '\n';
-            return 1;
+            vector<string> s;
+            parsing(returningStr, s);
+            if (s.size() == 0) {
+                fprintf(stderr, "Cannot find the id: %s\n", sqlite3_errmsg(db));
+                sqlite3_close(db);
+                return 0;
+            } else {
+
+                string strMessages;
+                string strId;
+
+                for (auto it = chat.idMessages.begin(); it != chat.idMessages.end(); it++) {
+                    if (it != chat.idMessages.begin()) {
+                        strMessages += "";
+                    }
+                    strMessages += to_string(*it);
+                }
+
+                for (auto it = chat.idList.begin(); it != chat.idList.end(); it++) {
+                    if (it != chat.idList.begin()) {
+                        strId += "";
+                    }
+                    strId += to_string(*it);
+                }
+
+                string sqlQuery =
+                        "UPDATE Chat SET idList =" + string("\'") + strId + string("\'") + " , idMessages = " +
+                        string("\'") + strMessages + string("\'") + ", title = " + string("\'") + chat.title +
+                        string("\'")
+                        + " WHERE idChat = " + to_string(chat.idChat);
+                rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg); ///Callback
+                if (rc != SQLITE_OK) {
+                    fprintf(stderr, "Set comand doesn t work on Chat: %s\n", sqlite3_errmsg(db));
+                    sqlite3_close(db);
+                    return 0;
+
+                } else {
+                    cout << "Chat Updated!" << '\n';
+                    return 1;
+                }
+            }
         }
     }
 
-    int deleteChat(int idChat)
-    {
+    int deleteChat(int idChat) {
         sqlite3 *db;
         sqlite3_stmt *stmt;
 
@@ -249,53 +238,43 @@ struct HandlerChatDB {
 
         int rc = sqlite3_open("mydb.db", &db); //aici am schimbat din database.db in mydb.db
 
-        if (rc != SQLITE_OK)
-        {
+        if (rc != SQLITE_OK) {
 
             fprintf(stderr, "Cannot open database on Chat : %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
             return 0;
         }
 
-        /// Aici trebuie sa vad daca exista utilizatorul meu. Altfel returnez iar cv
+        string sqlVerif = "SELECT idChat FROM Chat WHERE idChat = " + to_string(idChat);
 
-        string sqlVerif="SELECT EXISTS(SELECT idChat FROM Chat WHERE Chat.idChat = idChat )";
+        rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
 
-        rc = sqlite3_exec(db,sqlVerif.c_str(),0,0,&err_msg);
-        ///Ar trb in loc de 0 sa bag si functia callback ca sa iau din acel select cv
-
-/// Test : nu prea e oke e pus cu comm mai jos :
-/*
-            if(rc!=SQLITE_OK)
-            {
-                fprintf(stderr, "Cannot check id existance select: %s\n", sqlite3_errmsg(db));
-                sqlite3_close(db);
-                return 0;
-            }
-            else
-            {
-                int exists=sqlite3_column_int(stmt,0); ///Atentie ca asta cred ca retureaza mereu 0 si daca pun callnack-ul
-                if(exists == 0) {
-                    fprintf(stderr, "Cannot find the id: %s\n", sqlite3_errmsg(db));
-                    sqlite3_close(db);
-                    return 0;
-                }
-                else  ///Am gasit id-ul
-                {
-                */
-        sqlVerif = "DELETE FROM Chat WHERE idChat = Chat.idChat";   ///Atentie trebuia users (corrected)
-        rc = sqlite3_exec(db,sqlVerif.c_str(),0,0,&err_msg);
-        if(rc!=SQLITE_OK)
-        {
-            fprintf(stderr, "Delete comand doesn t work: %s\n", sqlite3_errmsg(db));
+        if (rc != SQLITE_OK) {
+            fprintf(stderr, "Cannot check id existance select: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
             return 0;
-        }
-        else
-        {
-            cout<<"Chat deleted"<<'\n';
-            return 1;
+        } else {
+                   vector<string>s;
+                   parsing(returningStr,s);
+            if (s.size() == 0) {
+                fprintf(stderr, "Cannot find the id: %s\n", sqlite3_errmsg(db));
+                sqlite3_close(db);
+                return 0;
+            } else
+            {
 
+                string sqlQuery = "DELETE FROM Chat WHERE idChat =" + to_string(idChat);
+                rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
+                if (rc != SQLITE_OK) {
+                    fprintf(stderr, "Delete comand doesn t work: %s\n", sqlite3_errmsg(db));
+                    sqlite3_close(db);
+                    return 0;
+                } else {
+                    cout << "Chat Deleted!" << '\n';
+                    return 1;
+
+                }
+            }
         }
     }
 

@@ -69,13 +69,21 @@ handler.getMessage(1,0);
 handler.updateMessage(message);
 //handler.deleteMessage(1,0);
 */
-
+/*
 FriendRequest friendRequest;
 HandlerFriendRequestDB handler;
 handler.createFriendRequest(friendRequest);
 
 handler.getFriendRequest(1,0);
 handler.updateFriendRequest(friendRequest);
+ */
+Chat chat;
+chat.idChat=0;
+HandlerChatDB handler;
+handler.CreateChat(chat);
+handler.getChat(1);
+handler.updateChat(chat);
+handler.deleteChat(1);
  }
 
 /*
