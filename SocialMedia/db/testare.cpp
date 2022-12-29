@@ -23,7 +23,7 @@ int main()
     user.userName = "test username";
     user.userName = "test username";
     // create the rest of the user
-
+/*
     HandlerUserDB handler;
     handler.createUser(user);
 
@@ -44,6 +44,21 @@ int main()
     userGet = handler.getUser(1);
     cout<<userGet.id;
 */
+News news;
+news.type="avs";
+news.content="asd";
+news.title="ion";
+news.authorId=0;
+
+HandlerNewsDB handler;
+handler.createNews(news);
+News getNews=handler.getNews(1,0);
+
+getNews.title="Try";
+handler.updateNews(getNews);
+News test = handler.getNews(1,0);
+cout<<test.title<<'\n';
+//handler.deleteNews(1,2);
 }
 
 /*
