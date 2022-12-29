@@ -1,4 +1,4 @@
 # ninja log v5
 0	343	1672264501342518160	CMakeFiles/SocialMedia.dir/main.cpp.o	7947f18cd2474c42
-0	354	1672264501350517980	CMakeFiles/SocialMedia.dir/db/InitializeDB.cpp.o	5dff50d5f76228d1
-0	399	1672264501398516898	CMakeFiles/SocialMedia.dir/db/testare.cpp.o	46247334e906631
+1	223	1672277911814394750	CMakeFiles/SocialMedia.dir/db/InitializeDB.cpp.o	5dff50d5f76228d1
+1	397	1672277911990392503	CMakeFiles/SocialMedia.dir/db/testare.cpp.o	46247334e906631

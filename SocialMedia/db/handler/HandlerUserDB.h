@@ -10,7 +10,6 @@
 #include <iostream>
 #include <string>
 #include<vector>
-
 using namespace std;
 
 string returningStr;
@@ -66,8 +65,8 @@ struct HandlerUserDB {
             return 0;
         }
 
-        // TODO: VERIFICA DACA USERNAME-ul nu e luat
-        string sqlVerif;
+
+        string sqlVerif ;
         sqlVerif =
                 "SELECT userName FROM Users WHERE userName=" +
                 string("\'") + user.userName + string("\'");
@@ -83,20 +82,21 @@ struct HandlerUserDB {
 
         rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
 
-        if (rc != SQLITE_OK) {
+        if (rc != SQLITE_OK)
+        {
             fprintf(stderr, "Select doesn't work %s\n", err_msg);
             return 0;
         } else {
 
             vector<string> s;
             parsing(returningStr, s);
-            if (int(s.size()) == 1) {
+            cout<<s.size();
+            if ( int(s.size()) < 1 ) {    //daca ==1 inseamna ca a gasit un user deci exista deja.
 
-                rc = sqlite3_exec(db, sqlQuery.c_str(), 0, 0, &err_msg);
+                rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
                 if (rc != SQLITE_OK) {
 
                     fprintf(stderr, "SQL error on insert user: %s\n", err_msg);
-
                     sqlite3_free(err_msg);
                     sqlite3_close(db);
                     return 0;
@@ -148,7 +148,7 @@ struct HandlerUserDB {
             } else {
 
                 string sqlQuery =
-                        "SELECT isAdmin,userName,firstname,lastname,birthday,accountCreationDate FROM Users WHERE id=" +
+                        "SELECT isAdmin,userName,firstname,lastname,birthday,accountCreationDate,profileDescription FROM Users WHERE id=" +
                         to_string(id);
 
                 rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
@@ -159,6 +159,7 @@ struct HandlerUserDB {
                 } else {
                     vector<string> s;
                     parsing(returningStr, s);
+                    cout<<returningStr;
                     bool isAdmin;
 
                     if (s[0] == "0")
@@ -175,6 +176,7 @@ struct HandlerUserDB {
                     cout << "User Getted!" << '\n';
                     return User(id, isAdmin, userName, firstname, lastname, birthday, accountCreationDate,
                                 profileDescription);
+
                 }
             }
         }

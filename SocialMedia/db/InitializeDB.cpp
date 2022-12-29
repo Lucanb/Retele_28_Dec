@@ -110,7 +110,7 @@ int createTables() {
 int Interogate()
 {
     char *err=nullptr;
-    const char *test="INSERT INTO Users VALUES(1,0,'abc','def','efg','hij','asd','fdg')";
+    const char *test="INSERT INTO Users VALUES(0,0,'ab','df','eg','hij','asd','fdg')";
     int vfComand=sqlite3_exec(db, test, 0, 0, &err);
     if(vfComand != SQLITE_OK)
     {
@@ -139,7 +139,7 @@ int getUser()
 int main() {
     createTables();
 
-       Interogate();
-//    getUser();
+   // Interogate();
+   // getUser();
     cout << "DB INITIALIZED\n";
 }

@@ -1,4 +1,7 @@
 //
+// Created by lolluckestar on 29.12.2022.
+//
+//
 // Salut
 //
 #include <iostream>
@@ -24,14 +27,19 @@ int main()
     HandlerUserDB handler;
     handler.createUser(user);
 
-    User userGet = handler.getUser(2);
+
+    User userGet = handler.getUser(1);
     cout << userGet.userName<<'\n';
     cout << userGet.lastname<<'\n';
-/*
+
+
     user.userName = "updated username";
-    handler.updateUser(user);
-    user = handler.getUser(1);
+    handler.updateUser(userGet);
+    userGet = handler.getUser(1);
     cout << user.userName<<'\n';
+
+
+/*
     handler.deleteUser(1);
     userGet = handler.getUser(1);
     cout<<userGet.id;
