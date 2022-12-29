@@ -145,8 +145,7 @@ struct HandlerUserDB {
                 fprintf(stderr, "Cannot find the user: %s\n", sqlite3_errmsg(db));
                 sqlite3_close(db);
                 return User(-3, -3, "Error User Doesn't Exists", "Error", "Error", "Error", "Error", "Error");
-            } else
-            {
+            } else {
 
                 string sqlQuery =
                         "SELECT isAdmin,userName,firstname,lastname,birthday,accountCreationDate FROM Users WHERE id=" +
@@ -162,16 +161,16 @@ struct HandlerUserDB {
                     parsing(returningStr, s);
                     bool isAdmin;
 
-                    if(s[0]=="0")
-                        isAdmin=0;
+                    if (s[0] == "0")
+                        isAdmin = 0;
                     else
-                        isAdmin=1;
-                    std::string userName=s[1];
-                    std::string firstname=s[2];
-                    std::string lastname=s[3];
-                    std::string birthday=s[4];
-                    std::string accountCreationDate=s[5];
-                    std::string profileDescription=s[6];
+                        isAdmin = 1;
+                    std::string userName = s[1];
+                    std::string firstname = s[2];
+                    std::string lastname = s[3];
+                    std::string birthday = s[4];
+                    std::string accountCreationDate = s[5];
+                    std::string profileDescription = s[6];
 
                     cout << "User Getted!" << '\n';
                     return User(id, isAdmin, userName, firstname, lastname, birthday, accountCreationDate,
@@ -182,11 +181,6 @@ struct HandlerUserDB {
 
     }
 
-    /*
-           functia primeste ca si parametru un User object
-           faci update in Users table unde id din parametru = id din tabel
-           daca reuseste, returneaza 1, daca da fail, returneaza 0
-  */
     int updateUser(User users) {
         sqlite3 *db;
         sqlite3_stmt *stmt;
@@ -194,7 +188,7 @@ struct HandlerUserDB {
         char *err_msg = 0;
         sqlite3_stmt *res;
 
-        int rc = sqlite3_open("mydb.db", &db); // aici am schimbat din database.db in mydb.db
+        int rc = sqlite3_open("mydb.db", &db);
 
         if (rc != SQLITE_OK) {
 
@@ -203,51 +197,47 @@ struct HandlerUserDB {
             return 0;
         }
 
-        /// Aici trebuie sa vad daca exista utilizatorul meu. Altfel returnez iar cv
-        /*
-            string sqlVerif="SELECT EXISTS(SELECT id FROM Users WHERE id = users.id)"; //
+        string sqlVerif = "SELECT id FROM Users WHERE id =" + to_string(users.id);
 
-            rc = sqlite3_exec(db,sqlVerif.c_str(),0,0,&err_msg);
-            ///Ar trb in loc de 0 sa bag si functia callback ca sa iau din acel select cv
+        rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
 
-    /// Test : nu prea e oke
-            if(rc!=SQLITE_OK)
-            {
-                fprintf(stderr, "Cannot check id existance select: %s\n", sqlite3_errmsg(db));
-                sqlite3_close(db);
-                return 0;
-            }
-            else
-            {
-                int exists=sqlite3_column_int(stmt,0); ///Atentie ca asta cred ca retureaza mereu 0 si daca pun callnack-ul
-                if(exists == 0) {
-                    fprintf(stderr, "Cannot find the id: %s\n", sqlite3_errmsg(db));
-                    sqlite3_close(db);
-                    return 0;
-                }
-                else  ///Am gasit id-ul
-                {
-                */
-        /// AICI FAC SET-UL   ; l comment i am pus strig sqlVerif si la rc am scus int rc.
-        string sqlVerif = "UPDATE Users SET isAdmin = " + to_string(users.isAdmin) + ", userName = " + users.userName +
-                          ", firstname = users.firstname , lastname = users.lastname , birthday = users.birthday , accountCreationDate = users.accountCreationDate , profileDescription = users.profileDescription WHERE id = users.id";
-        rc = sqlite3_exec(db, sqlVerif.c_str(), 0, 0, &err_msg); /// Callback
         if (rc != SQLITE_OK) {
-            fprintf(stderr, "Select comand doesn t work: %s\n", sqlite3_errmsg(db));
+            fprintf(stderr, "Cannot check id existance select: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
             return 0;
         } else {
-            cout << "User Updated!" << '\n';
-            return 1;
+            vector<string> s;
+            parsing(returningStr, s);
+            if (s.size() == 0) {
+                fprintf(stderr, "Cannot find the id: %s\n", sqlite3_errmsg(db));
+                sqlite3_close(db);
+                return 0;
+            } else {
+
+                string sqlQuery =
+                        "UPDATE Users SET isAdmin = " + to_string(users.isAdmin) + ", userName = " + string("\'") +
+                        users.userName +
+                        string("\'") + ", firstname =" + string("\'") + users.firstname + string("\'") +
+                        ", lastname =" + string("\'") + users.lastname +
+                        string("\'") + ", birthday =" + string("\'") + users.birthday + string("\'") +
+                        ", accountCreationDate =" + string("\'")
+                        + users.accountCreationDate + string("\'") + ", profileDescription =" + string("\'") +
+                        users.profileDescription + string("\'") +
+                        " WHERE id = users.id";
+                rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg); /// Callback
+                if (rc != SQLITE_OK) {
+                    fprintf(stderr, "Select comand doesn t work: %s\n", sqlite3_errmsg(db));
+                    sqlite3_close(db);
+                    return 0;
+                } else {
+                    cout << "User Updated!" << '\n';
+                    return 1;
+                }
+            }
         }
     }
-    // }
-    // }
-    /*
-         functia primeste ca si parametru un id
-         stergi din tabel user-ul cu id-ul ala
-         daca reuseste, returneaza 1, daca da fail, returneaza 0
-     */
+
+
     int deleteUser(int id) {
 
         sqlite3 *db;
@@ -265,48 +255,39 @@ struct HandlerUserDB {
             return 0;
         }
 
-        /// Aici trebuie sa vad daca exista utilizatorul meu. Altfel returnez iar cv
+        string sqlVerif = "SELECT id FROM Users WHERE Users.id =" + to_string(id); // Da seg fault
 
-        string sqlVerif = "SELECT EXISTS(SELECT id FROM Users WHERE Users.id = id)"; // Da seg fault
+        rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
 
-        rc = sqlite3_exec(db, sqlVerif.c_str(), 0, 0, &err_msg);
-        /// Ar trb in loc de 0 sa bag si functia callback ca sa iau din acel select cv
-
-        /// Test : nu prea e oke e pus cu comm mai jos :
-        /*
-                    if(rc!=SQLITE_OK)
-                    {
-                        fprintf(stderr, "Cannot check id existance select: %s\n", sqlite3_errmsg(db));
-                        sqlite3_close(db);
-                        return 0;
-                    }
-                    else
-                    {
-                        int exists=sqlite3_column_int(stmt,0); ///Atentie ca asta cred ca retureaza mereu 0 si daca pun callnack-ul
-                        if(exists == 0) {
-                            fprintf(stderr, "Cannot find the id: %s\n", sqlite3_errmsg(db));
-                            sqlite3_close(db);
-                            return 0;
-                        }
-                        else  ///Am gasit id-ul
-                        {
-                        */
-        sqlVerif = "DELETE FROM Users WHERE Users.id = id";      /// Atentie trebuia users (corrected)
-        rc = sqlite3_exec(db, sqlVerif.c_str(), 0, 0, &err_msg); /// Callback
         if (rc != SQLITE_OK) {
-            fprintf(stderr, "Delete comand doesn t work: %s\n", sqlite3_errmsg(db));
+            fprintf(stderr, "Cannot check id existance select: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
             return 0;
         } else {
-            cout << "User Deleted!" << '\n';
-            return 1;
-        }
-        cout << "nici aici nush ce sa i fac" << '\n';
-        return 1;
-    }
-    //          }
+            vector<string> s;
+            parsing(returningStr, s);
+            if (s.size() == 0) {
+                fprintf(stderr, "Cannot find the id: %s\n", sqlite3_errmsg(db));
+                sqlite3_close(db);
+                return 0;
+            } else {
 
-    //   }
+                string sqlQuery = "DELETE FROM Users WHERE Users.id =" + to_string(id);
+                rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
+                if (rc != SQLITE_OK) {
+                    fprintf(stderr, "Delete comand doesn t work: %s\n", sqlite3_errmsg(db));
+                    sqlite3_close(db);
+                    return 0;
+                } else {
+                    cout << "User Deleted!" << '\n';
+                    return 1;
+                }
+
+            }
+
+        }
+
+    }
 };
 
 #endif // SOCIALMEDIA_HANDLERUSERDB_H

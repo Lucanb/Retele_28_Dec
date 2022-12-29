@@ -14,7 +14,7 @@ using namespace std;
 int main()
 {
     User user;
-    user.userName = "test usernamess";
+    user.userName = "test username";
     user.firstname = "test firstname";
     user.lastname = "test lastname";
     user.userName = "test username";
@@ -23,15 +23,15 @@ int main()
 
     HandlerUserDB handler;
     handler.createUser(user);
-    User userGet = handler.getUser(1);
+
+    User userGet = handler.getUser(2);
     cout << userGet.userName<<'\n';
     cout << userGet.lastname<<'\n';
 /*
-    userGet.userName = "updated username";
-    handler.updateUser(userGet);
-    userGet = handler.getUser(1);
-    cout << userGet.userName;
-
+    user.userName = "updated username";
+    handler.updateUser(user);
+    user = handler.getUser(1);
+    cout << user.userName<<'\n';
     handler.deleteUser(1);
     userGet = handler.getUser(1);
     cout<<userGet.id;

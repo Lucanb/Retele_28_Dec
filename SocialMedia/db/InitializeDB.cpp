@@ -106,11 +106,11 @@ int createTables() {
     }
     return 1;
 }
-/*
+
 int Interogate()
 {
     char *err=nullptr;
-    const char *test="INSERT INTO Users VALUES(0,0,'abc','def','efg','hij','asd','fdg')";
+    const char *test="INSERT INTO Users VALUES(1,0,'abc','def','efg','hij','asd','fdg')";
     int vfComand=sqlite3_exec(db, test, 0, 0, &err);
     if(vfComand != SQLITE_OK)
     {
@@ -119,8 +119,8 @@ int Interogate()
     }
     return 1;
 }
-*/
-/*
+
+
 int getUser()
 {
     char *err=nullptr;
@@ -134,12 +134,12 @@ int getUser()
     return 1;
 }
 
-*/
+
 
 int main() {
     createTables();
 
-    //   Interogate();
+       Interogate();
 //    getUser();
     cout << "DB INITIALIZED\n";
 }
