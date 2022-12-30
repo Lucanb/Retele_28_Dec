@@ -144,7 +144,7 @@ int main()
 {
     createTables();
 
-    // Interogate();
-    // getUser();
+     //Interogate();
+     //getUser();
     cout << "DB INITIALIZED\n";
 }

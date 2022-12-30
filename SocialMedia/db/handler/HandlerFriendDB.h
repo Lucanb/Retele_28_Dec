@@ -376,8 +376,8 @@ struct HandlerFriendDB
             else
             {
 
-                string sqlQuery = "DELETE FROM Friend WHERE id1 = " + to_string(id1) + "AND id2 = " + to_string(id2);
-                string sqlQuery2 = "DELETE FROM Friend WHERE id1 = " + to_string(id2) + "AND id2 = " + to_string(id1);
+                string sqlQuery = "DELETE FROM Friend WHERE id1 = " + to_string(id1) + " AND id2 = " + to_string(id2);
+                string sqlQuery2 = "DELETE FROM Friend WHERE id1 = " + to_string(id2) + " AND id2 = " + to_string(id1);
                 rc = sqlite3_exec(db, sqlQuery.c_str(), 0, 0, &err_msg);
                int rc2 = sqlite3_exec(db, sqlQuery2.c_str(), 0, 0, &err_msg);
                 if (rc != SQLITE_OK)

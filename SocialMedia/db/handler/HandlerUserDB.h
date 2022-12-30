@@ -123,7 +123,7 @@ struct HandlerUserDB
         {
             vector<string> s;
             parsing(returningStr, s);
-            if (s.size() < 1)
+            if (s.size() == 0)
             {
                 fprintf(stderr, "Cannot find the user: %s\n", sqlite3_errmsg(db));
                 sqlite3_close(db);
@@ -141,7 +141,7 @@ struct HandlerUserDB
                 {
                     fprintf(stderr, "Select comand doesn t work: %s\n", sqlite3_errmsg(db));
                     sqlite3_close(db);
-                    return User(-5, -5, "Error using select", "Error", "Error", "Error", "Error", "Error");
+                    return User(-4, -4, "Error using select", "Error", "Error", "Error", "Error", "Error");
                 }
                 else
                 {

@@ -16,6 +16,7 @@ using namespace std;
 
 int main()
 {
+    /*
     User user;
     user.userName = "test username";
     user.firstname = "test firstname";
@@ -23,7 +24,7 @@ int main()
     user.userName = "test username";
     user.userName = "test username";
     // create the rest of the user
-/*
+
     HandlerUserDB handler;
     handler.createUser(user);
 
@@ -39,62 +40,81 @@ int main()
     cout << user.userName<<'\n';
 
 
+
+         handler.deleteUser(1);
+    //     userGet = handler.getUser(1);
+          cout<<userGet.id;
+*/
 /*
-    handler.deleteUser(1);
-    userGet = handler.getUser(1);
-    cout<<userGet.id;
+   News news;
+   news.type="avs";
+   news.content="asd";
+   news.title="ion";
+   news.authorId=2;
+   news.id=1;
 
-News news;
-news.type="avs";
-news.content="asd";
-news.title="ion";
-news.authorId=0;
+   HandlerNewsDB handler;
 
-HandlerNewsDB handler;
-handler.createNews(news);
-News getNews=handler.getNews(1,0);
+    handler.createNews(news);
+    News getNews=handler.getNews(1,0);
 
-getNews.title="Try";
-handler.updateNews(getNews);
-News test = handler.getNews(1,0);
-cout<<test.title<<'\n';
-//handler.deleteNews(1,2);
+    getNews.title="Try";
+    handler.updateNews(getNews);
 
-Message message;
-message.chatId=0;
-HandlerMessageDB handler;
+    News test = handler.getNews(1,0);
+    cout<<test.title<<'\n';
 
-handler.createMessage(message);
-handler.getMessage(1,0);
-handler.updateMessage(message);
-//handler.deleteMessage(1,0);
-
-
-FriendRequest friendRequest;
-friendRequest.id1=0;
-friendRequest.id2=1;
-HandlerFriendRequestDB handler;
-handler.createFriendRequest(friendRequest);
-
-handler.getFriendRequest(1,0);
-handler.updateFriendRequest(friendRequest);
+    handler.deleteNews(test.id,test.authorId);
+    handler.getNews(1,2);
 /*
-Chat chat;
-chat.idChat=0;
-HandlerChatDB handler;
-handler.CreateChat(chat);
-handler.getChat(1);
-handler.updateChat(chat);
-handler.deleteChat(1);
+
+    Message message;
+    message.chatId=0;
+    HandlerMessageDB handler;
+    handler.createMessage(message);
+    handler.getMessage(1,0);
+    handler.updateMessage(message);
+    handler.deleteMessage(1,0);
+    handler.getMessage(1,0);
+/*
+
+    FriendRequest friendRequest;
+    friendRequest.id1=0;
+    friendRequest.id2=1;
+    HandlerFriendRequestDB handler;
+    handler.createFriendRequest(friendRequest);
+
+    handler.getFriendRequest(friendRequest.id1,friendRequest.id2);
+    handler.deleteFriendRequest(friendRequest.id1,friendRequest.id2);
+    handler.updateFriendRequest(friendRequest);
+    handler.deleteFriendRequest(friendRequest.id1,friendRequest.id2);
+/*
  */
+    vector<int> v1,v2;
+    v1.push_back(2);
+    v2.push_back(3);
+    v1.push_back(1);
+    v2.push_back(4);
+    Chat chat(0,v1,v2,"titlu");
+ //   chat.idChat=0;
+
+  //    HandlerChatDB handler;
+ //     handler.CreateChat(chat);
+ //   handler.getChat(chat.idChat);
+  //  handler.updateChat(chat);
+  //  handler.deleteChat(1);
+
+/*
 Friend friendd;
 HandlerFriendDB handler;
 friendd.id1=0;
 friendd.id2=1;
 handler.createFriend(friendd);
-//handler.getFriend(1,0);
-//handler.updateFriend(friendd);
-//handler.deleteFriend(1,0);
+handler.getFriend(1,0);
+handler.updateFriend(friendd);
+handler.deleteFriend(friendd.id2,friendd.id1);
+handler.getFriend(friendd.id1,friendd.id2);
+ */
  }
 
 /*

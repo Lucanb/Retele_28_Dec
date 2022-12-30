@@ -30,7 +30,6 @@ void parsing(string s, vector<string> &result) {
             copy = "";
         }
     }
-
 }
 
 static int callback(void *data, int argc, char **argv, char **azColName) {

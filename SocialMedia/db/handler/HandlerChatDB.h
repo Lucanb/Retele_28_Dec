@@ -62,14 +62,14 @@ struct HandlerChatDB {
         } else {
             vector<string> s;
             parsing(returningStr, s);
-            if (s.size() != 0) {
+            if (s.size() == 1) {
                 fprintf(stderr, "This id exist in Chat: %s\n", sqlite3_errmsg(db));
                 sqlite3_close(db);
                 return 0;
             } else {
                 string sqlQuery = "INSERT INTO Chat (idList,idMessages,title) VALUES(" + string("\'") + strMessages
-                                  + string("\'") + string(",") +
-                                  "\'" + strId + "\'," +
+                                  + string("\'") + string(" ,") +
+                                  "\'" + strId + "\' ," +
                                   "\'" + chat.title + "\')";
                 rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
                 if (rc != SQLITE_OK) {
@@ -101,8 +101,8 @@ struct HandlerChatDB {
             fprintf(stderr, "Cannot open database on get Chat: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
             vector<int> v1, v2;
-            string s = "Error";
-            return Chat(-1, v1, v2, s);
+            string st = "Error";
+            return Chat(-1, v1, v2, st);
         }
 
 
@@ -124,7 +124,6 @@ struct HandlerChatDB {
                 vector<int> v1, v2;
                 return Chat(-3, v1, v2, "Error at existance");
             } else {
-
                 string sqlQuery = "SELECT idList,idMessages,title FROM Chat WHERE idChat = " + to_string(idChat);
                 rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
                 if (rc != SQLITE_OK) {
