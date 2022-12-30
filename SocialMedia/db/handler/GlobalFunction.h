@@ -14,6 +14,7 @@
 using namespace std;
 
 string returningStr;
+string returningStr2;
 
 void parsing(string s, vector<string> &result) {
     string copy = "";
@@ -41,6 +42,19 @@ static int callback(void *data, int argc, char **argv, char **azColName) {
         returningStr += "=";
         returningStr += argv[i] ? argv[i] : "NULL";
         returningStr += "\n";
+    }
+    return 0;
+}
+
+static int callback2(void *data, int argc, char **argv, char **azColName) {
+    returningStr2 = ""; //Aici initializez global ul;
+    int i;
+
+    for (i = 0; i < argc; i++) {
+        returningStr2 += azColName[i];
+        returningStr2 += "=";
+        returningStr2 += argv[i] ? argv[i] : "NULL";
+        returningStr2 += "\n";
     }
     return 0;
 }

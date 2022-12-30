@@ -43,9 +43,14 @@ struct HandlerFriendRequestDB
                           to_string(friendRequest.id2) + "," +
                           "\'" + to_string(friendRequest.accepted) + "\'," +
                           "\'" + friendRequest.type + "\')";
+        string sqlQuery2="INSERT INTO FriendRequest (id2,id1,accepted,type) VALUES(" + to_string(friendRequest.id1) + "," +
+                         to_string(friendRequest.id2) + "," +
+                         "\'" + to_string(friendRequest.accepted) + "\'," +
+                         "\'" + friendRequest.type + "\')";
 
         rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
-        int rc2 = sqlite3_exec(db, sqlVerif2.c_str(), callback, 0, &err_msg);
+        int rc2 = sqlite3_exec(db, sqlVerif2.c_str(), callback2, 0, &err_msg);
+
         if (rc != SQLITE_OK)
         {
             fprintf(stderr, "We can't say anything about the existence on 1st check: %s\n", err_msg);
@@ -53,7 +58,7 @@ struct HandlerFriendRequestDB
             sqlite3_close(db);
             return 0;
         }
-        else if (rc2 != SQLITE_OK)
+        if (rc2 != SQLITE_OK)
         {
             fprintf(stderr, "We can't say anything about the existence on 2nd check: %s\n", err_msg);
             sqlite3_free(err_msg);
@@ -65,8 +70,15 @@ struct HandlerFriendRequestDB
             // CHECK FOR S2
             vector<string> s;
             parsing(returningStr, s);
+            vector<string>s2;
+            parsing(returningStr2,s2);
             if (s.size() != 0)
             {
+                fprintf(stderr, "This friendship exists: %s\n", err_msg);
+                sqlite3_free(err_msg);
+                sqlite3_close(db);
+                return 0;
+            }else if(s2.size()!=0){
                 fprintf(stderr, "This friendship exists: %s\n", err_msg);
                 sqlite3_free(err_msg);
                 sqlite3_close(db);
@@ -75,9 +87,16 @@ struct HandlerFriendRequestDB
             else
             {
                 rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
+                rc2 = sqlite3_exec(db, sqlQuery2.c_str(), callback2, 0, &err_msg);
                 if (rc != SQLITE_OK)
                 {
 
+                    fprintf(stderr, "SQL error on create friendRequest: %s\n", err_msg);
+                    sqlite3_free(err_msg);
+                    sqlite3_close(db);
+                    return 0;
+                } else if(rc2 != SQLITE_OK)
+                {
                     fprintf(stderr, "SQL error on create friendRequest: %s\n", err_msg);
                     sqlite3_free(err_msg);
                     sqlite3_close(db);
@@ -115,19 +134,34 @@ struct HandlerFriendRequestDB
         string sqlVerif =
             "SELECT id,id1,id2 FROM FriendRequest WHERE id1 = " + to_string(id1) + " AND id2 = " + to_string(id2);
 
-        rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
+        string sqlVerif2 =
+                "SELECT id,id1,id2 FROM FriendRequest WHERE id1=" + to_string(id2) + " AND id2=" + to_string(id1);
 
+        rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
+        int rc2=sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
         if (rc != SQLITE_OK)
         {
-            fprintf(stderr, "Cannot use existance select: %s\n", sqlite3_errmsg(db));
+            fprintf(stderr, "Cannot use existance select first one: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return FriendRequest(-2, -2, -2, "Error at SELECT EXISTANCE", false);
+        }
+        else if( rc2 != SQLITE_OK){
+            fprintf(stderr, "Cannot use existance select second one: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
             return FriendRequest(-2, -2, -2, "Error at SELECT EXISTANCE", false);
         }
         else
         {
-            vector<string> s;
+            vector<string> s,s2;
             parsing(returningStr, s);
+            parsing(returningStr2,s2);
             if (s.size() == 0)
+            {
+                fprintf(stderr, "Cannot find the user: %s\n", sqlite3_errmsg(db));
+                sqlite3_close(db);
+                return FriendRequest(-3, -3, -3, "Error User Doesn't Exists", false);
+            }
+            else if(s2.size())
             {
                 fprintf(stderr, "Cannot find the user: %s\n", sqlite3_errmsg(db));
                 sqlite3_close(db);
@@ -138,7 +172,12 @@ struct HandlerFriendRequestDB
 
                 string sqlQuery = "SELECT accepted,type FROM FriendRequest WHERE id1 = " + to_string(id1) +
                                   " AND id2 = " + to_string(id2);
+
+                string sqlQuery2 = "SELECT accepted,type FROM FriendRequest WHERE id1 = " + to_string(id2) +
+                                  " AND id2 = " + to_string(id1);
+
                 rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
+                rc2 = sqlite3_exec(db, sqlQuery2.c_str(), callback2, 0, &err_msg);
                 if (rc != SQLITE_OK)
                 {
 
@@ -146,22 +185,41 @@ struct HandlerFriendRequestDB
                     sqlite3_close(db);
                     return FriendRequest(-5, -5, -5, "Error using select", false);
                 }
+                else if(rc2 != SQLITE_OK)
+                {
+                    fprintf(stderr, "Select comand doesn t work: %s\n", sqlite3_errmsg(db));
+                    sqlite3_close(db);
+                    return FriendRequest(-5, -5, -5, "Error using select", false);
+                }
                 else
                 {
-                    vector<string> s;
+                    vector<string> s,s2;
                     parsing(returningStr, s);
-                    string type = s[0];
-                    bool accepted;
-                    if (s[1] == "0")
-                    {
-                        accepted = 0;
+                    parsing(returningStr2,s2);
+                    if(s.size()!=0) {
+                        string type = s[0];
+                        bool accepted;
+                        if (s[1] == "0") {
+                            accepted = 0;
+                        } else {
+                            accepted = 1;
+                        }
+                        cout << "FriendRequest Getted!" << '\n';
+                        return FriendRequest(0, id1, id2, type, accepted);
                     }
                     else
-                    {
-                        accepted = 1;
-                    }
-                    cout << "FriendRequest Getted!" << '\n';
-                    return FriendRequest(0, id1, id2, type, accepted);
+                        if(s2.size() !=0 )
+                        {
+                            string type = s2[0];
+                            bool accepted;
+                            if (s2[1] == "0") {
+                                accepted = 0;
+                            } else {
+                                accepted = 1;
+                            }
+                            cout << "FriendRequest Getted!" << '\n';
+                            return FriendRequest(0, id1, id2, type, accepted);
+                        }
                 }
             }
         }
@@ -189,19 +247,35 @@ struct HandlerFriendRequestDB
             "SELECT id1,id2 FROM FriendRequest WHERE id1 = " + to_string(friendRequest.id1) +
             " AND id2 = " + to_string(friendRequest.id2);
 
-        rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
+        string sqlVerif2 = "SELECT id1,id2 FROM FriendRequest WHERE id1=" + to_string(friendRequest.id2) + " AND id2=" +
+                           to_string(friendRequest.id1);
 
+        rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
+        int rc2 = sqlite3_exec(db, sqlVerif2.c_str(), callback2, 0, &err_msg);
         if (rc != SQLITE_OK)
         {
-            fprintf(stderr, "Cannot check id existance select: %s\n", sqlite3_errmsg(db));
+            fprintf(stderr, "Cannot check id existance select first one: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return 0;
+        }
+        else if(rc2!= SQLITE_OK)
+        {
+            fprintf(stderr, "Cannot check id existance select second one: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
             return 0;
         }
         else
         {
-            vector<string> s;
+            vector<string> s,s2;
             parsing(returningStr, s);
+            parsing(returningStr2, s2);
             if (s.size() == 0)
+            {
+                fprintf(stderr, "Cannot find the id: %s\n", sqlite3_errmsg(db));
+                sqlite3_close(db);
+                return 0;
+            }
+            else if(s2.size() == 0)
             {
                 fprintf(stderr, "Cannot find the id: %s\n", sqlite3_errmsg(db));
                 sqlite3_close(db);
@@ -210,12 +284,25 @@ struct HandlerFriendRequestDB
             else
             {
 
-                string sqlVerif = "UPDATE FriendRequest SET accepted = " + string("\'") +
+                string sqlQuery = "UPDATE FriendRequest SET accepted = " + string("\'") +
                                   to_string(friendRequest.accepted) + string("\'") + " , type = " + string("\'") +
                                   friendRequest.type + string("\'") + "WHERE id1 = " + to_string(friendRequest.id1) +
                                   " AND id2 =" + to_string(friendRequest.id2);
-                rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
+
+                string sqlQuery2 = "UPDATE FriendRequest SET accepted = " + string("\'") +
+                                  to_string(friendRequest.accepted) + string("\'") + " , type = " + string("\'") +
+                                  friendRequest.type + string("\'") + "WHERE id1 = " + to_string(friendRequest.id2) +
+                                  " AND id2 =" + to_string(friendRequest.id1);
+
+                rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
+                int rc2 = sqlite3_exec(db, sqlQuery2.c_str(), callback2, 0, &err_msg);
                 if (rc != SQLITE_OK)
+                {
+                    fprintf(stderr, "Set comand doesn t work on friendRequest: %s\n", sqlite3_errmsg(db));
+                    sqlite3_close(db);
+                    return 0;
+                }
+                else if(rc2 != SQLITE_OK)
                 {
                     fprintf(stderr, "Set comand doesn t work on friendRequest: %s\n", sqlite3_errmsg(db));
                     sqlite3_close(db);
@@ -251,20 +338,34 @@ struct HandlerFriendRequestDB
 
         string sqlVerif =
             "SELECT id1,id2 FROM FriendRequest WHERE id1 = " + to_string(id1) + " AND id2 =" + to_string(id2);
+        string sqlVerif2 =
+                "SELECT id1,id2 FROM FriendRequest WHERE id1 = " + to_string(id2) + " AND id2 =" + to_string(id1);
 
         rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
+        int rc2=sqlite3_exec(db, sqlVerif.c_str(), callback2, 0, &err_msg);
+
         if (rc != SQLITE_OK)
         {
-            fprintf(stderr, "Cannot check id existance select: %s\n", sqlite3_errmsg(db));
+            fprintf(stderr, "Cannot check id existance select on first: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return 0;
+        } else if(rc2 != SQLITE_OK)
+        {
+            fprintf(stderr, "Cannot check id existance select on second: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
             return 0;
         }
         else
         {
-            vector<string> s;
+            vector<string> s,s2;
             parsing(returningStr, s);
-
+            parsing(returningStr2,s2);
             if (s.size() == 0)
+            {
+                fprintf(stderr, "Cannot find the id: %s\n", sqlite3_errmsg(db));
+                sqlite3_close(db);
+                return 0;
+            }else if(s2.size()==0)
             {
                 fprintf(stderr, "Cannot find the id: %s\n", sqlite3_errmsg(db));
                 sqlite3_close(db);
@@ -274,8 +375,15 @@ struct HandlerFriendRequestDB
             {
 
                 string sqlQuery = "DELETE FROM FriendRequest WHERE id1 = " + to_string(id1) + " AND id2 = " + to_string(id2);
+                string sqlQuery2 = "DELETE FROM FriendRequest WHERE id1 = " + to_string(id2) + " AND id2 = " + to_string(id1);
                 rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
+                rc2 = sqlite3_exec(db, sqlQuery2.c_str(), callback2, 0, &err_msg);
                 if (rc != SQLITE_OK)
+                {
+                    fprintf(stderr, "Delete comand doesn t work: %s\n", sqlite3_errmsg(db));
+                    sqlite3_close(db);
+                    return 0;
+                } else if (rc2 != SQLITE_OK)
                 {
                     fprintf(stderr, "Delete comand doesn t work: %s\n", sqlite3_errmsg(db));
                     sqlite3_close(db);
