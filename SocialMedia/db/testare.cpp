@@ -89,9 +89,11 @@ handler.deleteChat(1);
  */
 Friend friendd;
 HandlerFriendDB handler;
-//handler.createFriend(friendd);
+friendd.id1=0;
+friendd.id2=1;
+handler.createFriend(friendd);
 //handler.getFriend(1,0);
-handler.updateFriend(friendd);
+//handler.updateFriend(friendd);
 //handler.deleteFriend(1,0);
  }
 
