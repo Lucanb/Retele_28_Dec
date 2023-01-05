@@ -42,6 +42,7 @@ static int callback(void *data, int argc, char **argv, char **azColName) {
         returningStr += argv[i] ? argv[i] : "NULL";
         returningStr += "\n";
     }
+   // cout<<returningStr; //asta e de verificare
     return 0;
 }
 

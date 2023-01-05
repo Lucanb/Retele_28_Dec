@@ -41,6 +41,7 @@ struct HandlerChatDB {
             }
             strMessages += to_string(*it);
         }
+        //cout<<strMessages<<'\n';
 
         for (auto it = chat.idList.begin(); it != chat.idList.end(); it++) {
             if (it != chat.idList.begin()) {
@@ -48,6 +49,7 @@ struct HandlerChatDB {
             }
             strId += to_string(*it);
         }
+        //cout<<strId<<'\n';
 
 
         string sqlVerif = "Select idChat FROM Chat WHERE idChat = " + to_string(chat.idChat);
@@ -67,6 +69,7 @@ struct HandlerChatDB {
                 sqlite3_close(db);
                 return 0;
             } else {
+                //cout<<strId<<' '<<strMessages<<' '<<chat.title;
                 string sqlQuery = "INSERT INTO Chat (idList,idMessages,title) VALUES(" + string("\'") + strMessages
                                   + string("\'") + string(" ,") +
                                   "\'" + strId + "\' ," +
@@ -116,6 +119,8 @@ struct HandlerChatDB {
             vector<int> v1, v2;
             return Chat(-2, v1, v2, "Error at selection existance");
         } else {
+            //cout<<idChat;
+            //PROBLEMA E CA SIRUL DIN CALLBACK VA FI NULL LA FINAL SI DE ACOLO SI s VA FI MEREU NULL. LA RESTUL A MERS.
             vector<string> s;
             parsing(returningStr, s);
             if (s.size() == 0) {
