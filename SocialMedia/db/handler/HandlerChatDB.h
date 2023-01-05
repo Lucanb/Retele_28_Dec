@@ -122,6 +122,7 @@ struct HandlerChatDB {
             //cout<<idChat;
             //PROBLEMA E CA SIRUL DIN CALLBACK VA FI NULL LA FINAL SI DE ACOLO SI s VA FI MEREU NULL. LA RESTUL A MERS.
             vector<string> s;
+           // cout<<returningStr<<' ';
             parsing(returningStr, s);
             if (s.size() == 0) {
                 fprintf(stderr, "Cannot find the user: %s\n", sqlite3_errmsg(db));
@@ -140,9 +141,11 @@ struct HandlerChatDB {
 
                 } else {
                     vector<int> v1, v2;
+                    vector<string>s;
+                    parsing(returningStr,s);
                     std::string idList = s[0];
-                    std::string idMessages = s[1];
-                    std::string title = s[2];
+                    std::string idMessages=s[1] ;
+                    std::string title=s[2] ;
 
                     ///Start Coversion from string to vector<int> :
 
