@@ -89,7 +89,7 @@ int main()
     handler.updateFriendRequest(friendRequest);
     handler.deleteFriendRequest(friendRequest.id1,friendRequest.id2);
 /*
-*/
+
     vector<int> v1,v2;
     v1.push_back(2);
     v2.push_back(3);
@@ -100,9 +100,8 @@ int main()
       HandlerChatDB handler;
       handler.CreateChat(chat);
       handler.getChat(chat.idChat);
-  //  handler.updateChat(chat);
-  //  handler.deleteChat(1);
-
+      handler.updateChat(chat);
+      handler.deleteChat(1);
 /*
 Friend friendd;
 HandlerFriendDB handler;
