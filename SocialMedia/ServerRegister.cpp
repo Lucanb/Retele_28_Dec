@@ -53,9 +53,11 @@ int main()
     while (1)
     {
         int client;
-        int length = sizeof(form);
+        socklen_t length = sizeof(form);
         printf("Register server waits on %d\n", PORT_REGISTER);
-        client = accept(sd, reinterpret_cast<sockaddr *>(&form), reinterpret_cast<socklen_t *>(&length)); /// careful
+        fflush (stdout);
+        client = accept(sd,(struct sockaddr *)&form, &length);
+        //client = accept(sd, reinterpret_cast<sockaddr *>(&form), reinterpret_cast<socklen_t *>(&length)); /// careful
         if (client < 0)
         {
             perror("Error on client acces on register server \n");
@@ -105,10 +107,10 @@ int main()
                     close(client);
                     continue;
                 }
-                while (1)
-                {
+
+
                     std::cout << json;
-                }
+
                 /// TO DO MESSAGE BACK TO CLIENT
             }
 
