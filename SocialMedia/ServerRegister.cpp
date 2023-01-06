@@ -55,9 +55,9 @@ int main()
         int client;
         socklen_t length = sizeof(form);
         printf("Register server waits on %d\n", PORT_REGISTER);
-        fflush (stdout);
-        client = accept(sd,(struct sockaddr *)&form, &length);
-        //client = accept(sd, reinterpret_cast<sockaddr *>(&form), reinterpret_cast<socklen_t *>(&length)); /// careful
+        fflush(stdout);
+        client = accept(sd, (struct sockaddr *)&form, &length);
+        // client = accept(sd, reinterpret_cast<sockaddr *>(&form), reinterpret_cast<socklen_t *>(&length)); /// careful
         if (client < 0)
         {
             perror("Error on client acces on register server \n");
@@ -83,36 +83,45 @@ int main()
             /// copil
             close(sd);
 
-            std::cout << "am intrat in copil :3\n";
+            // std::cout << "am intrat in copil :3\n";
 
-            bzero(&user, sizeof(user));
-
-            bool start;
-            int rd = read(client, &start, sizeof(start));
-            if (rd <= 0)
+            std::cout << "INAINTE DE JSON";
+            std::string json;
+            int readbyte = read(client, json, BUFSIZ); //&?
+            if (readbyte < 0)
             {
-                perror("Error at reading");
+                perror("Eroare");
                 close(client);
                 continue;
             }
+            std::cout << json;
 
-            if (start)
-            {
-                std::cout << "INAINTE DE JSON";
-                std::string json;
-                int readbyte = read(client, &json, BUFSIZ);
-                if (readbyte <= 0)
-                {
-                    perror("Eroare");
-                    close(client);
-                    continue;
-                }
+            bzero(&user, sizeof(user));
 
+            // bool start;
+            // int rd = read(client, &start, sizeof(start));
+            // if (rd <= 0)
+            // {
+            //     perror("Error at reading");
+            //     close(client);
+            //     continue;
+            // }
 
-                    std::cout << json;
+            // if (start)
+            // {
+            //     std::cout << "INAINTE DE JSON";
+            //     std::string json;
+            //     int readbyte = read(client, &json, BUFSIZ);
+            //     if (readbyte <= 0)
+            //     {
+            //         perror("Eroare");
+            //         close(client);
+            //         continue;
+            //     }
+            //     std::cout << json;
 
-                /// TO DO MESSAGE BACK TO CLIENT
-            }
+            //     /// TO DO MESSAGE BACK TO CLIENT
+            // }
 
             close(client);
             exit(0);
