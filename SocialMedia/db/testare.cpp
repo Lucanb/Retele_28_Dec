@@ -17,13 +17,16 @@ using namespace std;
 int main()
 {
     /*
+     */
     User user;
 
       user.userName = "test username 2";
       user.firstname = "test firstname 2";
       user.lastname = "test lastname 2";
 
+      User(user.toJson());
 
+    /*
     create the rest of the user
     HandlerUserDB handler;
     handler.createUser(user);

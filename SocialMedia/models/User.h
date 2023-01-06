@@ -8,6 +8,7 @@
 
 #include<iostream>
 #include<string>
+#include <jsoncpp/json/json.h>
 
 struct User {
 
@@ -22,7 +23,7 @@ struct User {
     std::string profileDescription;
 
 
-    User()=default;
+    User() = default;
 
     User(
             int id,
@@ -33,9 +34,9 @@ struct User {
             std::string birthday,
             std::string accountCreationDate,
             std::string profileDescription
-    ){
-        this->id=id;
-        this->isAdmin=isAdmin;
+    ) {
+        this->id = id;
+        this->isAdmin = isAdmin;
         this->userName = userName;
         this->firstname = firstname;
         this->lastname = lastname;
@@ -43,6 +44,35 @@ struct User {
         this->accountCreationDate = accountCreationDate;
         this->profileDescription = profileDescription;
     }
+
+    User(std::string json) {
+        Json::Value jsonObj;
+        Json::Reader reader;
+        bool parsingSuccesful = reader.parse(json, jsonObj);
+        if (parsingSuccesful) {
+            id = jsonObj["id"].asInt();
+            isAdmin = jsonObj["isAdmin"].asInt();
+            userName = jsonObj["userName"].asString();
+            firstname = jsonObj["firstname"].asString();
+            lastname = jsonObj["lastname"].asString();
+            birthday = jsonObj["birthday"].asString();
+            accountCreationDate = jsonObj["accountCreationDate"].asString();
+            profileDescription = jsonObj["profileDescription"].asString();
+        }
+    }
+
+    std::string toJson() {
+        Json::Value jsonObj;
+        jsonObj["id"] = id;
+        jsonObj["isAdmin"] = isAdmin;
+        jsonObj["userName"] = userName;
+        jsonObj["firstname"] = firstname;
+        jsonObj["birthday"] = birthday;
+        jsonObj["accountCreationDate"] = accountCreationDate;
+        jsonObj["profileDescription"] = profileDescription;
+        return jsonObj.toStyledString();
+    }
 };
+
 
 #endif //MODELS_USER_H
