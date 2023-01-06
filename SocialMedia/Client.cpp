@@ -79,7 +79,14 @@ void CreeateUser() {
     }
 
     string json = userCreeateAccount.toJson();
-    int bytesWritten = write(sd, &json, BUFSIZ);
+    char towrite[BUFSIZ];
+    for(int j=0;j<BUFSIZ;j++)
+        towrite[j]=0;
+
+    for(int j=0;j<json.size();j++)
+        towrite[j]=json[j];
+
+    int bytesWritten = write(sd, &towrite, BUFSIZ);
     if (bytesWritten <= 0) {
         perror("Error at bytes Written Client");
         exit(-3);

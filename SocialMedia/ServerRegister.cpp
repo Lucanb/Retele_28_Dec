@@ -83,10 +83,7 @@ int main()
             /// copil
             close(sd);
 
-            // std::cout << "am intrat in copil :3\n";
-
-            std::cout << "INAINTE DE JSON";
-            std::string json;
+            char json[BUFSIZ];
             int readbyte = read(client, json, BUFSIZ); //&?
             if (readbyte < 0)
             {
@@ -94,6 +91,7 @@ int main()
                 close(client);
                 continue;
             }
+
             std::cout << json;
 
             bzero(&user, sizeof(user));
