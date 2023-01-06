@@ -18,13 +18,13 @@ int main()
 {
     /*
     User user;
-    user.userName = "test username";
-    user.firstname = "test firstname";
-    user.lastname = "test lastname";
-    user.userName = "test username";
-    user.userName = "test username";
-    // create the rest of the user
 
+      user.userName = "test username 2";
+      user.firstname = "test firstname 2";
+      user.lastname = "test lastname 2";
+
+
+    create the rest of the user
     HandlerUserDB handler;
     handler.createUser(user);
 
@@ -34,17 +34,17 @@ int main()
     cout << userGet.lastname<<'\n';
 
 
-    user.userName = "updated username";
-    handler.updateUser(userGet);
-    userGet = handler.getUser(1);
-    cout << user.userName<<'\n';
+   // user.userName = "updated username";
+   // handler.updateUser(userGet);
+  //  userGet = handler.getUser(1);
+    //cout << user.userName<<'\n';
 
 
 
-         handler.deleteUser(1);
+  //       handler.deleteUser(1);
     //     userGet = handler.getUser(1);
-          cout<<userGet.id;
-*/
+   //       cout<<userGet.id;
+
 /*
    News news;
    news.type="avs";

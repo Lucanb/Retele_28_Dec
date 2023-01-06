@@ -61,7 +61,7 @@ int createTables()
 {
     int sw;
     sw = formTable(
-        "CREATE TABLE IF NOT EXISTS Users(id INTEGER PRIMARY KEY, isAdmin INTEGER,userName TEXT,firstname TEXT,lastname TEXT,birthday TEXT,accountCreationDate TEXT,profileDescription TEXT);",
+        "CREATE TABLE IF NOT EXISTS Users(id INTEGER PRIMARY KEY AUTOINCREMENT, isAdmin INTEGER,userName TEXT,firstname TEXT,lastname TEXT,birthday TEXT,accountCreationDate TEXT,profileDescription TEXT);",
         "Users");
     if (!sw)
     {
@@ -70,7 +70,7 @@ int createTables()
     }
 
     sw = formTable(
-        "CREATE TABLE IF NOT EXISTS Friend(id INTEGER PRIMARY KEY, id1 INTEGER, id2 INTEGER ,type TEXT);",
+        "CREATE TABLE IF NOT EXISTS Friend(id INTEGER PRIMARY KEY AUTOINCREMENT, id1 INTEGER, id2 INTEGER ,type TEXT);",
         "Friend" // aici vezi cheile.
     );
     if (!sw)
@@ -79,7 +79,7 @@ int createTables()
         return 0;
     }
     sw = formTable(
-        "CREATE TABLE IF NOT EXISTS Chat(idChat INTEGER PRIMARY KEY,idList TEXT,idMessages TEXT,title TEXT);",
+        "CREATE TABLE IF NOT EXISTS Chat(idChat INTEGER PRIMARY KEY AUTOINCREMENT,idList TEXT,idMessages TEXT,title TEXT);",
         "Chat");
     if (!sw)
     {
@@ -87,7 +87,7 @@ int createTables()
         return 0;
     }
     sw = formTable(
-        "CREATE TABLE IF NOT EXISTS FriendRequest(id INTEGER PRIMARY KEY, id1 INTEGER, id2 INTEGER,type TEXT,accepted INTEGER);",
+        "CREATE TABLE IF NOT EXISTS FriendRequest(id INTEGER PRIMARY KEY AUTOINCREMENT, id1 INTEGER, id2 INTEGER,type TEXT,accepted INTEGER);",
         "FriendRequest");
     if (!sw)
     {
@@ -95,7 +95,7 @@ int createTables()
         return 0;
     }
     sw = formTable(
-        "CREATE TABLE IF NOT EXISTS Message(id INTEGER PRIMARY KEY, chatId INTEGER,date TEXT,message TEXT);",
+        "CREATE TABLE IF NOT EXISTS Message(id INTEGER PRIMARY KEY AUTOINCREMENT, chatId INTEGER,date TEXT,message TEXT);",
         "Message");
     if (!sw)
     {
@@ -104,13 +104,24 @@ int createTables()
     }
 
     sw = formTable(
-        "CREATE TABLE IF NOT EXISTS News(id INTEGER PRIMARY KEY, authorId INTEGER,title TEXT,content TEXT,type TEXT);",
+        "CREATE TABLE IF NOT EXISTS News(id INTEGER PRIMARY KEY AUTOINCREMENT, authorId INTEGER,title TEXT,content TEXT,type TEXT);",
         "News");
     if (!sw)
     {
         cout << "News Error";
         return 0;
     }
+
+    sw = formTable(
+            "CREATE TABLE IF NOT EXISTS Passwords(id INTEGER PRIMARY KEY AUTOINCREMENT, userName TEXT,password TEXT);",
+            "Passwords");
+    if (!sw)
+    {
+        cout << "Passwords Error";
+        return 0;
+    }
+
+
     return 1;
 }
 
