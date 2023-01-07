@@ -1,7 +1,3 @@
-//
-// Created by lolluckestar on 06.01.2023.
-//
-
 #include <iostream>
 #include "models/User.h"
 #include <sys/types.h>

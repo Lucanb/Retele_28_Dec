@@ -1,26 +1,30 @@
 //
-// Created by lolluckestar on 11.12.2022.
+// Created by lolluckestar on 07.01.2023.
 //
 #pragma once
-#ifndef SOCIALMEDIA_HANDLERUSERDB_H
-#define SOCIALMEDIA_HANDLERUSERDB_H
+#ifndef SOCIALMEDIA_HANDLERPASSWORDSDB_H
+#define SOCIALMEDIA_HANDLERPASSWORDSDB_H
+
 #include "GlobalFunction.h"
-#include "../../models/User.h"
+#include "../../models/Passwords.h"
 #include "../../db/mydb/sqlite3.h"
 #include <iostream>
 #include <string>
 #include <vector>
-
-
+/*
+ * int id;
+    std::string userName;
+    std::string password;
+*/
 using namespace std;
 
-struct HandlerUserDB
+struct HandlerPasswordsDB
 {
 
-    HandlerUserDB() = default;
+    HandlerPasswordsDB() = default;
 
-    int createUser(
-        struct User user)
+    int createPassword(
+            struct Passwords passwords)
     {
 
         sqlite3 *db;
@@ -32,7 +36,7 @@ struct HandlerUserDB
         if (rc != SQLITE_OK)
         {
 
-            fprintf(stderr, "Cannot open database on insert user: %s\n", sqlite3_errmsg(db));
+            fprintf(stderr, "Cannot open database on insert password: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
 
             return 0;
@@ -40,17 +44,12 @@ struct HandlerUserDB
 
         string sqlVerif;
         sqlVerif =
-            "SELECT userName FROM Users WHERE userName=" +
-            string("\'") + user.userName + string("\'");
+                "SELECT userName FROM Passwords WHERE userName=" +
+                string("\'") + passwords.userName + string("\'");
         string sqlQuery =
-            "INSERT INTO Users (isAdmin,userName,firstname,lastname,birthday,accountCreationDate,profileDescription) VALUES(" +
-            to_string(user.isAdmin) + "," +
-            "\'" + user.userName + "\'," +
-            "\'" + user.firstname + "\'," +
-            "\'" + user.lastname + "\'," +
-            "\'" + user.birthday + "\'," +
-            "\'" + user.accountCreationDate + "\'," +
-            "\'" + user.profileDescription + "\')";
+                "INSERT INTO Passwords (userName,password) VALUES("+
+                std::string("\'") + passwords.userName + std::string("\'") + "," +
+                "\'" + passwords.password + "\')";
 
         rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
 
@@ -79,20 +78,20 @@ struct HandlerUserDB
                 }
                 else
                 {
-                    cout << "User Created!" << '\n';
+                    cout << "Passwords Created!" << '\n';
                     return 1;
                 }
             }
             else
             {
-                fprintf(stderr, "SQL error on user already exists: %s\n");
+                fprintf(stderr, "SQL error on password user already exists: %s\n");
                 sqlite3_close(db);
                 return 0;
             }
         }
     }
 
-    User getUser(int id)
+    Passwords getPassword(int id)
     {
 
         sqlite3 *db;
@@ -106,12 +105,12 @@ struct HandlerUserDB
         if (rc != SQLITE_OK)
         {
 
-            fprintf(stderr, "Cannot open database on get user: %s\n", sqlite3_errmsg(db));
+            fprintf(stderr, "Cannot open database on get password: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
-            return User(-1, -1, "Error Open Data Base", "Error", "Error", "Error", "Error", "Error");
+            return Passwords(-1, "Error Open Data Base", "Error");
         }
 
-        string sqlVerif = "SELECT id FROM Users WHERE id=" + to_string(id);
+        string sqlVerif = "SELECT id FROM Passwords WHERE id=" + to_string(id);
 
         rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
 
@@ -119,7 +118,7 @@ struct HandlerUserDB
         {
             fprintf(stderr, "Cannot use existance select: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
-            return User(-2, -2, "Error at SELECT EXISTANCE", "Error", "Error", "Error", "Error", "Error");
+            return Passwords(-2, "Error Open Data Base", "Error");
         }
         else
         {
@@ -127,51 +126,39 @@ struct HandlerUserDB
             parsing(returningStr, s);
             if (s.size() == 0)
             {
-                fprintf(stderr, "Cannot find the user: %s\n", sqlite3_errmsg(db));
+                fprintf(stderr, "Cannot find the user for password: %s\n", sqlite3_errmsg(db));
                 sqlite3_close(db);
-                return User(-3, -3, "Error User Doesn't Exists", "Error", "Error", "Error", "Error", "Error");
+                return Passwords(-3, "Error Open Data Base", "Error");
             }
             else
             {
 
                 string sqlQuery =
-                    "SELECT isAdmin,userName,firstname,lastname,birthday,accountCreationDate,profileDescription FROM Users WHERE id=" +
-                    to_string(id);
+                        "SELECT userName,password FROM Passwords WHERE id=" +
+                        to_string(id);
 
                 rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
                 if (rc != SQLITE_OK)
                 {
                     fprintf(stderr, "Select comand doesn t work: %s\n", sqlite3_errmsg(db));
                     sqlite3_close(db);
-                    return User(-4, -4, "Error using select", "Error", "Error", "Error", "Error", "Error");
+                    return Passwords(-4, "Error Open Data Base", "Error");
                 }
                 else
                 {
                     vector<string> s;
                     parsing(returningStr, s);
-                    // cout<<returningStr;
-                    bool isAdmin;
-
-                    if (s[0] == "0")
-                        isAdmin = 0;
-                    else
-                        isAdmin = 1;
-                    std::string userName = s[1];
-                    std::string firstname = s[2];
-                    std::string lastname = s[3];
-                    std::string birthday = s[4];
-                    std::string accountCreationDate = s[5];
-                    std::string profileDescription = s[6];
+                    std::string userName = s[0];
+                    std::string password = s[1];
 
                     cout << "User Getted!" << '\n';
-                    return User(id, isAdmin, userName, firstname, lastname, birthday, accountCreationDate,
-                                profileDescription);
+                    return Passwords(id, userName, password);
                 }
             }
         }
     }
 
-    int updateUser(User users)
+    int updatePassword(Passwords passwords)
     {
         sqlite3 *db;
         sqlite3_stmt *stmt;
@@ -184,12 +171,12 @@ struct HandlerUserDB
         if (rc != SQLITE_OK)
         {
 
-            fprintf(stderr, "Cannot open database on update users: %s\n", sqlite3_errmsg(db));
+            fprintf(stderr, "Cannot open database on update password users: %s\n", sqlite3_errmsg(db));
             sqlite3_close(db);
             return 0;
         }
 
-        string sqlVerif = "SELECT id FROM Users WHERE id =" + to_string(users.id);
+        string sqlVerif = "SELECT id FROM Passwords WHERE id =" + to_string(passwords.id);
 
         rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
 
@@ -213,14 +200,9 @@ struct HandlerUserDB
             {
 
                 string sqlQuery =
-                    "UPDATE Users SET isAdmin = " + to_string(users.isAdmin) + ", userName = " + string("\'") +
-                    users.userName +
-                    string("\'") + ", firstname =" + string("\'") + users.firstname + string("\'") +
-                    ", lastname =" + string("\'") + users.lastname +
-                    string("\'") + ", birthday =" + string("\'") + users.birthday + string("\'") +
-                    ", accountCreationDate =" + string("\'") + users.accountCreationDate + string("\'") + ", profileDescription =" + string("\'") +
-                    users.profileDescription + string("\'") +
-                    " WHERE id =" + to_string(users.id);
+                        "UPDATE Passwords SET userName = " + string("\'")+ passwords.userName +string("\'")+
+                        + ", password =" + string("\'") + passwords.password + string("\'");
+
                 rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg); /// Callback
                 if (rc != SQLITE_OK)
                 {
@@ -230,14 +212,14 @@ struct HandlerUserDB
                 }
                 else
                 {
-                    cout << "User Updated!" << '\n';
+                    cout << "Passwords Updated!" << '\n';
                     return 1;
                 }
             }
         }
     }
 
-    int deleteUser(int id)
+    int deletePasswords(int id)
     {
 
         sqlite3 *db;
@@ -256,7 +238,7 @@ struct HandlerUserDB
             return 0;
         }
 
-        string sqlVerif = "SELECT id FROM Users WHERE id = " + to_string(id); // Da seg fault
+        string sqlVerif = "SELECT id FROM Passwords WHERE id = " + to_string(id); // Da seg fault
 
         rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
 
@@ -279,7 +261,7 @@ struct HandlerUserDB
             else
             {
 
-                string sqlQuery = "DELETE FROM Users WHERE id = " + to_string(id);
+                string sqlQuery = "DELETE FROM Passwords WHERE id = " + to_string(id);
                 rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
                 if (rc != SQLITE_OK)
                 {
@@ -289,7 +271,7 @@ struct HandlerUserDB
                 }
                 else
                 {
-                    cout << "User Deleted!" << '\n';
+                    cout << "Password Deleted!" << '\n';
                     return 1;
                 }
             }
@@ -297,4 +279,6 @@ struct HandlerUserDB
     }
 };
 
-#endif // SOCIALMEDIA_HANDLERUSERDB_H
+
+
+#endif //SOCIALMEDIA_HANDLERPASSWORDSDB_H

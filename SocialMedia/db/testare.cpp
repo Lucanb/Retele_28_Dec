@@ -5,8 +5,10 @@
 // Salut
 //
 #include <iostream>
-// #include"handler/GlobalFunction.h"
+#include"handler/GlobalFunction.h"
 #include "handler/HandlerUserDB.h"
+#include "handler//HandlerPasswordsDB.h"
+
 #include "handler/HandlerChatDB.h"
 #include "handler/HandlerFriendDB.h"
 #include "handler/HandlerFriendRequest.h"
@@ -14,10 +16,8 @@
 #include "handler/HandlerNewsDB.h"
 using namespace std;
 
-int main()
-{
+int main() {
     /*
-     */
     User user;
 
       user.userName = "test username 2";
@@ -26,7 +26,6 @@ int main()
 
       User(user.toJson());
 
-    /*
     create the rest of the user
     HandlerUserDB handler;
     handler.createUser(user);
@@ -115,8 +114,21 @@ handler.getFriend(1,0);
 handler.updateFriend(friendd);
 handler.deleteFriend(friendd.id2,friendd.id1);
 handler.getFriend(friendd.id1,friendd.id2);
- */
- }
+
+    Passwords passwords;
+    HandlerPasswordsDB handler;
+    passwords.userName="Luckya";
+    passwords.password="asada";
+
+    handler.createPassword(passwords);
+    handler.getPassword(1);
+
+    Passwords getPass = handler.getPassword(1);
+    handler.updatePassword(getPass);
+    handler.deletePasswords(1);
+    handler.getPassword(1);
+*/
+}
 
 /*
 int main()
@@ -172,10 +184,13 @@ int main()
     e.deleteMessage(id1, id2);
     e.updateMessage(message);
     std::cout << "It works!" << '\n';
+
     f.createNews(news);
     f.getNews(id1, id2);
     f.deleteNews(id1, id2);
     f.updateNews(news);
     // std::cout<<"It works!"<<'\n';
+
+
 }
 */

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 
+#include <jsoncpp/json/json.h>
 struct News {
     int id;
     int authorId;
@@ -31,6 +32,26 @@ struct News {
         this->title=title;
         this->content=content;
         this->type=type;
+    }
+    News(std::string json) {
+        Json::Value jsonObj;
+        Json::Reader reader;
+        bool parsingSuccesful = reader.parse(json, jsonObj);
+        if (parsingSuccesful) {
+            id = jsonObj["id"].asInt();
+            authorId = jsonObj["authorId"].asInt();
+            content = jsonObj["content"].asString();
+            type = jsonObj["type"].asString();
+        }
+    }
+
+    std::string toJson() {
+        Json::Value jsonObj;
+        jsonObj["id"] = id;
+        jsonObj["authorId"] = authorId;
+        jsonObj["content"] = content;
+        jsonObj["type"] = type;
+        return jsonObj.toStyledString();
     }
 };
 

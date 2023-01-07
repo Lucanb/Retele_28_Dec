@@ -7,6 +7,7 @@
 
 #include<iostream>
 #include<string>
+#include <jsoncpp/json/json.h>
 
 struct Message {
     int id;
@@ -30,6 +31,26 @@ struct Message {
         this->id = chatId;
         this->date=date;
         this->message=message;
+    }
+    Message(std::string json) {
+        Json::Value jsonObj;
+        Json::Reader reader;
+        bool parsingSuccesful = reader.parse(json, jsonObj);
+        if (parsingSuccesful) {
+            id = jsonObj["id"].asInt();
+            chatId = jsonObj["chatId"].asInt();
+            date = jsonObj["date"].asString();
+            message = jsonObj["message"].asString();
+        }
+    }
+
+    std::string toJson() {
+        Json::Value jsonObj;
+        jsonObj["id"] = id;
+        jsonObj["chatId"] = chatId;
+        jsonObj["date"] = date;
+        jsonObj["message"] = message;
+        return jsonObj.toStyledString();
     }
 };
 
