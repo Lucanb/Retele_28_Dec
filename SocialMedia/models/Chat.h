@@ -39,8 +39,8 @@ struct Chat {
         bool parsingSuccesful = reader.parse(json, jsonObj);
         if (parsingSuccesful) {
             idChat = jsonObj["idChat"].asInt();
-            idList = jsonObj["idList"].as<std::vector<int>>();
-            idMessages = jsonObj["idMessages"].as<std::vector<int>>();
+         //   idList = jsonObj["idList"].as<std::vector<int>>();
+         //   idMessages = jsonObj["idMessages"].as<std::vector<int>>();
             title = jsonObj["title"].asString();
         }
     }
@@ -48,8 +48,8 @@ struct Chat {
     std::string toJson() {
         Json::Value jsonObj;
         jsonObj["idChat"] = idChat;
-        jsonObj["idList"] = idList;
-        jsonObj["idMessages"] = idMessages;
+      //  jsonObj["idList"] = idList;
+      //  jsonObj["idMessages"] = idMessages;
         jsonObj["title"] = title;
         return jsonObj.toStyledString();
     }
