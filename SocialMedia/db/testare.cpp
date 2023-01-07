@@ -9,7 +9,7 @@
 #include "handler/HandlerUserDB.h"
 #include "handler//HandlerPasswordsDB.h"
 
-#include "handler/HandlerChatDB.h"
+//#include "handler/HandlerChatDB.h"
 #include "handler/HandlerFriendDB.h"
 #include "handler/HandlerFriendRequest.h"
 #include "handler/HandlerMessageDB.h"

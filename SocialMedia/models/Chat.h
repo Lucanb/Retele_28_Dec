@@ -39,13 +39,9 @@ struct Chat {
         bool parsingSuccesful = reader.parse(json, jsonObj);
         if (parsingSuccesful) {
             idChat = jsonObj["idChat"].asInt();
-            idList = jsonObj["idList"].asInt();
-            idMessages = jsonObj["idMessages"].asString();
+            idList = jsonObj["idList"].as<std::vector<int>>();
+            idMessages = jsonObj["idMessages"].as<std::vector<int>>();
             title = jsonObj["title"].asString();
-            lastname = jsonObj["lastname"].asString();
-            birthday = jsonObj["birthday"].asString();
-            accountCreationDate = jsonObj["accountCreationDate"].asString();
-            profileDescription = jsonObj["profileDescription"].asString();
         }
     }
 
