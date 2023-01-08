@@ -11,7 +11,6 @@
 #include <string>
 #include <vector>
 
-
 using namespace std;
 
 struct HandlerUserDB
@@ -20,7 +19,7 @@ struct HandlerUserDB
     HandlerUserDB() = default;
 
     int createUser(
-            User user)
+        User user)
     {
 
         sqlite3 *db;
@@ -52,7 +51,7 @@ struct HandlerUserDB
             "\'" + user.accountCreationDate + "\'," +
             "\'" + user.profileDescription + "\')";
         rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
-      if (rc != SQLITE_OK)
+        if (rc != SQLITE_OK)
         {
             fprintf(stderr, "Select doesn't work %s\n", err_msg);
             return 0;
@@ -88,6 +87,12 @@ struct HandlerUserDB
                 return 0;
             }
         }
+    }
+
+    // by username, not by id
+    User getUserByUsername(string username)
+    {
+        return User();
     }
 
     User getUser(int id)

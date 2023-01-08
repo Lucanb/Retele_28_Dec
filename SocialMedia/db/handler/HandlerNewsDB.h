@@ -55,6 +55,11 @@ struct HandlerNewsDB
         }
     }
 
+    News getNewsByTitle(string title)
+    {
+        return News();
+    }
+
     News getNews(int id, int authorId)
     {
 

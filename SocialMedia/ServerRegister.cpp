@@ -32,7 +32,7 @@ int main() {
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = htonl(INADDR_ANY);
 
-    server.sin_port = htons(PORT_REGISTER);
+    server.sin_port = htons(PORT_LOGIN);
 
     if (bind(sd, (struct sockaddr *) &server, sizeof(struct sockaddr)) == -1) {
         perror("Error on bind on register server \n");
@@ -48,7 +48,7 @@ int main() {
     while (1) {
         int client;
         socklen_t length = sizeof(form);
-        printf("Register server waits on %d\n", PORT_REGISTER);
+        printf("Register server waits on %d\n", PORT_LOGIN);
         fflush(stdout);
         client = accept(sd, (struct sockaddr *) &form, &length);
         // client = accept(sd, reinterpret_cast<sockaddr *>(&form), reinterpret_cast<socklen_t *>(&length)); /// careful
