@@ -82,54 +82,49 @@ int main() {
             // std::cout << json;
 
             User user = User(json);;
-            std::cout << user.userName<<'\n';
-            std::cout<<user.lastname<<'\n';
-            std::cout<<user.firstname<<'\n';
-            std::cout << user.isAdmin<<'\n';
-            std::cout<<user.accountCreationDate<<'\n';
-            std::cout<<user.birthday<<'\n';
-            std::cout<<user.profileDescription<<'\n';
+            std::cout << user.userName << '\n';
+            std::cout << user.lastname << '\n';
+            std::cout << user.firstname << '\n';
+            std::cout << user.isAdmin << '\n';
+            std::cout << user.accountCreationDate << '\n';
+            std::cout << user.birthday << '\n';
+            std::cout << user.profileDescription << '\n';
             HandlerUserDB handlerUser;
 
             int succes = handlerUser.createUser(user);
-            if (write(client, to_string(succes).c_str(),BUFSIZ)<=0){
+            if (write(client, to_string(succes).c_str(), BUFSIZ) <= 0) {
                 perror("Server Register Could Not Respond To Client!");
                 close(client);
                 exit(0);
             }
-           if(succes) {
-               cout << "User Successfully Created!";
-               char jsonPassword[BUFSIZ];
-               if(read(client,jsonPassword,BUFSIZ) < 0)
-               {
-                   perror("Password access!");
-                   close(client);
-                   exit(0);
-               }
-               Passwords password = Passwords(jsonPassword);
-               cout<<password.toJson()<<'\n';
-               HandlerPasswordsDB handlerPasswordsDB;
-               int responsePassword = handlerPasswordsDB.createPassword(password);
-               if (write(client, to_string(succes).c_str(),BUFSIZ)<=0){
-                   perror("Server Register Could Not Respond To Client!");
-                   close(client);
-                   exit(0);
-               }
-               if(responsePassword == 1)
-               {
-                  cout<<"Password Successfullly Created!";
-               }
-               else
-               {
-                   cout<<"Couldn't Creeate Password";
-               }
+            if (succes) {
+                cout << "User Successfully Created!";
+                char jsonPassword[BUFSIZ];
+                if (read(client, jsonPassword, BUFSIZ) < 0) {
+                    perror("Password access!");
+                    close(client);
+                    exit(0);
+                }
+                Passwords password = Passwords(jsonPassword);
+                cout << password.toJson() << '\n';
+                HandlerPasswordsDB handlerPasswordsDB;
+                int responsePassword = handlerPasswordsDB.createPassword(password);
+                if (write(client, to_string(succes).c_str(), BUFSIZ) <= 0) {
+                    perror("Server Register Could Not Respond To Client!");
+                    close(client);
+                    exit(0);
+                }
+                if (responsePassword == 1) {
+                    cout << "Password Successfullly Created!";
+                } else {
+                    cout << "Couldn't Creeate Password";
+                }
 
-           }
-               else {
-               cout << "Fail Create User";
-           }
-               close(client);
-               exit(0);
+            } else {
+                cout << "Fail Create User";
+            }
+            close(client);
+            exit(0);
         }
     }
 

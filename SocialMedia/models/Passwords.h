@@ -21,9 +21,9 @@ struct Passwords {
     Passwords(
             int id, std::string userName, std::string password
     ) {
-        this->id=id;
-        this->userName=userName;
-        this->password=password;
+        this->id = id;
+        this->userName = userName;
+        this->password = password;
     }
 
     Passwords(std::string json) {

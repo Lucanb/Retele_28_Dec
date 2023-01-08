@@ -18,8 +18,7 @@ using namespace std;
 
 int main() {
     /*
-     *
-     */
+
     User user;
 
    // user.userName = "test username 2";
@@ -122,13 +121,14 @@ handler.getFriend(friendd.id1,friendd.id2);
     passwords.password="asada";
 
     handler.createPassword(passwords);
-    handler.getPassword(1);
+    handler.getPassword("Luckya");
 
-    Passwords getPass = handler.getPassword(1);
-    handler.updatePassword(getPass);
-    handler.deletePasswords(1);
-    handler.getPassword(1);
-*/
+     Passwords getPass = handler.getPassword("Luckya");
+  //  handler.updatePassword(getPass);
+   // handler.deletePasswords(1);
+   // handler.getPassword(1);
+
+    */
 }
 
 /*

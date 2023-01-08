@@ -79,6 +79,64 @@ struct HandlerPasswordsDB {
         }
     }
 
+
+    Passwords getPasswordId(int  id) {
+
+        sqlite3 *db;
+        sqlite3_stmt *stmt;
+
+        char *err_msg = 0;
+        sqlite3_stmt *res;
+
+        int rc = sqlite3_open("db/mydb.db", &db);
+
+        if (rc != SQLITE_OK) {
+
+            fprintf(stderr, "Cannot open database on get password: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return Passwords(-1, "Error Open Data Base", "Error");
+        }
+
+        string sqlVerif =
+                "SELECT id FROM Passwords WHERE id=" + to_string(id) ; ///Careful
+
+        rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
+
+        if (rc != SQLITE_OK) {
+            fprintf(stderr, "Cannot use existance select: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return Passwords(-2, "Error Open Data Base", "Error");
+        } else {
+            vector<string> s;
+            parsing(returningStr, s);
+            if (s.size() == 0) {
+                fprintf(stderr, "Cannot find the user for password: %s\n", sqlite3_errmsg(db));
+                sqlite3_close(db);
+                return Passwords(-3, "Error Open Data Base", "Error");
+            } else {
+
+                string sqlQuery =
+                        "SELECT userName,password FROM Passwords WHERE id=" + to_string(id);
+
+                rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
+                if (rc != SQLITE_OK) {
+                    fprintf(stderr, "Select comand doesn t work: %s\n", sqlite3_errmsg(db));
+                    sqlite3_close(db);
+                    return Passwords(-4, "Error Open Data Base", "Error");
+                } else {
+                    vector<string> s;
+                    parsing(returningStr, s);
+                    std::string userName = s[0];
+                    std::string password = s[1];
+
+                    cout << "User Getted!" << '\n';
+                    return Passwords(id, userName, password);
+                }
+            }
+        }
+    }
+
+
     Passwords getPassword(string userName) {
 
         sqlite3 *db;
