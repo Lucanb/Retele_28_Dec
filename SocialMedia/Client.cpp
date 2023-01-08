@@ -20,6 +20,8 @@
 
 using namespace std;
 
+User loggedInUser;
+
 string currentISO8601TimeUTC()
 { /// stack overflow
     auto now = std::chrono::system_clock::now();
@@ -287,13 +289,19 @@ void Login()
     if (strcmp(response, "1") == 0)
     {
         cout << "YOU ARE LOGGED IN!\n";
-        LoggedInMenu();
+        getUserData(username);
     }
     else
     {
         cout << "FAILED TO LOG IN. PLEASE TRY AGAIN!\n";
         Login();
     }
+}
+
+void getUserData(string username)
+{
+    // functia asta apeleaza serverul ServerGetUser
+    // daca am luat datele la user, atunci apelam LoggedInMenu()
 }
 
 int main()
