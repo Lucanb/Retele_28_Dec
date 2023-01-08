@@ -91,6 +91,21 @@ void CreeateUser() {
         perror("Error at bytes Written Client");
         exit(-3);
     }
+    char response[BUFSIZ];
+    if(read(sd,response,BUFSIZ)<0){
+      perror("Client could not read server register response");
+      exit(-4);
+    }
+    if(strcmp(response,"1") == 0)
+    {
+        cout<<"User Created Successfully!";
+    }
+    else
+    {
+        perror("Fail to create user try again");
+    }
+
+
 }
 
 int main() {

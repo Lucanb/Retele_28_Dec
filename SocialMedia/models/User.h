@@ -67,6 +67,7 @@ struct User {
         jsonObj["isAdmin"] = isAdmin;
         jsonObj["userName"] = userName;
         jsonObj["firstname"] = firstname;
+        jsonObj["lastname"] = lastname;
         jsonObj["birthday"] = birthday;
         jsonObj["accountCreationDate"] = accountCreationDate;
         jsonObj["profileDescription"] = profileDescription;

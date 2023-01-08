@@ -20,14 +20,14 @@ struct HandlerUserDB
     HandlerUserDB() = default;
 
     int createUser(
-        struct User user)
+            User user)
     {
 
         sqlite3 *db;
         char *err_msg = 0;
         sqlite3_stmt *res;
 
-        int rc = sqlite3_open("mydb.db", &db);
+        int rc = sqlite3_open("db/mydb.db", &db);
 
         if (rc != SQLITE_OK)
         {
@@ -51,10 +51,10 @@ struct HandlerUserDB
             "\'" + user.birthday + "\'," +
             "\'" + user.accountCreationDate + "\'," +
             "\'" + user.profileDescription + "\')";
-
+        cout<<"\n \n"<<sqlQuery<<"\n \n";
+        cout<<"\n \n"<<sqlVerif<<"\n \n";
         rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
-
-        if (rc != SQLITE_OK)
+      if (rc != SQLITE_OK)
         {
             fprintf(stderr, "Select doesn't work %s\n", err_msg);
             return 0;
