@@ -5,6 +5,7 @@
 #include<chrono>
 #include<iomanip>
 #include "models/User.h"
+#include "models/Passwords.h"
 #include<sys/types.h>
 #include<sys/socket.h>
 #include <netinet/in.h>
@@ -58,6 +59,12 @@ void CreeateUser() {
 
     cin >> userCreeateAccount.isAdmin;
 
+    string password;
+
+    cout << "Choose your password:\n";
+
+    cin >> password;
+
     int sd;
     struct sockaddr_in server;
     int raspuns;
@@ -79,12 +86,13 @@ void CreeateUser() {
     }
 
     string json = userCreeateAccount.toJson();
-    char towrite[BUFSIZ];
-    for(int j=0;j<BUFSIZ;j++)
-        towrite[j]=0;
 
-    for(int j=0;j<json.size();j++)
-        towrite[j]=json[j];
+    char towrite[BUFSIZ];
+    for (int j = 0; j < BUFSIZ; j++)
+        towrite[j] = 0;
+
+    for (int j = 0; j < json.size(); j++)
+        towrite[j] = json[j];
 
     int bytesWritten = write(sd, &towrite, BUFSIZ);
     if (bytesWritten <= 0) {
@@ -92,16 +100,48 @@ void CreeateUser() {
         exit(-3);
     }
     char response[BUFSIZ];
-    if(read(sd,response,BUFSIZ)<0){
-      perror("Client could not read server register response");
-      exit(-4);
+    if (read(sd, response, BUFSIZ) < 0) {
+        perror("Client could not read server register response");
+        exit(-4);
     }
-    if(strcmp(response,"1") == 0)
-    {
-        cout<<"User Created Successfully!";
-    }
-    else
-    {
+
+    if (strcmp(response, "1") == 0) {
+        Passwords passwordObj;
+        passwordObj.userName = userCreeateAccount.userName;
+        passwordObj.password=password;
+        string jsonPassword = passwordObj.toJson();
+        for(int j=0 ;j<BUFSIZ;j++)
+        {
+            towrite[j]=0;
+        }
+
+        for(int j=0;j<jsonPassword.size();j++)
+        {
+            towrite[j]=jsonPassword[j];
+        }
+
+        bytesWritten = write(sd, &towrite, BUFSIZ);
+
+        if (bytesWritten <= 0) {
+            perror("Error bytes writen password Client");
+            exit(-5);
+        }
+
+        if (read(sd, response, BUFSIZ) < 0) {
+            perror("Client could not read server register response");
+            exit(-4);
+        }
+       if(strcmp(response,"1") == 0)
+       {
+           cout<<"Password Created Successfully!";
+       }
+       else
+       {
+           cout<<"Fail to create password";
+       }
+
+        cout << "User Created Successfully!";
+    } else {
         perror("Fail to create user try again");
     }
 

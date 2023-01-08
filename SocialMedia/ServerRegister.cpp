@@ -1,6 +1,8 @@
 #include <iostream>
 #include "models/User.h"
 #include "db/handler/HandlerUserDB.h"
+#include "models/Passwords.h"
+#include "db/handler/HandlerPasswordsDB.h"
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -94,12 +96,39 @@ int main() {
                 close(client);
                 exit(0);
             }
-           if(succes)
-            cout<<"User Successfully Created!";
-           else
-            cout<<"Fail Create User";
-           close(client);
-            exit(0);
+           if(succes) {
+               cout << "User Successfully Created!";
+               char jsonPassword[BUFSIZ];
+               if(read(client,jsonPassword,BUFSIZ) < 0)
+               {
+                   perror("Password access!");
+                   close(client);
+                   exit(0);
+               }
+               Passwords password = Passwords(jsonPassword);
+               cout<<password.toJson()<<'\n';
+               HandlerPasswordsDB handlerPasswordsDB;
+               int responsePassword = handlerPasswordsDB.createPassword(password);
+               if (write(client, to_string(succes).c_str(),BUFSIZ)<=0){
+                   perror("Server Register Could Not Respond To Client!");
+                   close(client);
+                   exit(0);
+               }
+               if(responsePassword == 1)
+               {
+                  cout<<"Password Successfullly Created!";
+               }
+               else
+               {
+                   cout<<"Couldn't Creeate Password";
+               }
+
+           }
+               else {
+               cout << "Fail Create User";
+           }
+               close(client);
+               exit(0);
         }
     }
 

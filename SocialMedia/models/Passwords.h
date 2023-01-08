@@ -32,7 +32,7 @@ struct Passwords {
         bool parsingSuccesful = reader.parse(json, jsonObj);
         if (parsingSuccesful) {
             id = jsonObj["id"].asInt();
-            userName = jsonObj["userName"].asInt();
+            userName = jsonObj["userName"].asString();
             password = jsonObj["password"].asString();
         }
     }

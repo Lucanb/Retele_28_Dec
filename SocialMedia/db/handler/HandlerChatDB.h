@@ -24,7 +24,7 @@ struct HandlerChatDB {
         char *err_msg = 0;
         sqlite3_stmt *res;
 
-        int rc = sqlite3_open("mydb.db", &db);
+        int rc = sqlite3_open("db/mydb.db", &db);
 
         if (rc != SQLITE_OK) {
             fprintf(stderr, "Cannot open database on insert Chat: %s\n", sqlite3_errmsg(db));
@@ -97,7 +97,7 @@ struct HandlerChatDB {
         char *err_msg = 0;
         sqlite3_stmt *res;
 
-        int rc = sqlite3_open("mydb.db", &db);
+        int rc = sqlite3_open("db/mydb.db", &db);
 
         if (rc != SQLITE_OK) {
 
@@ -175,7 +175,7 @@ struct HandlerChatDB {
         char *err_msg = 0;
         sqlite3_stmt *res;
 
-        int rc = sqlite3_open("mydb.db", &db);
+        int rc = sqlite3_open("db/mydb.db", &db);
 
         if (rc != SQLITE_OK) {
 
@@ -243,7 +243,7 @@ struct HandlerChatDB {
         char *err_msg = 0;
         sqlite3_stmt *res;
 
-        int rc = sqlite3_open("mydb.db", &db); //aici am schimbat din database.db in mydb.db
+        int rc = sqlite3_open("db/mydb.db", &db); //aici am schimbat din database.db in mydb.db
 
         if (rc != SQLITE_OK) {
 

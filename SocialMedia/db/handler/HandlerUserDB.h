@@ -51,8 +51,6 @@ struct HandlerUserDB
             "\'" + user.birthday + "\'," +
             "\'" + user.accountCreationDate + "\'," +
             "\'" + user.profileDescription + "\')";
-        cout<<"\n \n"<<sqlQuery<<"\n \n";
-        cout<<"\n \n"<<sqlVerif<<"\n \n";
         rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
       if (rc != SQLITE_OK)
         {
@@ -101,7 +99,7 @@ struct HandlerUserDB
         char *err_msg = 0;
         sqlite3_stmt *res;
 
-        int rc = sqlite3_open("mydb.db", &db);
+        int rc = sqlite3_open("db/mydb.db", &db);
 
         if (rc != SQLITE_OK)
         {
@@ -179,7 +177,7 @@ struct HandlerUserDB
         char *err_msg = 0;
         sqlite3_stmt *res;
 
-        int rc = sqlite3_open("mydb.db", &db);
+        int rc = sqlite3_open("db/mydb.db", &db);
 
         if (rc != SQLITE_OK)
         {
@@ -246,7 +244,7 @@ struct HandlerUserDB
         char *err_msg = 0;
         sqlite3_stmt *res;
 
-        int rc = sqlite3_open("mydb.db", &db); // aici am schimbat din database.db in mydb.db
+        int rc = sqlite3_open("db/mydb.db", &db); // aici am schimbat din database.db in mydb.db
 
         if (rc != SQLITE_OK)
         {
