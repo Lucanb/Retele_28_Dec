@@ -103,7 +103,7 @@ int main()
             Passwords verifyPassword = handlerPasswords.getPassword(loginDetails.userName);
 
             int loginSuccessfull;
-            if (strcmp(loginDetails.password, verifyPassword.password) == 0)
+            if (loginDetails.password == verifyPassword.password) ///ciudat
             {
                 loginSuccessfull = 1;
             }

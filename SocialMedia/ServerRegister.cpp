@@ -14,6 +14,7 @@
 
 #define PORT_REGISTER 2023
 
+
 int main() {
     struct sockaddr_in server;
     struct sockaddr_in form;
@@ -32,7 +33,7 @@ int main() {
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = htonl(INADDR_ANY);
 
-    server.sin_port = htons(PORT_LOGIN);
+    server.sin_port = htons(PORT_REGISTER);
 
     if (bind(sd, (struct sockaddr *) &server, sizeof(struct sockaddr)) == -1) {
         perror("Error on bind on register server \n");
@@ -48,7 +49,7 @@ int main() {
     while (1) {
         int client;
         socklen_t length = sizeof(form);
-        printf("Register server waits on %d\n", PORT_LOGIN);
+        printf("Register server waits on %d\n", PORT_REGISTER);
         fflush(stdout);
         client = accept(sd, (struct sockaddr *) &form, &length);
         // client = accept(sd, reinterpret_cast<sockaddr *>(&form), reinterpret_cast<socklen_t *>(&length)); /// careful

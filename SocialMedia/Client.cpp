@@ -31,6 +31,95 @@ string currentISO8601TimeUTC()
     return ss.str();
 }
 
+
+void getUserData(string username)
+{
+    // functia asta apeleaza serverul ServerGetUser
+    // daca am luat datele la user, atunci apelam LoggedInMenu()
+}
+
+void Login()
+{
+    cout << "Please input your login details:\n";
+
+    string username;
+    cout << "username:\n";
+    cin >> username;
+
+    string password;
+    cout << "password:\n";
+    cin >> password;
+
+    Passwords passwords;
+    passwords.userName = username;
+    passwords.password = password;
+
+    int sd;
+    struct sockaddr_in server;
+    int raspuns;
+
+    if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+    {
+        perror("Error at socket client at login\n");
+        exit(-1); // placeholder, nu ne trebuie exit
+        /*
+        cout<<"Failed to create user. Please try again!\n";
+        Login();
+        //SAU
+        //MainMenu();
+        */
+    }
+
+    bzero(&server, sizeof(server));
+
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = htonl(INADDR_ANY);
+    server.sin_port = htons(PORT_LOGIN);
+
+    if (connect(sd, (struct sockaddr *)&server, sizeof(struct sockaddr)) == -1)
+    {
+        perror("Wrong connect to register \n");
+        exit(-2);
+    }
+
+    string jsonLogin = passwords.toJson();
+
+    char towrite[BUFSIZ];
+    for (int j = 0; j < BUFSIZ; j++)
+        towrite[j] = 0;
+
+    for (int j = 0; j < jsonLogin.size(); j++)
+        towrite[j] = jsonLogin[j];
+
+    int bytesWritten = write(sd, &towrite, BUFSIZ);
+    if (bytesWritten <= 0)
+    {
+        perror("Error at bytes Written Client");
+        exit(-3);
+    }
+
+    char response[BUFSIZ];
+    if (read(sd, response, BUFSIZ) < 0)
+    {
+        perror("Client could not read server login response");
+        exit(-4);
+    }
+
+    // DACA A MERS LOGIN_UL PRIMIM 1, DACA NU, 0
+    if (strcmp(response, "1") == 0)
+    {
+        cout << "YOU ARE LOGGED IN!\n";
+        getUserData(username);
+    }
+    else
+    {
+        cout << "FAILED TO LOG IN. PLEASE TRY AGAIN!\n";
+        Login();
+    }
+}
+
+void CreeateUser();
+
 void MainMenu()
 {
     cout << "Welcome to VirtualSoc!" << '\n';
@@ -64,22 +153,6 @@ void MainMenu()
     {
         cout << "Comanda gresita!";
     }
-}
-
-void LoggedInMenu()
-{
-    cout << "Welcome to your Account!" << '\n';
-
-    cout << "Chose your command  \n";
-    cout << "1 - profile \n";
-    cout << "2 - create news \n";
-    cout << "3 - search news \n";
-    cout << "4 - search friend \n";
-    cout << "5 - see friend requests \n";
-    //...
-
-    int comanda;
-    cin >> comanda;
 }
 
 void CreeateUser()
@@ -218,91 +291,23 @@ void CreeateUser()
     }
 }
 
-void Login()
+
+void LoggedInMenu()
 {
-    cout << "Please input your login details:\n";
+    cout << "Welcome to your Account!" << '\n';
 
-    string username;
-    cout << "username:\n";
-    cin >> username;
+    cout << "Chose your command  \n";
+    cout << "1 - profile \n";
+    cout << "2 - create news \n";
+    cout << "3 - search news \n";
+    cout << "4 - search friend \n";
+    cout << "5 - see friend requests \n";
+    //...
 
-    string password;
-    cout << "password:\n";
-    cin >> password;
-
-    Passwords password;
-    password.username = username;
-    password.password = password;
-
-    int sd;
-    struct sockaddr_in server;
-    int raspuns;
-
-    if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
-    {
-        perror("Error at socket client at login\n");
-        exit(-1); // placeholder, nu ne trebuie exit
-        /*
-        cout<<"Failed to create user. Please try again!\n";
-        Login();
-        //SAU
-        //MainMenu();
-        */
-    }
-
-    bzero(&server, sizeof(server));
-
-    server.sin_family = AF_INET;
-    server.sin_addr.s_addr = htonl(INADDR_ANY);
-    server.sin_port = htons(PORT_LOGIN);
-
-    if (connect(sd, (struct sockaddr *)&server, sizeof(struct sockaddr)) == -1)
-    {
-        perror("Wrong connect to register \n");
-        exit(-2);
-    }
-
-    string jsonLogin = password.toJson();
-
-    char towrite[BUFSIZ];
-    for (int j = 0; j < BUFSIZ; j++)
-        towrite[j] = 0;
-
-    for (int j = 0; j < jsonLogin.size(); j++)
-        towrite[j] = jsonLogin[j];
-
-    int bytesWritten = write(sd, &towrite, BUFSIZ);
-    if (bytesWritten <= 0)
-    {
-        perror("Error at bytes Written Client");
-        exit(-3);
-    }
-
-    char response[BUFSIZ];
-    if (read(sd, response, BUFSIZ) < 0)
-    {
-        perror("Client could not read server login response");
-        exit(-4);
-    }
-
-    // DACA A MERS LOGIN_UL PRIMIM 1, DACA NU, 0
-    if (strcmp(response, "1") == 0)
-    {
-        cout << "YOU ARE LOGGED IN!\n";
-        getUserData(username);
-    }
-    else
-    {
-        cout << "FAILED TO LOG IN. PLEASE TRY AGAIN!\n";
-        Login();
-    }
+    int comanda;
+    cin >> comanda;
 }
 
-void getUserData(string username)
-{
-    // functia asta apeleaza serverul ServerGetUser
-    // daca am luat datele la user, atunci apelam LoggedInMenu()
-}
 
 int main()
 {
