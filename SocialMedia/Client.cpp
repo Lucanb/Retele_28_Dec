@@ -450,12 +450,21 @@ void LoggedInMenu() {
 
     cout << "Chose your command  \n";
 
-    cout << "1 - profile \n";
-    cout << "2 - create news \n";
-    cout << "3 - search news \n";
-    cout << "4 - search friend \n";
-    cout << "5 - see friend requests \n";
-    cout << "6 - search users with that name \n";
+    cout << " 1 - Profile \n";   //Done it;
+    cout << " 2 - Create news \n"; //Done it;
+    cout << " 3 - Search news \n"; //To do
+    cout << " 4 - Search friend \n"; //To do
+    cout << " 5 - See friend requests \n"; //To do
+    cout << " 6 - Search users with that name \n";
+    cout << " 7 - Add FriendRequest \n"; //Done it but u need to verify;
+    cout << " 8 - Send Message \n"; //Merge la mai multi useri
+    cout << " 9 - Search Message \n"; //To do
+    cout << " 10 - Change Password \n"; //Optional
+    cout << " 11 - Delete Account \n"; //Optional
+    cout << " 12 - Search User \n" //To do.
+    cout << " 13 - Add Fiend \n" // To do (daca am vreo cerere ii adaug).
+
+    //To do Profil + Post - private / publice;
     //...
 
     int comanda;

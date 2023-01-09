@@ -245,7 +245,7 @@ struct HandlerFriendRequestDB
             return collect;
         }
 
-        string sqlVerif = "SELECT id FROM Users WHERE userName = " + string("\'") +string("%")
+        string sqlVerif = "SELECT id FROM Users WHERE userName LIKE " + string("\'") +string("%")
                 + name+ string("%") + string("\'");    //aici facem cautarea de id uri cu acel substring
 
         rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
