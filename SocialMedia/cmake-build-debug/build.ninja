@@ -91,6 +91,12 @@ build CMakeFiles/SocialMedia.dir/ServerGetUser.cpp.o: CXX_COMPILER__SocialMedia_
   OBJECT_DIR = CMakeFiles/SocialMedia.dir
   OBJECT_FILE_DIR = CMakeFiles/SocialMedia.dir
 
+build CMakeFiles/SocialMedia.dir/ServerGetFriendRequests.cpp.o: CXX_COMPILER__SocialMedia_Debug /home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/ServerGetFriendRequests.cpp || cmake_object_order_depends_target_SocialMedia
+  DEP_FILE = CMakeFiles/SocialMedia.dir/ServerGetFriendRequests.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/SocialMedia.dir
+  OBJECT_FILE_DIR = CMakeFiles/SocialMedia.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target SocialMedia
@@ -99,7 +105,7 @@ build CMakeFiles/SocialMedia.dir/ServerGetUser.cpp.o: CXX_COMPILER__SocialMedia_
 #############################################
 # Link the executable SocialMedia
 
-build SocialMedia: CXX_EXECUTABLE_LINKER__SocialMedia_Debug CMakeFiles/SocialMedia.dir/main.cpp.o CMakeFiles/SocialMedia.dir/db/InitializeDB.cpp.o CMakeFiles/SocialMedia.dir/db/testare.cpp.o CMakeFiles/SocialMedia.dir/Client.cpp.o CMakeFiles/SocialMedia.dir/ServerRegister.cpp.o CMakeFiles/SocialMedia.dir/ServerLogin.cpp.o CMakeFiles/SocialMedia.dir/ServerGetUser.cpp.o
+build SocialMedia: CXX_EXECUTABLE_LINKER__SocialMedia_Debug CMakeFiles/SocialMedia.dir/main.cpp.o CMakeFiles/SocialMedia.dir/db/InitializeDB.cpp.o CMakeFiles/SocialMedia.dir/db/testare.cpp.o CMakeFiles/SocialMedia.dir/Client.cpp.o CMakeFiles/SocialMedia.dir/ServerRegister.cpp.o CMakeFiles/SocialMedia.dir/ServerLogin.cpp.o CMakeFiles/SocialMedia.dir/ServerGetUser.cpp.o CMakeFiles/SocialMedia.dir/ServerGetFriendRequests.cpp.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/SocialMedia.dir
   POST_BUILD = :

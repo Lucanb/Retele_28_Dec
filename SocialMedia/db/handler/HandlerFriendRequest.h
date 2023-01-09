@@ -234,7 +234,7 @@ struct HandlerFriendRequestDB
         char *err_msg = 0;
         sqlite3_stmt *res;
 
-        int rc = sqlite3_open("db/mydb.db", &db);
+        int rc = sqlite3_open("mydb.db", &db);
 
         if (rc != SQLITE_OK)
         {
@@ -245,7 +245,8 @@ struct HandlerFriendRequestDB
             return collect;
         }
 
-        string sqlVerif = "SELECT id FROM Users WHERE userName = " + string("\'") + name+ string("\'");
+        string sqlVerif = "SELECT id FROM Users WHERE userName = " + string("\'") +string("%")
+                + name+ string("%") + string("\'");    //aici facem cautarea de id uri cu acel substring
 
         rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
         if(rc!=SQLITE_OK)
@@ -268,25 +269,30 @@ struct HandlerFriendRequestDB
             }
             else
             {
-                int id = stoi(s[0]);
-                string sqlQuery = "SELECT userName FROM Users JOIN FriendRequest ON" + string("(") +
-                                  "Users.id = FriendRequest.id1 AND FriendRequest.id2 = "+ to_string(id) + ")"; //aici scot toti userii care au id ul 1 in Friends
-
-                rc = sqlite3_exec(db, sqlQuery.c_str(), callback2, 0, &err_msg);
-                if(rc != SQLITE_OK)
+                for(int i=0; i<s.size() ;i++)
                 {
-                    fprintf(stderr, "cannot take Friend Request list %s\n", sqlite3_errmsg(db));
-                    sqlite3_close(db);
-                    collect.push_back("fail");
-                    return collect;
-                }
-                else {
-                    printf("Show Friend Request List Succes");
-                    parsing(returningStr2, collect);
-                    return collect;
+                    int id = stoi(s[i]);
+                    string sqlQuery = "SELECT userName FROM Users JOIN FriendRequest ON" + string("(") +
+                                      "Users.id = FriendRequest.id1 AND FriendRequest.id2 = " + to_string(id) +
+                                      ")"; //aici scot toti userii care au id ul in User  in Friends (sunt prieteni)
+
+                    rc = sqlite3_exec(db, sqlQuery.c_str(), callback2, 0, &err_msg);
+                    if (rc != SQLITE_OK) {
+                        fprintf(stderr, "cannot take Friend Request list %s\n", sqlite3_errmsg(db));
+                        sqlite3_close(db);
+                        collect.push_back("fail");
+                        return collect;
+                    } else {
+                        printf("Show Friend Request List Succes");
+                        vector<string>s1;
+                        parsing(returningStr2, s1);
+                        if(s1.size()>0)
+                        collect.push_back(s1[0]);
+                    }
                 }
             }
         }
+        return collect;
     }
 
 

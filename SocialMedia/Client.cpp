@@ -18,6 +18,7 @@
 #define PORT_REGISTER 2023
 #define PORT_LOGIN 2024
 #define PORT_GETUSER 2025
+#define PORT_GetFriendRequest 2026
 
 using namespace std;
 
@@ -156,12 +157,13 @@ void Login() {
         exit(-4);
     }
 
-    string bcd;
+    string actualUser;
     // DACA A MERS LOGIN_UL PRIMIM 1, DACA NU, 0
-    if (strcmp(response, "fail") != 0) {
+    if (strcmp(response, "0") != 0) {
         cout << "YOU ARE LOGGED IN!\n";
-        getUserData(username,bcd);
-        cout<<bcd;
+        getUserData(username,actualUser);
+        cout<<actualUser;
+        loggedInUser = User(actualUser);
         LoggedInMenu();
     } else {
         cout << "FAILED TO LOG IN. PLEASE TRY AGAIN!\n";
@@ -317,20 +319,117 @@ void CreeateUser() {
     }
 }
 
+void GetFriendReq(string usernames,string UserGetted)
+{
+// functia asta apeleaza serverul ServerGetUser
+    // daca am luat datele la user, atunci apelam LoggedInMenu()
+    int sd;
+    struct sockaddr_in server;
+    int raspuns;
+
+    if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+        perror("Error at socket client at getUser\n");
+        exit(-1); // placeholder, nu ne trebuie exit
+        /*
+        cout<<"Failed to create user. Please try again!\n";
+        Login();
+        //SAU
+        //MainMenu();
+        */
+    }
+    bzero(&server, sizeof(server));
+
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = htonl(INADDR_ANY);
+    server.sin_port = htons(PORT_GetFriendRequest);
+
+    if (connect(sd, (struct sockaddr *) &server, sizeof(struct sockaddr)) == -1) {
+        perror("Wrong connect to GetUser \n");
+        exit(-2);
+    }
+    string jsonGetUser = usernames;
+
+    char towrite[BUFSIZ];
+    for (int j = 0; j < BUFSIZ; j++)
+        towrite[j] = 0;
+
+    for (int j = 0; j < jsonGetUser.size(); j++)
+        towrite[j] = jsonGetUser[j];
+
+    int bytesWritten = write(sd, &towrite, BUFSIZ);
+    if (bytesWritten <= 0) {
+        perror("Error at bytes Written Client");
+        exit(-3);
+    }
+
+    char response[BUFSIZ];
+    if (read(sd, response, BUFSIZ) < 0) {
+        perror("Client could not read server user get response");
+        exit(-4);
+    }
+
+    if (strcmp(response, "fail") != 0) {
+       cout << "User data getted!\n";
+       // UserGetted = response;
+    } else {
+        cout << "FAILED TO LOG IN. PLEASE TRY AGAIN!\n";
+        UserGetted = "";
+    }
+}
 
 void LoggedInMenu() {
+    int command;
     cout << "Welcome to your Account!" << '\n';
 
     cout << "Chose your command  \n";
+
     cout << "1 - profile \n";
     cout << "2 - create news \n";
     cout << "3 - search news \n";
     cout << "4 - search friend \n";
     cout << "5 - see friend requests \n";
+    cout << "6 - search users with that name \n";
     //...
 
     int comanda;
     cin >> comanda;
+    if(comanda == 1) ///Inca nu merge da seg eror si fail la cautare ...
+    {
+        string show;
+        string profileDetails = loggedInUser.userName;
+        cout<<profileDetails;
+        getUserData(profileDetails,show);
+        cout<<show<<"\n";
+        LoggedInMenu();
+    }
+    else if(comanda = 2)
+    {
+
+    }
+    else if(comanda =3)
+    {
+          ///Search News
+    }
+    else if(comanda =4 )
+    {
+          ///Search Friend
+    }
+    else if(comanda ==5)
+    {
+        string show;
+        cout<<"Write the string that u want to match \n";
+        string s;
+        cin>>s;
+        GetFriendReq(s,show);
+        cout<<show<<'\n';
+        LoggedInMenu();
+         ///Search Friend Request
+    }
+    else
+    {
+        cout<<"Wrong Command \n";
+        LoggedInMenu();
+    }
 }
 
 

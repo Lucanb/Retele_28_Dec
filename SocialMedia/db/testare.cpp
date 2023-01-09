@@ -80,7 +80,7 @@ int main() {
     handler.deleteMessage(1,0);
     handler.getMessage(1,0);
 /*
-
+*/
     FriendRequest friendRequest;
     friendRequest.id1=0;
     friendRequest.id2=1;
@@ -91,7 +91,8 @@ int main() {
   //  handler.deleteFriendRequest(friendRequest.id1,friendRequest.id2);
   //  handler.updateFriendRequest(friendRequest);
   //  handler.deleteFriendRequest(friendRequest.id1,friendRequest.id2);
-
+  //  handler.GetRequestNames("m");
+  /*
   handler.GetRequestNames("test username 2");
 
     vector<int> v1,v2;
