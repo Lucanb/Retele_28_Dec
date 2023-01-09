@@ -54,7 +54,8 @@
 				11,
 				12,
 				13,
-				17
+				17,
+				18
 			]
 		}
 	],
@@ -92,7 +93,8 @@
 				11,
 				12,
 				13,
-				17
+				17,
+				18
 			]
 		},
 		{
@@ -210,6 +212,12 @@
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
 			"path" : "ServerLogin.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "ServerGetUser.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],
