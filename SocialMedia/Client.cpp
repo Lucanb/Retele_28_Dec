@@ -19,6 +19,7 @@
 #define PORT_LOGIN 2024
 #define PORT_GETUSER 2025
 #define PORT_GetFriendRequest 2026
+#define PORT_SEARCHNEWS 2027
 
 using namespace std;
 
@@ -175,6 +176,71 @@ void Login() {
 
 void CreeateUser();
 
+void SearchNews()
+{
+    string name;
+    string NewsGetted;
+    cout<<"Pleas Input a Name : \n";
+    cin>>name;
+
+    int sd;
+    struct sockaddr_in server;
+    int raspuns;
+
+    if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+        perror("Error at socket client at Search News\n");
+        exit(-1); // placeholder, nu ne trebuie exit
+        /*
+        cout<<"Failed to create user. Please try again!\n";
+        SearchNews();
+        //SAU
+        //MainMenu();
+        */
+    }
+    bzero(&server, sizeof(server));
+
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = htonl(INADDR_ANY);
+    server.sin_port = htons(PORT_SEARCHNEWS);
+
+    if (connect(sd, (struct sockaddr *) &server, sizeof(struct sockaddr)) == -1) {
+        perror("Wrong connect to SearchNews \n");
+        exit(-2);
+    }
+
+    string jsonGetUser = name; ///Trimitem la server acest mesaj.
+
+    char towrite[BUFSIZ];
+    for (int j = 0; j < BUFSIZ; j++)
+        towrite[j] = 0;
+
+    for (int j = 0; j < jsonGetUser.size(); j++)
+        towrite[j] = jsonGetUser[j];
+
+    int bytesWritten = write(sd, &towrite, BUFSIZ);
+    if (bytesWritten <= 0) {
+        perror("Error at bytes Written SearchNews");
+        exit(-3);
+    }
+
+    char response[BUFSIZ];
+    if (read(sd, response, BUFSIZ) < 0) {
+        perror("Client could not read server SearchNews response");
+        exit(-4);
+    }
+
+    if (strcmp(response, "fail") != 0) {
+        cout << "News data getted!\n";
+        NewsGetted = response; //afiseaza json-ul.
+    } else {
+        cout << "FAILED Search News . PLEASE TRY AGAIN!\n";
+        NewsGetted = "";
+        SearchNews();
+    }
+
+    cout<<NewsGetted;
+}
+
 void MainMenu() {
     cout << "Welcome to VirtualSoc!" << '\n';
 
@@ -192,7 +258,7 @@ void MainMenu() {
     } else if (comanda == 2) {
         CreeateUser();
     } else if (comanda == 3) {
-        // SEARCH POST BASED ON A KEYWORD
+         SearchNews();
     } else if (comanda == 4) {
         exit(0);
     } else {
@@ -331,13 +397,11 @@ void GetFriendReq(string usernames,string &UserGetted)
 
     if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
         perror("Error at socket client at getUser\n");
-        exit(-1); // placeholder, nu ne trebuie exit
-        /*
+         // placeholder, nu ne trebuie exit
         cout<<"Failed to create user. Please try again!\n";
         Login();
         //SAU
         //MainMenu();
-        */
     }
     bzero(&server, sizeof(server));
 
@@ -372,7 +436,7 @@ void GetFriendReq(string usernames,string &UserGetted)
 
     if (strcmp(response, "fail") != 0) {
        cout << "User data getted!\n";
-       // UserGetted = response;
+        UserGetted = response;
     } else {
         cout << "FAILED TO LOG IN. PLEASE TRY AGAIN!\n";
         UserGetted = "";
@@ -404,19 +468,21 @@ void LoggedInMenu() {
         cout<<show<<"\n";
         LoggedInMenu();
     }
-    else if(comanda = 2)
+    else if(comanda == 2)
     {
-
+        LoggedInMenu();
     }
-    else if(comanda =3)
+    else if(comanda == 3)
     {
           ///Search News
+        LoggedInMenu();
     }
-    else if(comanda =4 )
+    else if(comanda == 4 )
     {
           ///Search Friend
+        LoggedInMenu();
     }
-    else if(comanda ==5)
+    else if(comanda == 5)
     {
         string show;
         cout<<"Write the string that u want to match \n";
