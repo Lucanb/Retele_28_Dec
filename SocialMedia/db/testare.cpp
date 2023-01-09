@@ -109,11 +109,12 @@ Friend friendd;
 HandlerFriendDB handler;
 friendd.id1=0;
 friendd.id2=1;
-handler.createFriend(friendd);
-handler.getFriend(1,0);
-handler.updateFriend(friendd);
-handler.deleteFriend(friendd.id2,friendd.id1);
-handler.getFriend(friendd.id1,friendd.id2);
+//handler.createFriend(friendd);
+//handler.GetNames("test username 2");
+//handler.updateFriend(friendd);
+//handler.deleteFriend(friendd.id2,friendd.id1);
+//handler.getFriend(friendd.id1,friendd.id2);
+
 
     Passwords passwords;
     HandlerPasswordsDB handler;

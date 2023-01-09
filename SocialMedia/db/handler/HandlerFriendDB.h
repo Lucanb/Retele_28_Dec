@@ -107,6 +107,124 @@ struct HandlerFriendDB
             }
         }
     }
+/*
+    string AddFriendsName(string myName,string friendName)
+    {
+        sqlite3 *db;
+        sqlite3_stmt *stmt;
+
+        char *err_msg = 0;
+        sqlite3_stmt *res;
+
+        int rc = sqlite3_open("db/mydb.db", &db);
+
+        if (rc != SQLITE_OK)
+        {
+
+            fprintf(stderr, "Cannot open database on get Friend: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return "fail";
+        }
+
+        string sqlVerif = "SELECT id FROM Users WHERE userName = " + string("\'")+ friendName +string("\'");
+        string sqlVerif2= "SELECT id FROM Users WHERE userName = "+ string("\'")+ myName +string("\'");
+
+        rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
+        int rc2 = sqlite3_exec(db, sqlVerif2.c_str(), callback2, 0, &err_msg);
+        if (rc != SQLITE_OK)
+        {
+            fprintf(stderr, "Cannot use existance select: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return "fail";
+        }
+        else if(rc2!= SQLITE_OK)
+        {
+            fprintf(stderr, "Cannot use existance select: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return "fail";
+        }
+        else {
+            vector<string> s, s2;
+            parsing(returningStr, s);
+            parsing(returningStr2, s2);
+            if (s.size() == 0) {
+                fprintf(stderr, "Cannot find the friend: %s\n", sqlite3_errmsg(db));
+                sqlite3_close(db);
+                return "fail";
+            } else if (s2.size() == 0) {
+                fprintf(stderr, "Cannot find the friend: %s\n", sqlite3_errmsg(db));
+                sqlite3_close(db);
+                return "fail";
+            } else {
+                int id1 = stoi(s2[0]); // am id ul lui user 1
+                int id2 = stoi(s[0]);  // am id -ul lui user 2
+            }
+        }
+    }
+*/
+   vector<string> GetNames(string name) //vedem daa facem si cu type si bag numele meu ; e ca sa vad toti prietenii
+   {
+       vector<string> collect;
+       sqlite3 *db;
+       sqlite3_stmt *stmt;
+
+       char *err_msg = 0;
+       sqlite3_stmt *res;
+
+       int rc = sqlite3_open("mydb.db", &db);
+
+       if (rc != SQLITE_OK)
+       {
+
+           fprintf(stderr, "Cannot open database on get Friend: %s\n", sqlite3_errmsg(db));
+           sqlite3_close(db);
+           collect.push_back("fail");
+           return collect;
+       }
+
+       string sqlVerif = "SELECT id FROM Users WHERE userName = " + string("\'") + name+ string("\'");
+
+        rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
+       if(rc!=SQLITE_OK)
+       {
+           fprintf(stderr, "Cannot verify existence of that user name %s\n", sqlite3_errmsg(db));
+           sqlite3_close(db);
+           collect.push_back("fail");
+           return collect;
+       }
+       else
+       {
+           vector<string> s;
+           parsing(returningStr,s);
+           if(s.size() == 0)
+           {
+               fprintf(stderr, "user name does not exists %s\n", sqlite3_errmsg(db));
+               sqlite3_close(db);
+               collect.push_back("fail");
+               return collect;
+           }
+           else
+           {
+               int id = stoi(s[0]);
+               string sqlQuery = "SELECT userName FROM Users JOIN Friend ON" + string("(") +
+                       "Users.id = Friend.id1 AND Friend.id2 = "+ to_string(id) + ") "; //aici scot toti userii care au id ul 1 in Friends
+               rc = sqlite3_exec(db, sqlQuery.c_str(), callback2, 0, &err_msg);
+              if(rc != SQLITE_OK)
+              {
+                  fprintf(stderr, "cannot take friend list %s\n", sqlite3_errmsg(db));
+                  sqlite3_close(db);
+                  collect.push_back("fail");
+                  return collect;
+              }
+              else {
+                  printf("Show frieng List Succes");
+                  parsing(returningStr2, collect);
+                  return collect;
+              }
+           }
+       }
+   }
+
 
     Friend getFriend(int id1, int id2)
     {
