@@ -225,6 +225,72 @@ struct HandlerFriendRequestDB
         }
     }
 
+    vector<string> GetRequestNames(string name) //vedem daa facem si cu type si bag numele meu ; e ca sa vad toti prietenii
+    {
+        vector<string> collect;
+        sqlite3 *db;
+        sqlite3_stmt *stmt;
+
+        char *err_msg = 0;
+        sqlite3_stmt *res;
+
+        int rc = sqlite3_open("db/mydb.db", &db);
+
+        if (rc != SQLITE_OK)
+        {
+
+            fprintf(stderr, "Cannot open database on get Friend: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            collect.push_back("fail");
+            return collect;
+        }
+
+        string sqlVerif = "SELECT id FROM Users WHERE userName = " + string("\'") + name+ string("\'");
+
+        rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
+        if(rc!=SQLITE_OK)
+        {
+            fprintf(stderr, "Cannot verify existence of that user name %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            collect.push_back("fail");
+            return collect;
+        }
+        else
+        {
+            vector<string> s;
+            parsing(returningStr,s);
+            if(s.size() == 0)
+            {
+                fprintf(stderr, "user name does not exists %s\n", sqlite3_errmsg(db));
+                sqlite3_close(db);
+                collect.push_back("fail");
+                return collect;
+            }
+            else
+            {
+                int id = stoi(s[0]);
+                string sqlQuery = "SELECT userName FROM Users JOIN FriendRequest ON" + string("(") +
+                                  "Users.id = FriendRequest.id1 AND FriendRequest.id2 = "+ to_string(id) + ")"; //aici scot toti userii care au id ul 1 in Friends
+
+                rc = sqlite3_exec(db, sqlQuery.c_str(), callback2, 0, &err_msg);
+                if(rc != SQLITE_OK)
+                {
+                    fprintf(stderr, "cannot take Friend Request list %s\n", sqlite3_errmsg(db));
+                    sqlite3_close(db);
+                    collect.push_back("fail");
+                    return collect;
+                }
+                else {
+                    printf("Show Friend Request List Succes");
+                    parsing(returningStr2, collect);
+                    return collect;
+                }
+            }
+        }
+    }
+
+
+
     int updateFriendRequest(FriendRequest friendRequest)
     {
         sqlite3 *db;

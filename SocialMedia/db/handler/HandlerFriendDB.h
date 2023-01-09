@@ -217,7 +217,7 @@ struct HandlerFriendDB
                   return collect;
               }
               else {
-                  printf("Show frieng List Succes");
+                  printf("Show frieng List Succes \n");
                   parsing(returningStr2, collect);
                   return collect;
               }

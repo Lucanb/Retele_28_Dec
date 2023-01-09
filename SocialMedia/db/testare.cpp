@@ -57,18 +57,19 @@ int main() {
 
    HandlerNewsDB handler;
 
-    handler.createNews(news);
-    News getNews=handler.getNews(1,0);
+//    handler.createNews(news);
+   // News getNews=handler.getNews(1,0);
 
-    getNews.title="Try";
-    handler.updateNews(getNews);
+   // getNews.title="Try";
+   // handler.updateNews(getNews);
 
-    News test = handler.getNews(1,0);
-    cout<<test.title<<'\n';
+    //News test = handler.getNews(1,0);
+   // cout<<test.title<<'\n';
 
-    handler.deleteNews(test.id,test.authorId);
-    handler.getNews(1,2);
-/*
+    //handler.deleteNews(test.id,test.authorId);
+   // handler.getNews(1,2);
+   handler.getNewsByTitle("ion");
+
 
     Message message;
     message.chatId=0;
