@@ -85,13 +85,14 @@ int main() {
     friendRequest.id1=0;
     friendRequest.id2=1;
     HandlerFriendRequestDB handler;
-    handler.createFriendRequest(friendRequest);
+  //  handler.createFriendRequest(friendRequest);
 
-    handler.getFriendRequest(friendRequest.id1,friendRequest.id2);
-    handler.deleteFriendRequest(friendRequest.id1,friendRequest.id2);
-    handler.updateFriendRequest(friendRequest);
-    handler.deleteFriendRequest(friendRequest.id1,friendRequest.id2);
-/*
+  //  handler.getFriendRequest(friendRequest.id1,friendRequest.id2);
+  //  handler.deleteFriendRequest(friendRequest.id1,friendRequest.id2);
+  //  handler.updateFriendRequest(friendRequest);
+  //  handler.deleteFriendRequest(friendRequest.id1,friendRequest.id2);
+
+  handler.GetRequestNames("test username 2");
 
     vector<int> v1,v2;
     v1.push_back(2);
