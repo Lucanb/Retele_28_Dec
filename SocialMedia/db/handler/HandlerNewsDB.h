@@ -70,7 +70,7 @@ struct HandlerNewsDB {
         }
 
         string sqlQuery =
-                "SELECT id,authorId,content FROM News WHERE title =" +string("\'")+ title +string("\'");  //
+                "SELECT content FROM News WHERE title LIKE" +string("\'")+"%"+ title + "%" +string("\'");  //
 
         rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
 
@@ -80,30 +80,21 @@ struct HandlerNewsDB {
             collect.push_back("fail");
             return collect;
         } else {
-            vector<string> s;
-            cout<<returningStr;
-            parsing(returningStr, s);
-            for (int i = 0; i < s.size() ; i++) {
-                string sqlQuery2 = "SELECT userName FROM Users WHERE Users.id =" + s[3 * i]; ///aici nu stiu dc nu merge
-                rc = sqlite3_exec(db, sqlQuery2.c_str(), callback2, 0, &err_msg);
-                if (rc != SQLITE_OK) {
-                    fprintf(stderr, "Cannot search the titles: %s\n", sqlite3_errmsg(db));
-                    sqlite3_close(db);
-                    collect.push_back("fail");
-                    return collect;
-                } else {
-                    vector<string> s2;
-                    parsing(returningStr2, s2);
-                    string newString;
-
-                    newString = s2[0] + ":" + s[i + 2];
-                    collect.push_back(newString);
+                  vector<string> s;
+                  cout<<returningStr;
+                  parsing(returningStr, s);
+                  if(s.size() != 0) {
+                      for (int i = 0; i < s.size(); i++) {
+                          string copy = title + "\n" + s[i] + "\n";
+                          collect.push_back(copy);
+                      }
+                      return collect;
+                  }
+                  else {
+                      cout << "Doesn t exist a refference \n";
+                      collect.push_back("fail");
+                  }
                 }
-            }
-        }
-
-        cout << "Succsesful show News!";
-        return collect;
     }
 
     News getNews(int id, int authorId) {

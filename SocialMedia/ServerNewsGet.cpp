@@ -22,7 +22,6 @@ int main() {
     char msg[BUFSIZ];
     char msgrasp[BUFSIZ];
     int sd = -1;
-    User getNews;
     if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
         perror("Error on register server \n");
         return -1;
@@ -47,7 +46,6 @@ int main() {
     }
 ////
 
-    int i;
     while (1) {
         vector<string> v1;
         int client;
@@ -80,20 +78,26 @@ int main() {
                 close(client);
                 continue;
             }
-            string userDetails = json;
+            string NewsDetails = json;
             HandlerNewsDB handler;
             ///Acum trbuie in baza de date sa aplicam functia ce ne returneaza dupa userName.
-            v1 = handler.getNewsByTitle(userDetails); ///Merge!   (vect de content uri)
+            v1 = handler.getNewsByTitle(NewsDetails); ///Merge!   (vect de content uri)
+           // cout<<"a ajuns";
           }
        ////
         if(v1[0] != "fail")  ///
         {
+            ///Vectorul este oke deci pun in stringul final toate elementele gasite.
+            string json2;
+            for(int i=0;i<v1.size();i++)
+              json2 = json2 + v1[i] + string("\n");
+
             if (write(client, json2.c_str(), BUFSIZ) <= 0) {
-                perror("Server GetUser Could Not Respond To Client!");
+                perror("Server Search News Could Not Respond To Client!");
                 close(client);
                 exit(0);
             } else {
-                cout << "User Getted \n";
+                cout << "News Getted \n";    ///Aici am scris mesajul final;
             }
             close(client);
             exit(0);

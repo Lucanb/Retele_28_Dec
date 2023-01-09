@@ -222,16 +222,17 @@ void SearchNews()
         perror("Error at bytes Written SearchNews");
         exit(-3);
     }
-
     char response[BUFSIZ];
     if (read(sd, response, BUFSIZ) < 0) {
         perror("Client could not read server SearchNews response");
         exit(-4);
     }
 
+
     if (strcmp(response, "fail") != 0) {
         cout << "News data getted!\n";
         NewsGetted = response; //afiseaza json-ul.
+        cout<<NewsGetted;
     } else {
         cout << "FAILED Search News . PLEASE TRY AGAIN!\n";
         NewsGetted = "";

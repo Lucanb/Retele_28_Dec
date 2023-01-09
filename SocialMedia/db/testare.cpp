@@ -49,16 +49,17 @@ int main() {
    //       cout<<userGet.id;
 
 /*
+     */
    News news;
    news.type="avs";
    news.content="asd";
-   news.title="ion";
+   news.title="mere";
    news.authorId=2;
    news.id=1;
 
    HandlerNewsDB handler;
 
-//    handler.createNews(news);
+  //  handler.createNews(news);
    // News getNews=handler.getNews(1,0);
 
    // getNews.title="Try";
@@ -69,8 +70,11 @@ int main() {
 
     //handler.deleteNews(test.id,test.authorId);
    // handler.getNews(1,2);
-   handler.getNewsByTitle("ion");
 
+   vector<string> v = handler.getNewsByTitle("mere");
+   for(int i=0;i<v.size();i++)
+   cout<<v[i];
+/*
 
     Message message;
     message.chatId=0;
