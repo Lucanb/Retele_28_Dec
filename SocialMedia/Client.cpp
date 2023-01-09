@@ -201,7 +201,7 @@ void CreeateUser() {
     cout << "You are going to creeate your account \n";
 
     User userCreeateAccount;
-
+///AICI DE FCT mai tz.
     cout << "Please input your username \n";
 
     cin >> userCreeateAccount.userName;
