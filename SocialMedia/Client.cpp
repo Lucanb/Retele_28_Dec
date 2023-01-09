@@ -33,7 +33,7 @@ string currentISO8601TimeUTC() { /// stack overflow
 }
 
 
-void getUserData(string username,string UserGetted) {
+void getUserData(string username,string &UserGetted) {
 
     // functia asta apeleaza serverul ServerGetUser
     // daca am luat datele la user, atunci apelam LoggedInMenu()
@@ -61,6 +61,7 @@ void getUserData(string username,string UserGetted) {
         perror("Wrong connect to GetUser \n");
         exit(-2);
     }
+
     string jsonGetUser = username;
 
     char towrite[BUFSIZ];
@@ -84,13 +85,12 @@ void getUserData(string username,string UserGetted) {
 
     if (strcmp(response, "fail") != 0) {
         cout << "User data getted!\n";
-        UserGetted = response;
+        UserGetted = response; //afiseaza json-ul.
+     //   cout<<UserGetted;
     } else {
         cout << "FAILED TO LOG IN. PLEASE TRY AGAIN!\n";
-        UserGetted = nullptr;
+        UserGetted = "";
     }
-
-
 }
 
 void LoggedInMenu();
@@ -158,12 +158,14 @@ void Login() {
     }
 
     string actualUser;
+
     // DACA A MERS LOGIN_UL PRIMIM 1, DACA NU, 0
     if (strcmp(response, "0") != 0) {
         cout << "YOU ARE LOGGED IN!\n";
         getUserData(username,actualUser);
         cout<<actualUser;
-        loggedInUser = User(actualUser);
+        loggedInUser = User(actualUser); ///aici nu l face;
+   //     cout<< loggedInUser.userName<<" "<<loggedInUser.accountCreationDate<<" "<<loggedInUser.firstname<<'\n'; //nu il face;
         LoggedInMenu();
     } else {
         cout << "FAILED TO LOG IN. PLEASE TRY AGAIN!\n";
@@ -319,7 +321,7 @@ void CreeateUser() {
     }
 }
 
-void GetFriendReq(string usernames,string UserGetted)
+void GetFriendReq(string usernames,string &UserGetted)
 {
 // functia asta apeleaza serverul ServerGetUser
     // daca am luat datele la user, atunci apelam LoggedInMenu()
@@ -396,8 +398,8 @@ void LoggedInMenu() {
     if(comanda == 1) ///Inca nu merge da seg eror si fail la cautare ...
     {
         string show;
-        string profileDetails = loggedInUser.userName;
-        cout<<profileDetails;
+        string profileDetails = "traian";//"loggedInUser.userName"; ///Asta nu afiseaza nimic ; de ce? :)
+       // cout<<profileDetails;
         getUserData(profileDetails,show);
         cout<<show<<"\n";
         LoggedInMenu();

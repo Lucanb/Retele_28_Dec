@@ -83,7 +83,7 @@ int main() {
             string userDetails = json;
             HandlerUserDB handler;
             ///Acum trbuie in baza de date sa aplicam functia ce ne returneaza dupa userName.
-            getUser = handler.getUserByUsername(userDetails);
+            getUser = handler.getUserByUsername(userDetails); ///Merge!
         }
         /*
         std::cout << getUser.userName << '\n';

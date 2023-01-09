@@ -18,25 +18,26 @@ using namespace std;
 
 int main() {
     /*
-
     User user;
 
-   // user.userName = "test username 2";
-   //  user.firstname = "test firstname 2";
-   //  user.lastname = "test lastname 2";
+    user.userName = "test username 2";
+     user.firstname = "test firstname 2";
+     user.lastname = "test lastname 2";
 
-//      User(user.toJson());
+      // User(user.toJson());
+
 
     HandlerUserDB handler;
 //    handler.createUser(user);
 
 
-    User userGet = handler.getUser(1);
-    cout << userGet.userName<<'\n';
-    cout << userGet.lastname<<'\n';
+    User userGet;// = handler.getUser(1);
+   // cout << userGet.userName<<'\n';
+   // cout << userGet.lastname<<'\n';
 
-
-   // user.userName = "updated username";
+  userGet = handler.getUserByUsername("traian");
+  cout<<userGet.userName<<' '<<userGet.profileDescription;
+  // user.userName = "updated username";
    // handler.updateUser(userGet);
   //  userGet = handler.getUser(1);
     //cout << user.userName<<'\n';
@@ -80,7 +81,7 @@ int main() {
     handler.deleteMessage(1,0);
     handler.getMessage(1,0);
 /*
-*/
+
     FriendRequest friendRequest;
     friendRequest.id1=0;
     friendRequest.id2=1;
