@@ -6,6 +6,7 @@
 #include <iomanip>
 #include "models/User.h"
 #include "models/Passwords.h"
+#include "models/News.h"
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -20,6 +21,7 @@
 #define PORT_GETUSER 2025
 #define PORT_GetFriendRequest 2026
 #define PORT_SEARCHNEWS 2027
+#define PORT_CREATENEWS 2028
 
 using namespace std;
 
@@ -444,6 +446,69 @@ void GetFriendReq(string usernames,string &UserGetted)
     }
 }
 
+void CreeateNews()
+{
+    News news;
+    cout<<"Introduce News Title \n";
+    cin>>news.title;
+    cout<<"Introduce News Content \n";
+    cin>>news.content;
+    cout<<"Introduce Type \n";
+    cin>>news.type;
+    news.authorId=loggedInUser.id;
+
+    string newsJson;
+    newsJson=news.toJson();   //Timit la server , identific id ul dupa userName-ul userului actual;
+
+    int sd;
+    struct sockaddr_in server;
+    int raspuns;
+
+    if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+        perror("Error at socket client at Creeate News\n");
+        // placeholder, nu ne trebuie exit
+        cout<<"Failed to create News. Please try again!\n";
+        Login();
+        //SAU
+        //MainMenu();
+    }
+    bzero(&server, sizeof(server));
+
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = htonl(INADDR_ANY);
+    server.sin_port = htons(PORT_CREATENEWS);
+
+    if (connect(sd, (struct sockaddr *) &server, sizeof(struct sockaddr)) == -1) {
+        perror("Wrong connect to News \n");
+        exit(-2);
+    }
+
+    char towrite[BUFSIZ];
+    for (int j = 0; j < BUFSIZ; j++)
+        towrite[j] = 0;
+
+    for (int j = 0; j < newsJson.size(); j++)
+        towrite[j] = newsJson[j];
+
+    int bytesWritten = write(sd, &towrite, BUFSIZ);
+    if (bytesWritten <= 0) {
+        perror("Error at bytes Written News");
+        exit(-3);
+    }
+
+    char response[BUFSIZ];
+    if (read(sd, response, BUFSIZ) < 0) {
+        perror("Client could not read server News Create response");
+        exit(-4);
+    }
+
+    if (strcmp(response, "0") != 0) {
+        cout << "User data Created!\n";
+    } else {
+        cout << "FAILED TO Create News\n";
+    }
+}
+
 void LoggedInMenu() {
     int command;
     cout << "Welcome to your Account!" << '\n';
@@ -461,8 +526,8 @@ void LoggedInMenu() {
     cout << " 9 - Search Message \n"; //To do
     cout << " 10 - Change Password \n"; //Optional
     cout << " 11 - Delete Account \n"; //Optional
-    cout << " 12 - Search User \n" //To do.
-    cout << " 13 - Add Fiend \n" // To do (daca am vreo cerere ii adaug).
+    cout << " 12 - Search User \n"; //To do.
+    cout << " 13 - Add Friend \n"; // To do (daca am vreo cerere ii adaug).
 
     //To do Profil + Post - private / publice;
     //...
@@ -480,6 +545,7 @@ void LoggedInMenu() {
     }
     else if(comanda == 2)
     {
+        CreeateNews();
         LoggedInMenu();
     }
     else if(comanda == 3)
