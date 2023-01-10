@@ -61,6 +61,7 @@ int main() {
         fflush(stdout);
         client = accept(sd, (struct sockaddr *) &form, &length);
         // client = accept(sd, reinterpret_cast<sockaddr *>(&form), reinterpret_cast<socklen_t *>(&length)); /// careful
+        cout<< "face";
         if (client < 0) {
             perror("Error on client acces on SendMessage server \n");
             continue;

@@ -26,8 +26,7 @@
 #define PORT_SEARCHNEWS 2027
 #define PORT_CREATENEWS 2028
 #define PORT_SEARCHNEWSLOGGED 2029
-#define PORT_SERVERMESSAGE 2030
-
+#define PORT_SERVERSENDMESSAGE 2030
 using namespace std;
 
 User loggedInUser;
@@ -592,36 +591,37 @@ void SendMessage() {
     cin >> number;
     cout << "Please Introduce The Name of Your Chat \n";
     cin >> title;
-    cout<<"Please Introduce User Names That you want to see the messages \n";
+    cout << "Please Introduce User Names That you want to see the messages \n";
     for (int i = 0; i < number; i++) {
         {
-            cin>>userNames[i];
+            string userNamess;
+            cin >> userNamess;
+            userNames.push_back(userNamess);
         }
     }
-  ////Gata datele ce trebuie trimise.
+    ////Gata datele ce trebuie trimise.
     int sd;
     struct sockaddr_in server;
     int raspuns;
 
     if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
         perror("Error at socket client at ServerSendMessage\n");
-        exit(-1); // placeholder, nu ne trebuie exit
-        /*
+       // exit(-1); // placeholder, nu ne trebuie exit
         cout<<"Failed to create user. Please try again!\n";
         SendMessage();
         //SAU
         //MainMenu();
-        */
     }
     bzero(&server, sizeof(server));
 
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = htonl(INADDR_ANY);
-    server.sin_port = htons(PORT_SERVERMESSAGE);
+    server.sin_port = htons(PORT_SERVERSENDMESSAGE);
 
     if (connect(sd, (struct sockaddr *) &server, sizeof(struct sockaddr)) == -1) {
         perror("Wrong connect to ServerSendMessage \n");
-        exit(-2);
+        SendMessage();
+       // exit(-2);
     }
     ///
     Message messageObj;
@@ -641,23 +641,24 @@ void SendMessage() {
     int bytesWritten = write(sd, &towrite, BUFSIZ);
     if (bytesWritten <= 0) {
         perror("Error at bytes Written SendMessage");
-        exit(-3);
+        SendMessage();
+        //exit(-3);
     }
     char response[BUFSIZ];
     if (read(sd, response, BUFSIZ) < 0) {
         perror("Client could not read server SendMessage response");
-        exit(-4);
+        SendMessage();
+        //exit(-4);
     }
 
-
+   cout<<"not yet"<<'\n';
     if (strcmp(response, "0") != 0) {
         string NameSent = "";
         string numelog = to_string(loggedInUser.id);
-        for(int j=0;j<userNames.size();j++)
-        {
-           NameSent+=userNames[j] + "/n";
+        for (int j = 0; j < userNames.size(); j++) {
+            NameSent += userNames[j] + "/n";
         }
-        NameSent+="%" +numelog;
+        NameSent += "%" + numelog;
 
         char towrite[BUFSIZ];
         for (int j = 0; j < BUFSIZ; j++)
@@ -676,13 +677,10 @@ void SendMessage() {
             perror("Client could not read server SendMessage response");
             exit(-4);
         }
-        if(strcmp(response,"0")!=0)
-        {
+        if (strcmp(response, "0") != 0) {
             cout << "Message Sent!\n";
             SendMessage();
-        }
-        else
-        {
+        } else {
             cout << "Message doesn't sent . PLEASE TRY AGAIN!\n";
             SendMessage();
         }
