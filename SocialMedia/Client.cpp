@@ -172,8 +172,9 @@ void Login() {
         getUserData(username, actualUser);
         cout << actualUser;
         loggedInUser = User(actualUser); ///aici nu l face;
-        //     cout<< loggedInUser.userName<<" "<<loggedInUser.accountCreationDate<<" "<<loggedInUser.firstname<<'\n'; //nu il face;
-        LoggedInMenu();
+           //  cout<< loggedInUser.userName<<" "<<loggedInUser.accountCreationDate<<" "<<loggedInUser.firstname<<'\n';
+        //LoggedInMenu(loggedInUser);
+          LoggedInMenu();
     } else {
         cout << "FAILED TO LOG IN. PLEASE TRY AGAIN!\n";
         Login();
@@ -413,34 +414,54 @@ void CreeateUser() {
 ///AICI DE FCT mai tz.
     cout << "Please input your username \n";
 
-    cin >> userCreeateAccount.userName;
+    //cin >> userCreeateAccount.userName;
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::getline(std::cin, userCreeateAccount.userName);
+     for(int i=0;i<userCreeateAccount.userName.size();i++)
+         if(userCreeateAccount.userName[i] == ' ')
+         {
+             cout<<"Please don't use spaces \n";
+             CreeateUser();
+         }
 
     cout << "Please input your firstname \n";
-
-    cin >> userCreeateAccount.firstname;
+   // cin >> userCreeateAccount.firstname;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::getline(std::cin, userCreeateAccount.firstname);
 
     cout << "Please input your lastname \n";
 
-    cin >> userCreeateAccount.lastname;
+   // cin >> userCreeateAccount.lastname;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::getline(std::cin, userCreeateAccount.lastname);
 
     cout << "Please input your profile description \n";
 
-    // CIN PERMITE CITIREA PANA LA SPACE SAU ENTER
-    cin >> userCreeateAccount.profileDescription;
+    //cin >> userCreeateAccount.profileDescription;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::getline(std::cin, userCreeateAccount.profileDescription);
 
     cout << "Please input your birthday \n";
 
-    cin >> userCreeateAccount.birthday;
+    //cin >> userCreeateAccount.birthday;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::getline(std::cin, userCreeateAccount.birthday);
+
 
     userCreeateAccount.accountCreationDate = currentISO8601TimeUTC(); /// a ramas id ul care e autoincrement , data si cu isAdmin.
 
     cout << "Input 1 if you are an admin else input 0 \n";
 
     cin >> userCreeateAccount.isAdmin;
-
+    if(userCreeateAccount.isAdmin != 0 && userCreeateAccount.isAdmin != 1)
+    {
+        cout<<"Please respect the format \n";
+        CreeateUser();
+    }
     string password;
 
-    cout << "Choose your password:\n";
+    cout << "Choose your password: \n";
 
     cin >> password;
 
@@ -781,8 +802,9 @@ void LoggedInMenu() {
     if (comanda == 1) ///Inca nu merge da seg eror si fail la cautare ...
     {
         string show;
-        string profileDetails = "traian";//"loggedInUser.userName"; ///Asta nu afiseaza nimic ; de ce? :)
-        // cout<<profileDetails;
+        string profileDetails = loggedInUser.userName;
+              //  "traian"; //"loggedInUser.userName"; ///Asta nu afiseaza nimic ; de ce? :)
+         cout<<profileDetails;
         getUserData(profileDetails, show);
         cout << show << "\n";
         LoggedInMenu();

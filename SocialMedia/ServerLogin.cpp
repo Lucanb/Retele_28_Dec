@@ -9,6 +9,8 @@
 #include <sys/wait.h>
 #include <jsoncpp/json/json.h>
 #include <unistd.h>
+#include <openssl/aes.h>
+#include <openssl//evp.h>
 
 #define PORT_LOGIN 2024
 
@@ -88,6 +90,7 @@ int main() {
             HandlerPasswordsDB handlerPasswords;
 
             Passwords verifyPassword = handlerPasswords.getPassword(loginDetails.userName);
+
 
             int loginSuccessfull;
             if (loginDetails.password == verifyPassword.password) ///ciudat

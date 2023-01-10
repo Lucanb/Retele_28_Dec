@@ -11,9 +11,10 @@
 #include <sys/wait.h>
 #include <jsoncpp/json/json.h>
 #include <unistd.h>
+#include<openssl/aes.h>
+#include<openssl/evp.h>
 
 #define PORT_REGISTER 2023
-
 
 int main() {
     struct sockaddr_in server;

@@ -21,6 +21,7 @@
 #include <sys/wait.h>
 #include <jsoncpp/json/json.h>
 #include <unistd.h>
+
 #define PORT_SERVERSENDMESSAGE 2030
 
 
@@ -61,7 +62,7 @@ int main() {
         fflush(stdout);
         client = accept(sd, (struct sockaddr *) &form, &length);
         // client = accept(sd, reinterpret_cast<sockaddr *>(&form), reinterpret_cast<socklen_t *>(&length)); /// careful
-        cout<< "face";
+//        cout<< "face";
         if (client < 0) {
             perror("Error on client acces on SendMessage server \n");
             continue;
@@ -87,107 +88,106 @@ int main() {
                 succes = 0;
                 perror("Eroare");
                 close(client);
-            //    continue;
-            }
-            else {
+                continue;
+            } else {
                 succes = 1;
             }
 
 
-//            if(succes == 1)///
-           // {
+            if (succes == 1)///
+            {
                 string title;
 
                 string newjson;
 
-            int sw =0;
-            for(int i=0;i<strlen(json);i++)
-            {
-                   if(sw == 0)
-                   {
-                       newjson.push_back(json[i]);
-                   }
-                   if(json[i] == '%')
-                   {
-                       sw = 1;
-                   }
-                   if(sw == 1)
-                   {
-                       title.push_back(json[i]);
-                   }
-            }
-          /*  vector<string> usersName ///Asta sa il bagi in functie
-            HandlerMessageDB handler;
-            Message message = Message(newjson);
-            int succes = handler.SentMessage(message,title); //chatId il voi pune cu Update
-*/
-            ////
-            if (write(client, to_string(succes).c_str(), BUFSIZ) <= 0) {
-                perror("Server Register Could Not Respond To Client!");
-                close(client);
-                exit(0);
-            }
-
-            if (succes) {
-                cout << "Our String Succsesfully  Getted!";
-                char namesJson[BUFSIZ];
-                if (read(client, namesJson, BUFSIZ) < 0) {
-                    perror("Password access!");
-                    close(client);
-                    exit(0);
-
+                int sw = 0;
+                for (int i = 0; i < strlen(json); i++) {
+                    if (sw == 0) {
+                        newjson.push_back(json[i]);
+                    }
+                    if (json[i] == '%') {
+                        sw = 1;
+                    }
+                    if (sw == 1) {
+                        title.push_back(json[i]);
+                    }
                 }
-
-                 vector<string>userNames;
-                 string id;
-                 sw=0;
-                 for(int k=0;k<strlen(namesJson);k++)
-                 {
-                     if(sw == 0) ////CAREFUL
-                     {
-                         int i=k;
-                         string myString="";
-                         while(namesJson[i] != '\n')
-                         {
-                             myString+=namesJson[i];
-                             i++;
-                         }
-                         k=i+1;
-                        userNames.push_back(myString); ///Trebuie sa fac asta sa mearga.
-                     }
-                     if(namesJson[k] == '%')
-                     {
-                         sw = 1;
-                         k++;
-                     }
-                     if(sw){
-                         id.push_back(namesJson[k]);
-                     }
-                 }
-              //  cout << password.toJson() << '\n';
-                HandlerMessageDB handler;
-                int responsePassword = handler.SentMessage(newjson,title,userNames,id);
+                /*  vector<string> usersName ///Asta sa il bagi in functie
+                  HandlerMessageDB handler;
+                  Message message = Message(newjson);
+                  int succes = handler.SentMessage(message,title); //chatId il voi pune cu Update
+      */
+                ////
                 if (write(client, to_string(succes).c_str(), BUFSIZ) <= 0) {
                     perror("Server Register Could Not Respond To Client!");
                     close(client);
                     exit(0);
                 }
-                if (responsePassword == 1) {
-                    cout << "Message Successfullly Sent!";
-                } else {
-                    cout << "Couldn't Sent Message";
-                }
 
-            } else {
-                cout << "Fail Create User";
+                if (succes) {
+                    cout << "Our String Succsesfully  Getted!";
+                    char namesJson[BUFSIZ];
+                    if (read(client, namesJson, BUFSIZ) < 0) {
+                        perror("Password access!");
+                        close(client);
+                        exit(0);
+
+                    }
+
+                    vector<string> userNames;
+                    string id;
+                    sw = 0;
+                    for (int k = 0; k < strlen(namesJson); k++) {
+                        if (sw == 0) ////CAREFUL
+                        {
+                            int i = k;
+                            string myString = "";
+                            while (namesJson[i] != '\n') {
+                                myString += namesJson[i];
+                                i++;
+                            }
+                            k = i + 1;
+                            userNames.push_back(myString); ///Trebuie sa fac asta sa mearga.
+                        }
+                        if (namesJson[k] == '%') {
+                            sw = 1;
+                            k++;
+                        }
+                        if (sw) {
+                            id.push_back(namesJson[k]);
+                        }
+                    }
+                    //  cout << password.toJson() << '\n';
+                    HandlerMessageDB handler;
+                    int responsePassword = handler.SentMessage(newjson, title, userNames, id);
+                    if (write(client, to_string(succes).c_str(), BUFSIZ) <= 0) {
+                        perror("Server Register Could Not Respond To Client!");
+                        close(client);
+                        exit(0);
+                    }
+                    if (responsePassword == 1) {
+                        cout << "Message Successfullly Sent!";
+                    } else {
+                        cout << "Couldn't Sent Message";
+                    }
+
+                } else {
+                    cout << "Fail Create User";
+                }
+                close(client);
+                exit(0);
             }
+        }
+        else
+        {
+            cout<<"Can't find the read json \n";
             close(client);
             exit(0);
         }
     }
 
-    std::cout << "qbc";
-    return 0;
+   // std::cout << "qbc";
+    //return 0;
 }
 
 
