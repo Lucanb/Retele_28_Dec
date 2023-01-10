@@ -17,26 +17,31 @@
 using namespace std;
 
 int main() {
-    /*
+/*
     User user;
 
     user.userName = "test username 2";
      user.firstname = "test firstname 2";
      user.lastname = "test lastname 2";
 
+     string s = user.toJson();
+     cout<<s;
+     User userr=User(s);
+
       // User(user.toJson());
 
 
     HandlerUserDB handler;
-//    handler.createUser(user);
+   handler.createUser(user);
 
 
-    User userGet;// = handler.getUser(1);
+//    User userGet;// = handler.getUser(1);
    // cout << userGet.userName<<'\n';
    // cout << userGet.lastname<<'\n';
 
-  userGet = handler.getUserByUsername("traian");
-  cout<<userGet.userName<<' '<<userGet.profileDescription;
+ User userGet = handler.getUserByUsername("est");
+ cout<< userGet.firstname;
+//  cout<<userGet.userName<<' '<<userGet.profileDescription;
   // user.userName = "updated username";
    // handler.updateUser(userGet);
   //  userGet = handler.getUser(1);
@@ -49,21 +54,26 @@ int main() {
    //       cout<<userGet.id;
 
 /*
-     */
+*/
    News news;
    news.type="avs";
    news.content="asd";
-   news.title="uragan";
+   news.title="moare";
    news.authorId=2;
-   news.id=1;
 
+
+ //  string s = news.toJson();
+  //    cout<<s;
+   //   News newss;
+    //   newss =News(s);
+     //  newss.id=0;
    HandlerNewsDB handler;
 
-    //handler.createNews(news);
+   handler.createNews(news);
    // News getNews=handler.getNews(1,0);
 
-   // getNews.title="Try";
-   // handler.updateNews(getNews);
+    string getNews ="jel";
+    handler.getNewsByTitle(getNews);
 
     //News test = handler.getNews(1,0);
    // cout<<test.title<<'\n';
@@ -71,19 +81,19 @@ int main() {
     //handler.deleteNews(test.id,test.authorId);
    // handler.getNews(1,2);
 
-   vector<string> v = handler.getNewsByTitle("uo");
-   for(int i=0;i<v.size();i++)
-   cout<<v[i];
+  // vector<string> v = handler.getNewsByTitle("ura");
+  // for(int i=0;i<v.size();i++)
+   //cout<<v[i];
 /*
 
-    Message message;
-    message.chatId=0;
-    HandlerMessageDB handler;
-    handler.createMessage(message);
-    handler.getMessage(1,0);
-    handler.updateMessage(message);
-    handler.deleteMessage(1,0);
-    handler.getMessage(1,0);
+  //  Message message;
+ //   message.chatId=0;
+  //  HandlerMessageDB handler;
+   // handler.createMessage(message);
+    //handler.getMessage(12,8);
+  //  handler.updateMessage(message);
+  //  handler.deleteMessage(1,0);
+   // handler.getMessage(1,0);
 /*
 
     FriendRequest friendRequest;

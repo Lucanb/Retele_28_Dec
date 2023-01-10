@@ -173,7 +173,7 @@ struct HandlerNewsDB {
         char *err_msg = 0;
         sqlite3_stmt *res;
 
-        int rc = sqlite3_open("db/mydb.db", &db);
+        int rc = sqlite3_open("mydb.db", &db);
 
         if (rc != SQLITE_OK) {
 

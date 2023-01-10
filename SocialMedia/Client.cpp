@@ -724,6 +724,7 @@ void CreeateNews() {
 
     string newsJson;
     newsJson = news.toJson();   //Timit la server , identific id ul dupa userName-ul userului actual;
+    cout<<newsJson;
 
     int sd;
     struct sockaddr_in server;

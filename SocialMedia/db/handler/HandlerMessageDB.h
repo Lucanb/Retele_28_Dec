@@ -77,7 +77,7 @@ struct HandlerMessageDB {
         char *err_msg = 0;
         sqlite3_stmt *res;
 
-        int rc = sqlite3_open("db/mydb.db", &db); //aici am schimbat din database.db in mydb.db
+        int rc = sqlite3_open("mydb.db", &db); //aici am schimbat din database.db in mydb.db
 
         if (rc != SQLITE_OK) {
 

@@ -97,7 +97,7 @@ int main() {
                 cout<<json<<'\n';
                 cout << "News Successfully Created!";
             } else {
-                cout << "Couldn't Creeate Password";
+                cout << "Couldn't Creeate News";
             }
             close(client);
             exit(0);
