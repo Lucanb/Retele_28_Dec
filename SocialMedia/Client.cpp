@@ -22,6 +22,7 @@
 #define PORT_GetFriendRequest 2026
 #define PORT_SEARCHNEWS 2027
 #define PORT_CREATENEWS 2028
+#define PORT_SEARCHNEWSLOGGED 2029
 
 using namespace std;
 
@@ -243,6 +244,75 @@ void SearchNews()
 
     cout<<NewsGetted;
 }
+
+void SearchNewsLoggedIn()
+{
+    string name;
+    string NewsGetted;
+    cout<<"Pleas Input a Name : \n";
+    cin>>name;
+
+    int sd;
+    struct sockaddr_in server;
+    int raspuns;
+
+    if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+        perror("Error at socket client at Search News\n");
+        exit(-1); // placeholder, nu ne trebuie exit
+        /*
+        cout<<"Failed to create user. Please try again!\n";
+        LoggedMenu();
+        //SAU
+        //MainMenu();
+        */
+    }
+    bzero(&server, sizeof(server));
+
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = htonl(INADDR_ANY);
+    server.sin_port = htons(PORT_SEARCHNEWSLOGGED);
+
+    if (connect(sd, (struct sockaddr *) &server, sizeof(struct sockaddr)) == -1) {
+        perror("Wrong connect to SearchNews  Logged\n");
+        exit(-2);
+    }
+
+    string jsonGetUser = name + "\n" + to_string(loggedInUser.id); ///Trimitem la server acest mesaj - titlul stirii cu id -ul.
+                                                                  /// dupa in Friends va trebui sa verific daca id si cu author id sunt prieteni.
+
+    char towrite[BUFSIZ];
+    for (int j = 0; j < BUFSIZ; j++)
+        towrite[j] = 0;
+
+    for (int j = 0; j < jsonGetUser.size(); j++)
+        towrite[j] = jsonGetUser[j];
+
+    int bytesWritten = write(sd, &towrite, BUFSIZ);
+    if (bytesWritten <= 0) {
+        perror("Error at bytes Written SearchNews Logged");
+        exit(-3);
+    }
+    char response[BUFSIZ];
+    if (read(sd, response, BUFSIZ) < 0) {
+        perror("Client could not read server SearchNews Logged response");
+        exit(-4);
+    }
+
+
+    if (strcmp(response, "fail") != 0) {
+        cout << "News data getted!\n";
+        NewsGetted = response; //afiseaza json-ul.
+        cout<<NewsGetted;
+    } else {
+        cout << "FAILED Search News Logged. PLEASE TRY AGAIN!\n";
+        NewsGetted = "";
+        SearchNews();
+    }
+
+    cout<<NewsGetted;
+}
+
+
 
 void MainMenu() {
     cout << "Welcome to VirtualSoc!" << '\n';
@@ -516,7 +586,7 @@ void LoggedInMenu() {
     cout << "Chose your command  \n";
 
     cout << " 1 - Profile \n";   //Done it;
-    cout << " 2 - Create news \n"; //Done it;
+    cout << " 2 - Create news \n"; //Done it
     cout << " 3 - Search news \n"; //To do
     cout << " 4 - Search friend \n"; //To do
     cout << " 5 - See friend requests \n"; //To do
@@ -550,7 +620,7 @@ void LoggedInMenu() {
     }
     else if(comanda == 3)
     {
-          ///Search News
+        SearchNewsLoggedIn();
         LoggedInMenu();
     }
     else if(comanda == 4 )

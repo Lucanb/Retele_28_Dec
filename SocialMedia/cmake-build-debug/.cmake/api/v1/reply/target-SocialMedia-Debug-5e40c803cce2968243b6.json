@@ -58,7 +58,8 @@
 				18,
 				19,
 				20,
-				21
+				21,
+				22
 			]
 		}
 	],
@@ -100,7 +101,8 @@
 				18,
 				19,
 				20,
-				21
+				21,
+				22
 			]
 		},
 		{
@@ -242,6 +244,12 @@
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
 			"path" : "ServerCreeateNews.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "ServerSearchNewsLogged.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],
