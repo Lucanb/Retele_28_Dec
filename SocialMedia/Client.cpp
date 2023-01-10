@@ -720,6 +720,7 @@ void CreeateNews() {
     cout << "Introduce Type \n";
     cin >> news.type;
     news.authorId = loggedInUser.id;
+    //cout<< news.authorId<<'\n';
 
     string newsJson;
     newsJson = news.toJson();   //Timit la server , identific id ul dupa userName-ul userului actual;
@@ -802,10 +803,12 @@ void LoggedInMenu() {
     if (comanda == 1) ///Inca nu merge da seg eror si fail la cautare ...
     {
         string show;
+        cout<<"\n";
         string profileDetails = loggedInUser.userName;
               //  "traian"; //"loggedInUser.userName"; ///Asta nu afiseaza nimic ; de ce? :)
-         cout<<profileDetails;
-        getUserData(profileDetails, show);
+       //  cout<<profileDetails;
+       // cout<<"\n";
+         getUserData(profileDetails, show);
         cout << show << "\n";
         LoggedInMenu();
     } else if (comanda == 2) {

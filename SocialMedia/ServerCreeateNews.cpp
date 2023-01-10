@@ -81,10 +81,12 @@ int main() {
                 close(client);
                 continue;
             }
+
             News newsObj = News(json);
             //Testeaza daca vrei.
             HandlerNewsDB handler;
 
+            cout<<newsObj.authorId<<" "<<newsObj.id<<" "<<newsObj.title<<" "<<newsObj.type << " " <<newsObj.content;
             int succes = handler.createNews(newsObj);
             if (write(client, to_string(succes).c_str(), BUFSIZ) <= 0) {
                 perror("Server Create News Could Not Respond To Client!");

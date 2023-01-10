@@ -13,6 +13,7 @@
 #include <sys/wait.h>
 #include <jsoncpp/json/json.h>
 #include <unistd.h>
+
 #define PORT_SEARCHNEWS 2027
 
 
@@ -82,15 +83,17 @@ int main() {
             HandlerNewsDB handler;
             ///Acum trbuie in baza de date sa aplicam functia ce ne returneaza dupa userName.
             v1 = handler.getNewsByTitle(NewsDetails); ///Merge!   (vect de content uri)
-           // cout<<"a ajuns";
-          }
-       ////
-        if(v1[0] != "fail")  ///
+            // cout<<"a ajuns";
+        }
+        ////
+        if (v1[0] != "fail")  ///
         {
             ///Vectorul este oke deci pun in stringul final toate elementele gasite.
             string json2;
-            for(int i=0;i<v1.size();i++)
-              json2 = json2 + v1[i] + string("\n");
+            for (int i = 0; i < v1.size(); i++)
+                json2 = json2 + v1[i] + string("\n");
+
+            cout<<json2;
 
             if (write(client, json2.c_str(), BUFSIZ) <= 0) {
                 perror("Server Search News Could Not Respond To Client!");
@@ -101,9 +104,7 @@ int main() {
             }
             close(client);
             exit(0);
-        }
-        else
-        {
+        } else {
             string json2 = "fail";  ///POSIBILA EROARE
             if (write(client, json2.c_str(), BUFSIZ) <= 0) {
                 perror("Server GetUser Could Not Respond To Client!");
