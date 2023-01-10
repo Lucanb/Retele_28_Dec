@@ -181,7 +181,7 @@ struct HandlerMessageDB {
         }
     }
 
-    int SentMessage(Message message, string title, vector<string> UserNames, int loggedId) {
+    int SentMessage(Message message, string title, vector<string> UserNames, string loggedId) {
         sqlite3 *db;
         sqlite3_stmt *stmt;
         char *err_msg = 0;
@@ -219,7 +219,7 @@ struct HandlerMessageDB {
             vector<string> str;
             parsing(returningStr, str);
 
-            int myid = loggedId;
+            int myid = stoi(loggedId);
             chat.idList.push_back(myid);
 
 

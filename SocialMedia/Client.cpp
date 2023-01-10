@@ -649,8 +649,43 @@ void SendMessage() {
         exit(-4);
     }
 
+
     if (strcmp(response, "0") != 0) {
-        cout << "Message Sent!\n";
+        string NameSent = "";
+        string numelog = to_string(loggedInUser.id);
+        for(int j=0;j<userNames.size();j++)
+        {
+           NameSent+=userNames[j] + "/n";
+        }
+        NameSent+="%" +numelog;
+
+        char towrite[BUFSIZ];
+        for (int j = 0; j < BUFSIZ; j++)
+            towrite[j] = 0;
+
+        for (int j = 0; j < NameSent.size(); j++)
+            towrite[j] = NameSent[j];
+
+        int bytesWritten = write(sd, &towrite, BUFSIZ);
+        if (bytesWritten <= 0) {
+            perror("Error at bytes Written SendMessage");
+            exit(-3);
+        }
+        char response[BUFSIZ];
+        if (read(sd, response, BUFSIZ) < 0) {
+            perror("Client could not read server SendMessage response");
+            exit(-4);
+        }
+        if(strcmp(response,"0")!=0)
+        {
+            cout << "Message Sent!\n";
+            SendMessage();
+        }
+        else
+        {
+            cout << "Message doesn't sent . PLEASE TRY AGAIN!\n";
+            SendMessage();
+        }
     } else {
         cout << "Message doesn't sent . PLEASE TRY AGAIN!\n";
         SendMessage();

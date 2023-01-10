@@ -79,23 +79,32 @@ int main() {
             /// copil
             close(sd);
 
+            int succes;
             char json[BUFSIZ];
             int readbyte = read(client, json, BUFSIZ); //&?
             if (readbyte < 0) {
+                succes = 0;
                 perror("Eroare");
                 close(client);
-                continue;
+            //    continue;
+            }
+            else {
+                succes = 1;
             }
 
-            char title[BUFSIZ];
-            char newjson[BUFSIZ];
+
+//            if(succes == 1)///
+           // {
+                string title;
+
+                string newjson;
 
             int sw =0;
             for(int i=0;i<strlen(json);i++)
             {
                    if(sw == 0)
                    {
-                       newjson[i] =json[i];
+                       newjson.push_back(json[i]);
                    }
                    if(json[i] == '%')
                    {
@@ -103,41 +112,69 @@ int main() {
                    }
                    if(sw == 1)
                    {
-                       title[i] = json[i];
+                       title.push_back(json[i]);
                    }
             }
-            vector<string> usersName ///Asta sa il bagi in functie
+          /*  vector<string> usersName ///Asta sa il bagi in functie
             HandlerMessageDB handler;
             Message message = Message(newjson);
             int succes = handler.SentMessage(message,title); //chatId il voi pune cu Update
-
+*/
             ////
             if (write(client, to_string(succes).c_str(), BUFSIZ) <= 0) {
                 perror("Server Register Could Not Respond To Client!");
                 close(client);
                 exit(0);
             }
+
             if (succes) {
-                cout << "User Successfully Created!";
-                char jsonPassword[BUFSIZ];
-                if (read(client, jsonPassword, BUFSIZ) < 0) {
+                cout << "Our String Succsesfully  Getted!";
+                char namesJson[BUFSIZ];
+                if (read(client, namesJson, BUFSIZ) < 0) {
                     perror("Password access!");
                     close(client);
                     exit(0);
+
                 }
-                Passwords password = Passwords(jsonPassword);
-                cout << password.toJson() << '\n';
-                HandlerPasswordsDB handlerPasswordsDB;
-                int responsePassword = handlerPasswordsDB.createPassword(password);
+
+                 vector<string>userNames;
+                 string id;
+                 sw=0;
+                 for(int k=0;k<strlen(namesJson);k++)
+                 {
+                     if(sw == 0) ////CAREFUL
+                     {
+                         int i=k;
+                         string myString="";
+                         while(namesJson[i] != '\n')
+                         {
+                             myString+=namesJson[i];
+                             i++;
+                         }
+                         k=i+1;
+                        userNames.push_back(myString); ///Trebuie sa fac asta sa mearga.
+                     }
+                     if(namesJson[k] == '%')
+                     {
+                         sw = 1;
+                         k++;
+                     }
+                     if(sw){
+                         id.push_back(namesJson[k]);
+                     }
+                 }
+              //  cout << password.toJson() << '\n';
+                HandlerMessageDB handler;
+                int responsePassword = handler.SentMessage(newjson,title,userNames,id);
                 if (write(client, to_string(succes).c_str(), BUFSIZ) <= 0) {
                     perror("Server Register Could Not Respond To Client!");
                     close(client);
                     exit(0);
                 }
                 if (responsePassword == 1) {
-                    cout << "Password Successfullly Created!";
+                    cout << "Message Successfullly Sent!";
                 } else {
-                    cout << "Couldn't Creeate Password";
+                    cout << "Couldn't Sent Message";
                 }
 
             } else {
