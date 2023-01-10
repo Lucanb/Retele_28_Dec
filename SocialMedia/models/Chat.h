@@ -9,7 +9,7 @@
 #include<string>
 #include<vector>
 #include"Message.h"
-//#include <jsoncpp/json/json.h>
+#include <jsoncpp/json/json.h>
 #include "../nlohmann/json.hpp"
 
 struct Chat {
@@ -57,14 +57,23 @@ struct Chat {
     }
     */
 
-    Chat(std::string json)
+    Chat(std::string jsonstring)
     {
+        nlohmann::json j = nlohmann::json ::parse(jsonstring);
+        idChat=j["idChat"];
+        idList.assign(j["idList"].begin(), j["idList"].end());
+        idMessages.assign(j["idMessages"].begin(), j["idMessages"].end());
+        title=j["title"];
 
     }
     
     std::string toJson()
     {
-
+        nlohmann::json j;
+       j["idChat"]= idChat;
+       j["title"] = title;
+       j["idList"]=idList;
+       j["idMessages"]=idMessages;
     }
 };
 

@@ -14,6 +14,9 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <jsoncpp/json/json.h>
+#include "nlohmann/json.hpp"
+#include "models/Message.h"
+#include "models/Chat.h"
 #include <unistd.h>
 
 #define PORT_REGISTER 2023
@@ -23,6 +26,7 @@
 #define PORT_SEARCHNEWS 2027
 #define PORT_CREATENEWS 2028
 #define PORT_SEARCHNEWSLOGGED 2029
+#define PORT_SERVERMESSAGE 2030
 
 using namespace std;
 
@@ -37,7 +41,7 @@ string currentISO8601TimeUTC() { /// stack overflow
 }
 
 
-void getUserData(string username,string &UserGetted) {
+void getUserData(string username, string &UserGetted) {
 
     // functia asta apeleaza serverul ServerGetUser
     // daca am luat datele la user, atunci apelam LoggedInMenu()
@@ -90,7 +94,7 @@ void getUserData(string username,string &UserGetted) {
     if (strcmp(response, "fail") != 0) {
         cout << "User data getted!\n";
         UserGetted = response; //afiseaza json-ul.
-     //   cout<<UserGetted;
+        //   cout<<UserGetted;
     } else {
         cout << "FAILED TO LOG IN. PLEASE TRY AGAIN!\n";
         UserGetted = "";
@@ -166,10 +170,10 @@ void Login() {
     // DACA A MERS LOGIN_UL PRIMIM 1, DACA NU, 0
     if (strcmp(response, "0") != 0) {
         cout << "YOU ARE LOGGED IN!\n";
-        getUserData(username,actualUser);
-        cout<<actualUser;
+        getUserData(username, actualUser);
+        cout << actualUser;
         loggedInUser = User(actualUser); ///aici nu l face;
-   //     cout<< loggedInUser.userName<<" "<<loggedInUser.accountCreationDate<<" "<<loggedInUser.firstname<<'\n'; //nu il face;
+        //     cout<< loggedInUser.userName<<" "<<loggedInUser.accountCreationDate<<" "<<loggedInUser.firstname<<'\n'; //nu il face;
         LoggedInMenu();
     } else {
         cout << "FAILED TO LOG IN. PLEASE TRY AGAIN!\n";
@@ -179,12 +183,11 @@ void Login() {
 
 void CreeateUser();
 
-void SearchNews()
-{
+void SearchNews() {
     string name;
     string NewsGetted;
-    cout<<"Pleas Input a Name : \n";
-    cin>>name;
+    cout << "Pleas Input a Name : \n";
+    cin >> name;
 
     int sd;
     struct sockaddr_in server;
@@ -235,22 +238,21 @@ void SearchNews()
     if (strcmp(response, "fail") != 0) {
         cout << "News data getted!\n";
         NewsGetted = response; //afiseaza json-ul.
-        cout<<NewsGetted;
+        cout << NewsGetted;
     } else {
         cout << "FAILED Search News . PLEASE TRY AGAIN!\n";
         NewsGetted = "";
         SearchNews();
     }
 
-    cout<<NewsGetted;
+    cout << NewsGetted;
 }
 
-void SearchNewsLoggedIn()
-{
+void SearchNewsLoggedIn() {
     string name;
     string NewsGetted;
-    cout<<"Pleas Input a Name : \n";
-    cin>>name;
+    cout << "Pleas Input a Name : \n";
+    cin >> name;
 
     int sd;
     struct sockaddr_in server;
@@ -277,8 +279,9 @@ void SearchNewsLoggedIn()
         exit(-2);
     }
 
-    string jsonGetUser = name + "\n" + to_string(loggedInUser.id); ///Trimitem la server acest mesaj - titlul stirii cu id -ul.
-                                                                  /// dupa in Friends va trebui sa verific daca id si cu author id sunt prieteni.
+    string jsonGetUser =
+            name + "\n" + to_string(loggedInUser.id); ///Trimitem la server acest mesaj - titlul stirii cu id -ul.
+    /// dupa in Friends va trebui sa verific daca id si cu author id sunt prieteni.
 
     char towrite[BUFSIZ];
     for (int j = 0; j < BUFSIZ; j++)
@@ -302,25 +305,24 @@ void SearchNewsLoggedIn()
     if (strcmp(response, "fail") != 0) {
         cout << "News data getted!\n";
         NewsGetted = response; //afiseaza json-ul.
-        cout<<NewsGetted;
+        cout << NewsGetted;
     } else {
         cout << "FAILED Search News Logged. PLEASE TRY AGAIN!\n";
         NewsGetted = "";
         SearchNews();
     }
 
-    cout<<NewsGetted;
+    cout << NewsGetted;
 }
 
-void SearchGetFriendRequest()
-{
+void SearchGetFriendRequest() {
     string NewGetReq;
     string username_first;
     string username_second = to_string(loggedInUser.id);
 
-    cout<<"Please enter the neme o strig you are looking for!";
-    cin>>username_first;
-    string message = username_first + "\n" +username_second;
+    cout << "Please enter the neme o strig you are looking for!";
+    cin >> username_first;
+    string message = username_first + "\n" + username_second;
 
     int sd;
     struct sockaddr_in server;
@@ -369,14 +371,14 @@ void SearchGetFriendRequest()
     if (strcmp(response, "fail") != 0) {
         cout << "Friend Request data getted!\n";
         NewGetReq = response; //afiseaza json-ul.
-        cout<<NewGetReq;
+        cout << NewGetReq;
     } else {
         cout << "FAILED Friend Request Logged. PLEASE TRY AGAIN!\n";
         NewGetReq = "";
         SearchNews();
     }
 
-    cout<<NewGetReq;
+    cout << NewGetReq;
 }
 
 void MainMenu() {
@@ -396,7 +398,7 @@ void MainMenu() {
     } else if (comanda == 2) {
         CreeateUser();
     } else if (comanda == 3) {
-         SearchNews();
+        SearchNews();
     } else if (comanda == 4) {
         exit(0);
     } else {
@@ -525,8 +527,7 @@ void CreeateUser() {
     }
 }
 
-void GetFriendReq(string usernames,string &UserGetted)
-{
+void GetFriendReq(string usernames, string &UserGetted) {
 // functia asta apeleaza serverul ServerGetUser
     // daca am luat datele la user, atunci apelam LoggedInMenu()
     int sd;
@@ -535,8 +536,8 @@ void GetFriendReq(string usernames,string &UserGetted)
 
     if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
         perror("Error at socket client at getUser\n");
-         // placeholder, nu ne trebuie exit
-        cout<<"Failed to create user. Please try again!\n";
+        // placeholder, nu ne trebuie exit
+        cout << "Failed to create user. Please try again!\n";
         Login();
         //SAU
         //MainMenu();
@@ -573,7 +574,7 @@ void GetFriendReq(string usernames,string &UserGetted)
     }
 
     if (strcmp(response, "fail") != 0) {
-       cout << "User data getted!\n";
+        cout << "User data getted!\n";
         UserGetted = response;
     } else {
         cout << "FAILED TO LOG IN. PLEASE TRY AGAIN!\n";
@@ -581,19 +582,93 @@ void GetFriendReq(string usernames,string &UserGetted)
     }
 }
 
-void CreeateNews()
-{
+void SendMessage() {
+    int number;
+    string message, title;
+    vector<string> userNames;
+    cout << "Please Introduce Message \n";
+    cin >> message;
+    cout << "Please Introduce Number of Users Of Conversation\n";
+    cin >> number;
+    cout << "Please Introduce The Name of Your Chat \n";
+    cin >> title;
+    cout<<"Please Introduce User Names That you want to see the messages \n";
+    for (int i = 0; i < number; i++) {
+        {
+            cin>>userNames[i];
+        }
+    }
+  ////Gata datele ce trebuie trimise.
+    int sd;
+    struct sockaddr_in server;
+    int raspuns;
+
+    if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+        perror("Error at socket client at ServerSendMessage\n");
+        exit(-1); // placeholder, nu ne trebuie exit
+        /*
+        cout<<"Failed to create user. Please try again!\n";
+        SendMessage();
+        //SAU
+        //MainMenu();
+        */
+    }
+    bzero(&server, sizeof(server));
+
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = htonl(INADDR_ANY);
+    server.sin_port = htons(PORT_SERVERMESSAGE);
+
+    if (connect(sd, (struct sockaddr *) &server, sizeof(struct sockaddr)) == -1) {
+        perror("Wrong connect to ServerSendMessage \n");
+        exit(-2);
+    }
+    ///
+    Message messageObj;
+    messageObj.message = message;
+    messageObj.date;
+    string jsonMessageGet = messageObj.toJson(); ///Trimitem la server acest mesaj. ; nu uita si de userNames
+
+    jsonMessageGet = jsonMessageGet + "%" + title;
+
+    char towrite[BUFSIZ];
+    for (int j = 0; j < BUFSIZ; j++)
+        towrite[j] = 0;
+
+    for (int j = 0; j < jsonMessageGet.size(); j++)
+        towrite[j] = jsonMessageGet[j];
+
+    int bytesWritten = write(sd, &towrite, BUFSIZ);
+    if (bytesWritten <= 0) {
+        perror("Error at bytes Written SendMessage");
+        exit(-3);
+    }
+    char response[BUFSIZ];
+    if (read(sd, response, BUFSIZ) < 0) {
+        perror("Client could not read server SendMessage response");
+        exit(-4);
+    }
+
+    if (strcmp(response, "0") != 0) {
+        cout << "Message Sent!\n";
+    } else {
+        cout << "Message doesn't sent . PLEASE TRY AGAIN!\n";
+        SendMessage();
+    }
+}
+
+void CreeateNews() {
     News news;
-    cout<<"Introduce News Title \n";
-    cin>>news.title;
-    cout<<"Introduce News Content \n";
-    cin>>news.content;
-    cout<<"Introduce Type \n";
-    cin>>news.type;
-    news.authorId=loggedInUser.id;
+    cout << "Introduce News Title \n";
+    cin >> news.title;
+    cout << "Introduce News Content \n";
+    cin >> news.content;
+    cout << "Introduce Type \n";
+    cin >> news.type;
+    news.authorId = loggedInUser.id;
 
     string newsJson;
-    newsJson=news.toJson();   //Timit la server , identific id ul dupa userName-ul userului actual;
+    newsJson = news.toJson();   //Timit la server , identific id ul dupa userName-ul userului actual;
 
     int sd;
     struct sockaddr_in server;
@@ -602,7 +677,7 @@ void CreeateNews()
     if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
         perror("Error at socket client at Creeate News\n");
         // placeholder, nu ne trebuie exit
-        cout<<"Failed to create News. Please try again!\n";
+        cout << "Failed to create News. Please try again!\n";
         Login();
         //SAU
         //MainMenu();
@@ -653,55 +728,56 @@ void LoggedInMenu() {
     cout << " 1 - Profile \n";   //Done it;
     cout << " 2 - Create news \n"; //Done it
     cout << " 3 - Search news \n"; //Done it but I need your help.
-    cout << " 4 - Search friend \n"; //To do -> afisez lista cu toate uservame urile de prieteni;
-    cout << " 5 - See friend requests \n"; //To do -> lista cu toate request urile
+    cout << " 4 - Search friend \n"; //To do -> afisez lista cu toate username urile de prieteni;
+    cout << " 5 - See friend requests \n"; //Done it but u need to verify it after adding a friend
     cout << " 6 - Search users with that name \n"; // -> userii care au nume asemanator. LIKE
-    cout << " 7 - Add FriendRequest \n"; //Done it but u need to verify;
-    cout << " 8 - Send Message \n"; //Merge la mai multi useri
-    cout << " 9 - Search Message \n"; //To do
+    cout << " 7 - Add FriendRequest \n"; //To do;
+    cout << " 8 - Send Message \n"; //To do Merge la mai multi useri
+
+    cout << " 9 -  Search Message \n"; //To do
     cout << " 10 - Change Password \n"; //Optional
     cout << " 11 - Delete Account \n"; //Optional
     cout << " 12 - Search User \n"; //To do.
     cout << " 13 - Add Friend \n"; // To do (daca am vreo cerere ii adaug).
-
+    cout << " 14 - show chat \n"; //Optional.
     //To do Profil + Post - private / publice;
     //...
 
     int comanda;
     cin >> comanda;
-    if(comanda == 1) ///Inca nu merge da seg eror si fail la cautare ...
+    if (comanda == 1) ///Inca nu merge da seg eror si fail la cautare ...
     {
         string show;
         string profileDetails = "traian";//"loggedInUser.userName"; ///Asta nu afiseaza nimic ; de ce? :)
-       // cout<<profileDetails;
-        getUserData(profileDetails,show);
-        cout<<show<<"\n";
+        // cout<<profileDetails;
+        getUserData(profileDetails, show);
+        cout << show << "\n";
         LoggedInMenu();
-    }
-    else if(comanda == 2)
-    {
+    } else if (comanda == 2) {
         CreeateNews();
         LoggedInMenu();
-    }
-    else if(comanda == 3)
-    {
+    } else if (comanda == 3) {
         SearchNewsLoggedIn();
         LoggedInMenu();
-    }
-    else if(comanda == 4 )
-    {
-          ///Search Friend
+    } else if (comanda == 4) {
+        ///Search Friend
         LoggedInMenu();
-    }
-    else if(comanda == 5)
-    {
+    } else if (comanda == 5) {
         SearchGetFriendRequest();
         LoggedInMenu();
-         ///Search Friend Request
-    }
-    else
-    {
-        cout<<"Wrong Command \n";
+        ///Search Friend Request
+    } else if (comanda == 8) {
+        SendMessage();
+        LoggedInMenu();
+        ///Search Friend Request
+    } else if (comanda == 9) {
+        LoggedInMenu();
+        ///Search Friend Request
+    } else if (comanda == 10) {
+        LoggedInMenu();
+        ///Search Friend Request
+    } else {
+        cout << "Wrong Command \n";
         LoggedInMenu();
     }
 }
