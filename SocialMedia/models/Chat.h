@@ -9,7 +9,8 @@
 #include<string>
 #include<vector>
 #include"Message.h"
-#include <jsoncpp/json/json.h>
+//#include <jsoncpp/json/json.h>
+#include "../nlohmann/json.hpp"
 
 struct Chat {
 
@@ -32,7 +33,7 @@ struct Chat {
         idMessages = pidMessages;
         title = ptitle;
     }
-
+/*
     Chat(std::string json) {
         Json::Value jsonObj;
         Json::Reader reader;
@@ -42,6 +43,7 @@ struct Chat {
          //   idList = jsonObj["idList"].as<std::vector<int>>();
          //   idMessages = jsonObj["idMessages"].as<std::vector<int>>();
             title = jsonObj["title"].asString();
+            ///
         }
     }
 
@@ -52,6 +54,17 @@ struct Chat {
       //  jsonObj["idMessages"] = idMessages;
         jsonObj["title"] = title;
         return jsonObj.toStyledString();
+    }
+    */
+
+    Chat(std::string json)
+    {
+
+    }
+    
+    std::string toJson()
+    {
+
     }
 };
 

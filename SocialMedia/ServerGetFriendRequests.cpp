@@ -83,11 +83,27 @@ int main() {
             }
             ////
             string userDetails = json;
+            string userActual;
+            for(int i=0;i<strlen(json);i++)
+            {
+                int sw =0;
+                  if(json[i]!= '\n' && sw==0)
+                      userDetails[i] = json[i];
+                  else
+                  {
+                      sw=1;
+                      i++;
+                  }
+                  if(sw == 1)
+                  {
+                      userActual[i]=json[i];
+                  }
+            }
             HandlerFriendRequestDB handler;
             ///Acum trbuie in baza de date sa aplicam functia ce ne returneaza dupa userName.
             // getUser
             vector<string> usersGet;
-            usersGet = handler.GetRequestNames(userDetails);
+            usersGet = handler.GetRequestNames(userDetails,userActual);
             for (int i = 0; i < usersGet.size(); i++)
                 getUser += usersGet[i] + "\n";
         }

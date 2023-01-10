@@ -312,7 +312,72 @@ void SearchNewsLoggedIn()
     cout<<NewsGetted;
 }
 
+void SearchGetFriendRequest()
+{
+    string NewGetReq;
+    string username_first;
+    string username_second = to_string(loggedInUser.id);
 
+    cout<<"Please enter the neme o strig you are looking for!";
+    cin>>username_first;
+    string message = username_first + "\n" +username_second;
+
+    int sd;
+    struct sockaddr_in server;
+    int raspuns;
+
+    if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+        perror("Error at socket client at Get FriendRequest\n");
+        exit(-1); // placeholder, nu ne trebuie exit
+        /*
+        cout<<"Failed to create user. Please try again!\n";
+        LoggedMenu();
+        //SAU
+        //MainMenu();
+        */
+    }
+    bzero(&server, sizeof(server));
+
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = htonl(INADDR_ANY);
+    server.sin_port = htons(PORT_GetFriendRequest);
+
+    if (connect(sd, (struct sockaddr *) &server, sizeof(struct sockaddr)) == -1) {
+        perror("Wrong connect to Get Friend Request  Logged\n");
+        exit(-2);
+    }
+
+    char towrite[BUFSIZ];
+    for (int j = 0; j < BUFSIZ; j++)
+        towrite[j] = 0;
+
+    for (int j = 0; j < message.size(); j++)
+        towrite[j] = message[j];
+
+    int bytesWritten = write(sd, &towrite, BUFSIZ);
+    if (bytesWritten <= 0) {
+        perror("Error at bytes Written get Friend Request Logged");
+        exit(-3);
+    }
+    char response[BUFSIZ];
+    if (read(sd, response, BUFSIZ) < 0) {
+        perror("Client could not read server Search Friend Request Logged response");
+        exit(-4);
+    }
+
+
+    if (strcmp(response, "fail") != 0) {
+        cout << "Friend Request data getted!\n";
+        NewGetReq = response; //afiseaza json-ul.
+        cout<<NewGetReq;
+    } else {
+        cout << "FAILED Friend Request Logged. PLEASE TRY AGAIN!\n";
+        NewGetReq = "";
+        SearchNews();
+    }
+
+    cout<<NewGetReq;
+}
 
 void MainMenu() {
     cout << "Welcome to VirtualSoc!" << '\n';
@@ -587,10 +652,10 @@ void LoggedInMenu() {
 
     cout << " 1 - Profile \n";   //Done it;
     cout << " 2 - Create news \n"; //Done it
-    cout << " 3 - Search news \n"; //To do
-    cout << " 4 - Search friend \n"; //To do
-    cout << " 5 - See friend requests \n"; //To do
-    cout << " 6 - Search users with that name \n";
+    cout << " 3 - Search news \n"; //Done it but I need your help.
+    cout << " 4 - Search friend \n"; //To do -> afisez lista cu toate uservame urile de prieteni;
+    cout << " 5 - See friend requests \n"; //To do -> lista cu toate request urile
+    cout << " 6 - Search users with that name \n"; // -> userii care au nume asemanator. LIKE
     cout << " 7 - Add FriendRequest \n"; //Done it but u need to verify;
     cout << " 8 - Send Message \n"; //Merge la mai multi useri
     cout << " 9 - Search Message \n"; //To do
@@ -630,12 +695,7 @@ void LoggedInMenu() {
     }
     else if(comanda == 5)
     {
-        string show;
-        cout<<"Write the string that u want to match \n";
-        string s;
-        cin>>s;
-        GetFriendReq(s,show);
-        cout<<show<<'\n';
+        SearchGetFriendRequest();
         LoggedInMenu();
          ///Search Friend Request
     }
