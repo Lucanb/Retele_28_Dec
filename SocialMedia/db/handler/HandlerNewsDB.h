@@ -97,7 +97,7 @@ struct HandlerNewsDB {
 ///Asta daca e private;
        for(int i=0;i<allId.size();i++) {
            string sqlVerif2 = "SELECT type from Friend WHERE id1=" + id1
-                   + "AND" + "id2=" + allId[i] ;
+                   + " AND" + "id2=" + allId[i] ;
            rc= sqlite3_exec(db,sqlVerif2.c_str(), callback2,0,&err_msg);
            if(rc!=SQLITE_OK)
            {
@@ -173,7 +173,7 @@ struct HandlerNewsDB {
         char *err_msg = 0;
         sqlite3_stmt *res;
 
-        int rc = sqlite3_open("mydb.db", &db);
+        int rc = sqlite3_open("db/mydb.db", &db);
 
         if (rc != SQLITE_OK) {
 
@@ -184,7 +184,8 @@ struct HandlerNewsDB {
         }
 
         string sqlQuery =
-                "SELECT content FROM News WHERE title LIKE" +string("\'")+"%"+ title + "%" +string("\'");  //
+                "SELECT content FROM News WHERE title LIKE" +string("\'")+"%"+ title + "%" +string("\'") + " AND " +
+                "type =" + string("\'") + "public" + string("\'");  //
 
         rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
 

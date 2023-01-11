@@ -56,9 +56,9 @@ int main() {
 /*
 */
    News news;
-   news.type="avs";
-   news.content="asd";
-   news.title="moare";
+   news.type="public";
+   news.content="epist";
+   news.title="moaretas";
    news.authorId=2;
 
 
