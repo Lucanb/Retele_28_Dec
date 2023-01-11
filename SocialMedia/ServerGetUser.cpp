@@ -84,50 +84,48 @@ int main() {
             HandlerUserDB handler;
             ///Acum trbuie in baza de date sa aplicam functia ce ne returneaza dupa userName.
             getUser = handler.getUserByUsername(userDetails); ///Merge!
-        }
-        /*
-        std::cout << getUser.userName << '\n';
-        std::cout << getUser.profileDescription << '\n';
-        std::cout << getUser.birthday << '\n';
-        std::cout << getUser.firstname << '\n';
-        std::cout << getUser.lastname << '\n';
-        std::cout << getUser.isAdmin << '\n';
-        std::cout << getUser.accountCreationDate << '\n';
-        */
-        int success;
-        if (getUser.id >= 0)
-            success = 1;
-        else
-            success = 0;
+            // }
+            /*
+            std::cout << getUser.userName << '\n';
+            std::cout << getUser.profileDescription << '\n';
+            std::cout << getUser.birthday << '\n';
+            std::cout << getUser.firstname << '\n';
+            std::cout << getUser.lastname << '\n';
+            std::cout << getUser.isAdmin << '\n';
+            std::cout << getUser.accountCreationDate << '\n';
+            */
+            int success;
+            if (getUser.id >= 0)
+                success = 1;
+            else
+                success = 0;
 
-        if (success) {
-            string json2 = getUser.toJson();  ///POSIBILA EROARE
-            if (write(client, json2.c_str(), BUFSIZ) <= 0) {
-                perror("Server GetUser Could Not Respond To Client!");
+            if (success) {
+                string json2 = getUser.toJson();  ///POSIBILA EROARE
+                if (write(client, json2.c_str(), BUFSIZ) <= 0) {
+                    perror("Server GetUser Could Not Respond To Client!");
+                    close(client);
+                    exit(0);
+                } else {
+                    cout << "User Getted \n";
+                }
                 close(client);
                 exit(0);
             } else {
-                cout << "User Getted \n";
-            }
-            close(client);
-            exit(0);
-        }
-        else
-        {
-            string json2 = "fail";  ///POSIBILA EROARE
-            if (write(client, json2.c_str(), BUFSIZ) <= 0) {
-                perror("Server GetUser Could Not Respond To Client!");
+                string json2 = "fail";  ///POSIBILA EROARE
+                if (write(client, json2.c_str(), BUFSIZ) <= 0) {
+                    perror("Server GetUser Could Not Respond To Client!");
+                    close(client);
+                    exit(0);
+                } else {
+                    cout << "Fail To  respond getUser in for user \n";
+                }
+                cout << "Fail To getUser in for user \n";
                 close(client);
                 exit(0);
-            } else {
-                cout << "Fail To  respond getUser in for user \n";
             }
-            cout << "Fail To getUser in for user \n";
-            close(client);
-            exit(0);
+
         }
-
-
         /////
     }
 }
