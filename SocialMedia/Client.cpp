@@ -320,6 +320,69 @@ void SearchNewsLoggedIn() {
     cout << NewsGetted;
 }
 
+void CreeateFrinedRequest() {
+    string userName;
+    string type;
+    cout<<"Please Introduce a userName \n";
+    cin>>userName;
+    cout<<"Please Introduce The Type of FriendShip \n";
+    cin>>type;
+
+    int sd;
+    struct sockaddr_in server;
+    int raspuns;
+
+    if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+        perror("Error at socket client at Creeate Friend Request\n");
+        exit(-1); // placeholder, nu ne trebuie exit
+        /*
+        cout<<"Failed to create user. Please try again!\n";
+        LoggedMenu();
+        //SAU
+        //MainMenu();
+        */
+    }
+    bzero(&server, sizeof(server));
+
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = htonl(INADDR_ANY);
+    server.sin_port = htons(PORT_DOFRIENDREQUEST);
+
+    if (connect(sd, (struct sockaddr *) &server, sizeof(struct sockaddr)) == -1) {
+        perror("Wrong connect to Creeate Friend Request Logged\n");
+        exit(-2);
+    }
+
+    string jsonData = userName + "\n" + loggedInUser.userName + "\n" + type;
+
+    char towrite[BUFSIZ];
+    for (int j = 0; j < BUFSIZ; j++)
+        towrite[j] = 0;
+
+    for (int j = 0; j < jsonData.size(); j++)
+        towrite[j] = jsonData[j];
+
+    int bytesWritten = write(sd, &towrite, BUFSIZ);
+
+    if (bytesWritten <= 0) {
+        perror("Error at bytes Written Creeate Friend Request");
+        exit(-3);
+    }
+
+    char response[BUFSIZ];
+    if (read(sd, response, BUFSIZ) < 0) {
+        perror("Client could not read server Creeate FriendRequest response");
+        exit(-4);
+    }
+
+    if (strcmp(response, "0") != 0) {
+        cout << "Friend Request Added!\n";
+    } else {
+        cout << "Failed Adding FriendRequest. PLEASE TRY AGAIN!\n";
+        LoggedInMenu();
+    }
+}
+
 void SearchGetFriendRequest() {
     string NewGetReq;
     string username_first;
@@ -768,8 +831,7 @@ void SendMessage() {
     }
 }
 
-void AddFriendRequest(string usernames , string type)
-{
+void AddFriendRequest(string usernames, string type) {
     int sd;
     struct sockaddr_in server;
     int raspuns;
@@ -819,6 +881,10 @@ void AddFriendRequest(string usernames , string type)
         cout << "FAILED TO ADD FriendRequest. PLEASE TRY AGAIN!\n";
         LoggedInMenu();
     }
+}
+
+void SearchMessage() {
+
 }
 
 void CreeateNews() {
@@ -934,18 +1000,18 @@ void LoggedInMenu() {
         LoggedInMenu();
     } else if (comanda == 6) {
         string s;
-        cout<<"Please Insert a string \n";
-        cin>> s;
+        cout << "Please Insert a string \n";
+        cin >> s;
         ServerSearchUser(s);
         LoggedInMenu();
     } else if (comanda == 7) {
         string s1;
         string s2;
-        cout<<"Please Input user that u want to add \n";
-        cin>>s1;
-        cout<<"Please Input the type of friend \n";
-        cin>>s2;
-        AddFriendRequest(s1,s2);
+        cout << "Please Input user that u want to add \n";
+        cin >> s1;
+        cout << "Please Input the type of friend \n";
+        cin >> s2;
+        AddFriendRequest(s1, s2);
         LoggedInMenu();
     } else if (comanda == 8) {
         SendMessage();
@@ -956,11 +1022,9 @@ void LoggedInMenu() {
         LoggedInMenu();
         ///Search Friend Request
     } else if (comanda == 10) {
+        CreeateFrinedRequest();
         LoggedInMenu();
         ///Search Friend Request
-    } else if (comanda == 11) {
-        //AddFriend();
-        LoggedInMenu();
     } else {
         cout << "Wrong Command \n";
         LoggedInMenu();
