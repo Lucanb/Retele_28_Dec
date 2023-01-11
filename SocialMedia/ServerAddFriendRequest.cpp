@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include "db/handler/HandlerFriendDB.h"
 #include "db/handler/HandlerUserDB.h"
+#include "db/handler/HandlerFriendRequest.h"
 
 #define ADD_FRIENDREQUEST 2032
 
@@ -101,24 +102,38 @@ int main() {
             }
 
             HandlerFriendDB handler;
+            HandlerFriendRequestDB handlerReq;
+            FriendRequest VerifObj;
             HandlerUserDB handlerUser;
 
             int ids1 = handlerUser.GetUserId(userActual);
             int ids2 = handlerUser.GetUserId(userDetails);
             if (ids1 != 0 && ids2 != 0) {
-                Friend friendObj;
-                friendObj.id1 = ids1;
-                friendObj.id2 = ids2;
-                friendObj.type = type;
 
-                int verif = handler.createFriend(friendObj);
-                if (verif != 0) {
-                    succes = "1";
+
+                Friend friendObj;
+
+                VerifObj = handlerReq.getFriendRequest(ids1, ids2);
+                if (VerifObj.id >= 0) {
+                    friendObj.id1 = ids1;
+                    friendObj.id2 = ids2;
+                    friendObj.type = type;
+
+                    int verif = handler.createFriend(friendObj);
+
+                    if (verif != 0) {
+                        succes = "1";
+                    } else {
+                        succes = "0";
+                    }
                 } else {
                     succes = "0";
                 }
-            } else {
-                succes = "0";
+            }
+            else
+            {
+                cout<<"You don t have any Request";
+                succes = "0"; // ca nu am cerere de prietenie.
             }
 
             if (write(client, succes.c_str(), BUFSIZ) <= 0) {
