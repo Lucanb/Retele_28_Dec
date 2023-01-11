@@ -254,9 +254,10 @@ void SearchNews() {
 }
 
 void SearchNewsLoggedIn() {
+
     string name;
     string NewsGetted;
-    cout << "Pleas Input a Name : \n";
+    cout << "Please Input a Name : \n";
     cin >> name;
 
     int sd;
@@ -265,13 +266,13 @@ void SearchNewsLoggedIn() {
 
     if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
         perror("Error at socket client at Search News\n");
-        exit(-1); // placeholder, nu ne trebuie exit
-        /*
-        cout<<"Failed to create user. Please try again!\n";
-        LoggedMenu();
+        //  exit(-1); // placeholder, nu ne trebuie exit
+
+        cout << "Failed to create user. Please try again!\n";
+        LoggedInMenu();
         //SAU
         //MainMenu();
-        */
+
     }
     bzero(&server, sizeof(server));
 
@@ -281,11 +282,12 @@ void SearchNewsLoggedIn() {
 
     if (connect(sd, (struct sockaddr *) &server, sizeof(struct sockaddr)) == -1) {
         perror("Wrong connect to SearchNews  Logged\n");
-        exit(-2);
+        LoggedInMenu();
     }
 
-    string jsonGetUser =
-            name + "\n" + to_string(loggedInUser.id); ///Trimitem la server acest mesaj - titlul stirii cu id -ul.
+    string jsonGetUser;
+
+    jsonGetUser = name + "\n" + to_string(loggedInUser.id); ///Trimitem la server acest mesaj - titlul stirii cu id -ul.
     /// dupa in Friends va trebui sa verific daca id si cu author id sunt prieteni.
 
     char towrite[BUFSIZ];
@@ -298,35 +300,37 @@ void SearchNewsLoggedIn() {
     int bytesWritten = write(sd, &towrite, BUFSIZ);
     if (bytesWritten <= 0) {
         perror("Error at bytes Written SearchNews Logged");
-        exit(-3);
+        LoggedInMenu();
     }
+
     char response[BUFSIZ];
     if (read(sd, response, BUFSIZ) < 0) {
         perror("Client could not read server SearchNews Logged response");
-        exit(-4);
+        LoggedInMenu();
     }
-
 
     if (strcmp(response, "fail") != 0) {
         cout << "News data getted!\n";
         NewsGetted = response; //afiseaza json-ul.
         cout << NewsGetted;
+        LoggedInMenu();
     } else {
         cout << "FAILED Search News Logged. PLEASE TRY AGAIN!\n";
         NewsGetted = "";
-        SearchNews();
+        LoggedInMenu();
     }
 
     cout << NewsGetted;
+    LoggedInMenu();
 }
 
 void CreeateFrinedRequest() {
     string userName;
     string type;
-    cout<<"Please Introduce a userName \n";
-    cin>>userName;
-    cout<<"Please Introduce The Type of FriendShip \n";
-    cin>>type;
+    cout << "Please Introduce a userName \n";
+    cin >> userName;
+    cout << "Please Introduce The Type of FriendShip \n";
+    cin >> type;
 
     int sd;
     struct sockaddr_in server;
@@ -886,8 +890,8 @@ void AddFriendRequest(string usernames, string type) {
 void SearchMessage() {
 
     string chatName;
-    cout<<"Please insert the title of the chat you are looking for \n";
-    cin>>chatName;
+    cout << "Please insert the title of the chat you are looking for \n";
+    cin >> chatName;
 
     int sd;
     struct sockaddr_in server;
@@ -935,7 +939,7 @@ void SearchMessage() {
 
     if (strcmp(response, "No Messages \n") != 0) {
         cout << "Message found!\n";
-        cout<<response;
+        cout << response;
     } else {
         cout << "FAILED TO Find Message. PLEASE TRY AGAIN!\n";
         LoggedInMenu();
@@ -1016,7 +1020,6 @@ void LoggedInMenu() {
     cout << " 1 - Profile \n";   //Done it;
     cout << " 2 - Create news \n"; //Done it
     cout << " 3 - Search news \n"; //Done it but I need your help.
-    cout << " 4 - Search friend \n"; //To do -> afisez lista cu toate username urile de prieteni;
 
     cout << " 5 - See friend requests \n"; //Done it but u need to verify it after adding a friend
     cout << " 6 - Search users with that name \n"; // -> userii care au nume asemanator. LIKE
@@ -1047,9 +1050,6 @@ void LoggedInMenu() {
         LoggedInMenu();
     } else if (comanda == 3) {
         SearchNewsLoggedIn();
-        LoggedInMenu();
-    } else if (comanda == 4) {
-        // SearchFriend();
         LoggedInMenu();
     } else if (comanda == 5) {
         SearchGetFriendRequest();

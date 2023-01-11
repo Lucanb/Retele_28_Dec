@@ -34,7 +34,7 @@ int main() {
 
 
     //HandlerUserDB handler;
-   // handler.createUser(user);
+    //handler.createUser(user);
    // handler.getUserByUsernameAnother("st");
 //    vector<string> s = handler.getUserByUsernameAnother("on");
 //   if(s.size() == 1)
@@ -61,11 +61,10 @@ int main() {
 
    News news;
    news.type="public";
-   news.content="epist";
-   news.title="moaretas";
-   news.authorId=2;
-
-
+   news.content="asdf";
+   news.title="asda";
+   news.authorId=1;
+/*
  //  string s = news.toJson();
   //    cout<<s;
    //   News newss;
@@ -76,8 +75,8 @@ int main() {
    handler.createNews(news);
    // News getNews=handler.getNews(1,0);
 
-    string getNews ="jel";
-    handler.getNewsByTitle(getNews);
+//    string getNews ="jel";
+//    handler.getNewsByTitle(getNews);
 
     //News test = handler.getNews(1,0);
    // cout<<test.title<<'\n';
@@ -99,10 +98,9 @@ int main() {
   //  handler.deleteMessage(1,0);
    // handler.getMessage(1,0);
 /*
-
     FriendRequest friendRequest;
-    friendRequest.id1=0;
-    friendRequest.id2=1;
+ //   friendRequest.id1=0;
+ //   friendRequest.id2=1;
     HandlerFriendRequestDB handler;
   //  handler.createFriendRequest(friendRequest);
 
@@ -129,7 +127,11 @@ int main() {
 /*
 Friend friendd;
 HandlerFriendDB handler;
-friendd.id1=0;
+friendd.id1=1;
+friendd.id2=2;
+handler.createFriend(friendd);
+ /*
+ friendd.id1=0;
 friendd.id2=1;
 //handler.createFriend(friendd);
 //handler.GetNames("test username 2");
