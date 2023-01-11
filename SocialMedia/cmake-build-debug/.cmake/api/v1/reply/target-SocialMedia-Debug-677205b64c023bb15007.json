@@ -64,7 +64,8 @@
 				24,
 				25,
 				26,
-				27
+				27,
+				28
 			]
 		}
 	],
@@ -112,7 +113,8 @@
 				24,
 				25,
 				26,
-				27
+				27,
+				28
 			]
 		},
 		{
@@ -290,6 +292,12 @@
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
 			"path" : "ServerCreeateFriendRequest.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Server GetMessage.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

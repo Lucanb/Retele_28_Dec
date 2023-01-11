@@ -885,6 +885,62 @@ void AddFriendRequest(string usernames, string type) {
 
 void SearchMessage() {
 
+    string chatName;
+    cout<<"Please insert the title of the chat you are looking for \n";
+    cin>>chatName;
+
+    int sd;
+    struct sockaddr_in server;
+    int raspuns;
+
+    if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+        perror("Error at socket client at Get Message\n");
+        // placeholder, nu ne trebuie exit
+        cout << "Failed to Search message. Please try again!\n";
+        Login();
+        //SAU
+        //MainMenu();
+    }
+    bzero(&server, sizeof(server));
+
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = htonl(INADDR_ANY);
+    server.sin_port = htons(PORT_GETMESSAGE);
+
+    if (connect(sd, (struct sockaddr *) &server, sizeof(struct sockaddr)) == -1) {
+        perror("Wrong connect to Get Message \n");
+        exit(-2);
+    }
+
+    string jsonGetUser = chatName;
+
+    char towrite[BUFSIZ];
+    for (int j = 0; j < BUFSIZ; j++)
+        towrite[j] = 0;
+
+    for (int j = 0; j < jsonGetUser.size(); j++)
+        towrite[j] = jsonGetUser[j];
+
+    int bytesWritten = write(sd, &towrite, BUFSIZ);
+    if (bytesWritten <= 0) {
+        perror("Error at bytes Written Client");
+        exit(-3);
+    }
+
+    char response[BUFSIZ];
+    if (read(sd, response, BUFSIZ) < 0) {
+        perror("Client could not read server Get Message get response");
+        exit(-4);
+    }
+
+    if (strcmp(response, "No Messages \n") != 0) {
+        cout << "Message found!\n";
+        cout<<response;
+    } else {
+        cout << "FAILED TO Find Message. PLEASE TRY AGAIN!\n";
+        LoggedInMenu();
+    }
+
 }
 
 void CreeateNews() {
@@ -1018,7 +1074,7 @@ void LoggedInMenu() {
         LoggedInMenu();
         ///Search Friend Request
     } else if (comanda == 9) {
-        // SearchMessage();
+        SearchMessage();
         LoggedInMenu();
         ///Search Friend Request
     } else if (comanda == 10) {

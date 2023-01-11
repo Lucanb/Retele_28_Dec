@@ -69,6 +69,63 @@ struct HandlerMessageDB {
         }
     }
 
+    vector<string> getMessageAfterName(string name)
+    {
+        sqlite3 *db;
+        char *err_msg = 0;
+        sqlite3_stmt *res;
+
+        int rc = sqlite3_open("db/mydb.db", &db);
+
+        if (rc != SQLITE_OK) {
+            fprintf(stderr, "Cannot open database on insert message: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            vector<string> s;
+            s.push_back("fail");
+            return s;
+        }
+
+        int idd;
+
+        string sqlVerif1="SELECT idChat FROM Chat WHERE title = " + string("\'") + name +string("\'");
+        rc = sqlite3_exec(db, sqlVerif1.c_str(), callback, 0, &err_msg);
+        if(rc!=SQLITE_OK)
+        {
+            fprintf(stderr, "Cannot use first select: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            vector<string> s;
+            s.push_back("fail");
+            return s;
+        }
+        vector<string>sp;
+        parsing(returningStr,sp);
+
+       if(sp.size() != 0) {
+           idd = stoi(sp[0]);
+           string sqlVerif = "SELECT message FROM MESSAGE WHERE chatId=" + to_string(idd);
+           rc = sqlite3_exec(db, sqlVerif1.c_str(), callback, 0, &err_msg);
+           if(rc!=SQLITE_OK)
+           {
+               fprintf(stderr, "Cannot use first select: %s\n", sqlite3_errmsg(db));
+               sqlite3_close(db);
+               vector<string> s;
+               s.push_back("fail");
+               return s;
+           }
+           vector<string>sp;
+           parsing(returningStr,sp);
+           return sp;
+       }
+       else
+       {
+           fprintf(stderr, "My title doesn't exists %s\n", sqlite3_errmsg(db));
+           sqlite3_close(db);
+           vector<string> s;
+           s.push_back("fail");
+           return s;
+       }
+    }
+
     Message getMessage(int id, int chatId) {
 
         sqlite3 *db;
