@@ -20,27 +20,31 @@ int main() {
 /*
     User user;
 
-    user.userName = "test username 2";
-     user.firstname = "test firstname 2";
-     user.lastname = "test lastname 2";
-
-     string s = user.toJson();
-     cout<<s;
-     User userr=User(s);
+    user.userName = "luca_nastasa";
+     user.firstname = "Luca";
+     user.lastname = "Nastasa Baras";
+     user.isAdmin =1;
+     user.birthday = "10/06/2002";
+     user.profileDescription = "Funny";
+     //string s = user.toJson();
+    // cout<<s;
+   //  User userr=User(s);
 
       // User(user.toJson());
 
 
-    HandlerUserDB handler;
-   handler.createUser(user);
-
-
+    //HandlerUserDB handler;
+   // handler.createUser(user);
+   // handler.getUserByUsernameAnother("st");
+//    vector<string> s = handler.getUserByUsernameAnother("on");
+//   if(s.size() == 1)
+//     cout<<s[0];
 //    User userGet;// = handler.getUser(1);
    // cout << userGet.userName<<'\n';
    // cout << userGet.lastname<<'\n';
 
- User userGet = handler.getUserByUsername("est");
- cout<< userGet.firstname;
+// User userGet = handler.getUserByUsername("est");
+ //cout<< userGet.firstname;
 //  cout<<userGet.userName<<' '<<userGet.profileDescription;
   // user.userName = "updated username";
    // handler.updateUser(userGet);
@@ -54,7 +58,7 @@ int main() {
    //       cout<<userGet.id;
 
 /*
-*/
+
    News news;
    news.type="public";
    news.content="epist";

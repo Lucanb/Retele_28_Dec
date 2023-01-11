@@ -27,6 +27,11 @@
 #define PORT_CREATENEWS 2028
 #define PORT_SEARCHNEWSLOGGED 2029
 #define PORT_SERVERSENDMESSAGE 2030
+#define PORT_SEARCHUSER 2031
+#define ADD_FRIENDREQUEST 2032
+#define PORT_DOFRIENDREQUEST 2033
+#define PORT_GETMESSAGE 2034
+
 using namespace std;
 
 User loggedInUser;
@@ -172,9 +177,9 @@ void Login() {
         getUserData(username, actualUser);
         cout << actualUser;
         loggedInUser = User(actualUser); ///aici nu l face;
-           //  cout<< loggedInUser.userName<<" "<<loggedInUser.accountCreationDate<<" "<<loggedInUser.firstname<<'\n';
+        //  cout<< loggedInUser.userName<<" "<<loggedInUser.accountCreationDate<<" "<<loggedInUser.firstname<<'\n';
         //LoggedInMenu(loggedInUser);
-          LoggedInMenu();
+        LoggedInMenu();
     } else {
         cout << "FAILED TO LOG IN. PLEASE TRY AGAIN!\n";
         Login();
@@ -418,21 +423,20 @@ void CreeateUser() {
 
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::getline(std::cin, userCreeateAccount.userName);
-     for(int i=0;i<userCreeateAccount.userName.size();i++)
-         if(userCreeateAccount.userName[i] == ' ')
-         {
-             cout<<"Please don't use spaces \n";
-             CreeateUser();
-         }
+    for (int i = 0; i < userCreeateAccount.userName.size(); i++)
+        if (userCreeateAccount.userName[i] == ' ') {
+            cout << "Please don't use spaces \n";
+            CreeateUser();
+        }
 
     cout << "Please input your firstname \n";
-   // cin >> userCreeateAccount.firstname;
+    // cin >> userCreeateAccount.firstname;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::getline(std::cin, userCreeateAccount.firstname);
 
     cout << "Please input your lastname \n";
 
-   // cin >> userCreeateAccount.lastname;
+    // cin >> userCreeateAccount.lastname;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::getline(std::cin, userCreeateAccount.lastname);
 
@@ -454,9 +458,8 @@ void CreeateUser() {
     cout << "Input 1 if you are an admin else input 0 \n";
 
     cin >> userCreeateAccount.isAdmin;
-    if(userCreeateAccount.isAdmin != 0 && userCreeateAccount.isAdmin != 1)
-    {
-        cout<<"Please respect the format \n";
+    if (userCreeateAccount.isAdmin != 0 && userCreeateAccount.isAdmin != 1) {
+        cout << "Please respect the format \n";
         CreeateUser();
     }
     string password;
@@ -547,6 +550,60 @@ void CreeateUser() {
     }
 }
 
+
+void ServerSearchUser(string usernames) {
+    int sd;
+    struct sockaddr_in server;
+    int raspuns;
+
+    if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+        perror("Error at socket client at getUser\n");
+        // placeholder, nu ne trebuie exit
+        cout << "Failed to create user. Please try again!\n";
+        Login();
+        //SAU
+        //MainMenu();
+    }
+    bzero(&server, sizeof(server));
+
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = htonl(INADDR_ANY);
+    server.sin_port = htons(PORT_SEARCHUSER);
+
+    if (connect(sd, (struct sockaddr *) &server, sizeof(struct sockaddr)) == -1) {
+        perror("Wrong connect to GetUser \n");
+        exit(-2);
+    }
+    string jsonGetUser = usernames;
+
+    char towrite[BUFSIZ];
+    for (int j = 0; j < BUFSIZ; j++)
+        towrite[j] = 0;
+
+    for (int j = 0; j < jsonGetUser.size(); j++)
+        towrite[j] = jsonGetUser[j];
+
+    int bytesWritten = write(sd, &towrite, BUFSIZ);
+    if (bytesWritten <= 0) {
+        perror("Error at bytes Written Client");
+        exit(-3);
+    }
+
+    char response[BUFSIZ];
+    if (read(sd, response, BUFSIZ) < 0) {
+        perror("Client could not read server user get response");
+        exit(-4);
+    }
+
+    if (strcmp(response, "fail") != 0) {
+        cout << "User data getted!\n";
+        cout << response;
+    } else {
+        cout << "FAILED TO LOG IN. PLEASE TRY AGAIN!\n";
+        Login();
+    }
+}
+
 void GetFriendReq(string usernames, string &UserGetted) {
 // functia asta apeleaza serverul ServerGetUser
     // daca am luat datele la user, atunci apelam LoggedInMenu()
@@ -627,8 +684,8 @@ void SendMessage() {
 
     if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
         perror("Error at socket client at ServerSendMessage\n");
-       // exit(-1); // placeholder, nu ne trebuie exit
-        cout<<"Failed to create user. Please try again!\n";
+        // exit(-1); // placeholder, nu ne trebuie exit
+        cout << "Failed to create user. Please try again!\n";
         SendMessage();
         //SAU
         //MainMenu();
@@ -642,7 +699,7 @@ void SendMessage() {
     if (connect(sd, (struct sockaddr *) &server, sizeof(struct sockaddr)) == -1) {
         perror("Wrong connect to ServerSendMessage \n");
         SendMessage();
-       // exit(-2);
+        // exit(-2);
     }
     ///
     Message messageObj;
@@ -672,7 +729,7 @@ void SendMessage() {
         //exit(-4);
     }
 
-   cout<<"not yet"<<'\n';
+    cout << "not yet" << '\n';
     if (strcmp(response, "0") != 0) {
         string NameSent = "";
         string numelog = to_string(loggedInUser.id);
@@ -711,6 +768,59 @@ void SendMessage() {
     }
 }
 
+void AddFriendRequest(string usernames , string type)
+{
+    int sd;
+    struct sockaddr_in server;
+    int raspuns;
+
+    if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+        perror("Error at socket client at getUser\n");
+        // placeholder, nu ne trebuie exit
+        cout << "Failed to create user. Please try again!\n";
+        Login();
+        //SAU
+        //MainMenu();
+    }
+    bzero(&server, sizeof(server));
+
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = htonl(INADDR_ANY);
+    server.sin_port = htons(ADD_FRIENDREQUEST);
+
+    if (connect(sd, (struct sockaddr *) &server, sizeof(struct sockaddr)) == -1) {
+        perror("Wrong connect to GetUser \n");
+        exit(-2);
+    }
+    string jsonGetUser = usernames + "\n" + loggedInUser.userName + "\n" + type;
+
+    char towrite[BUFSIZ];
+    for (int j = 0; j < BUFSIZ; j++)
+        towrite[j] = 0;
+
+    for (int j = 0; j < jsonGetUser.size(); j++)
+        towrite[j] = jsonGetUser[j];
+
+    int bytesWritten = write(sd, &towrite, BUFSIZ);
+    if (bytesWritten <= 0) {
+        perror("Error at bytes Written Client");
+        exit(-3);
+    }
+
+    char response[BUFSIZ];
+    if (read(sd, response, BUFSIZ) < 0) {
+        perror("Client could not read server user get response");
+        exit(-4);
+    }
+
+    if (strcmp(response, "0") != 0) {
+        cout << "User Friend Reqest Added!\n";
+    } else {
+        cout << "FAILED TO ADD FriendRequest. PLEASE TRY AGAIN!\n";
+        LoggedInMenu();
+    }
+}
+
 void CreeateNews() {
     News news;
     cout << "Introduce News Title \n";
@@ -724,7 +834,7 @@ void CreeateNews() {
 
     string newsJson;
     newsJson = news.toJson();   //Timit la server , identific id ul dupa userName-ul userului actual;
-    cout<<newsJson;
+    cout << newsJson;
 
     int sd;
     struct sockaddr_in server;
@@ -785,17 +895,15 @@ void LoggedInMenu() {
     cout << " 2 - Create news \n"; //Done it
     cout << " 3 - Search news \n"; //Done it but I need your help.
     cout << " 4 - Search friend \n"; //To do -> afisez lista cu toate username urile de prieteni;
+
     cout << " 5 - See friend requests \n"; //Done it but u need to verify it after adding a friend
     cout << " 6 - Search users with that name \n"; // -> userii care au nume asemanator. LIKE
-    cout << " 7 - Add FriendRequest \n"; //To do;
-    cout << " 8 - Send Message \n"; //To do Merge la mai multi useri
+    cout << " 7 - Add FriendRequest \n"; //To do; (accepta friend request ul)
+    cout << " 8 - Send Message \n"; //To do Merge la mai multi useri - implementata
 
     cout << " 9 -  Search Message \n"; //To do
-    cout << " 10 - Change Password \n"; //Optional
-    cout << " 11 - Delete Account \n"; //Optional
-    cout << " 12 - Search User \n"; //To do.
-    cout << " 13 - Add Friend \n"; // To do (daca am vreo cerere ii adaug).
-    cout << " 14 - show chat \n"; //Optional.
+    cout << " 10 - Do Request \n"; //To do
+
     //To do Profil + Post - private / publice;
     //...
 
@@ -804,12 +912,12 @@ void LoggedInMenu() {
     if (comanda == 1) ///Inca nu merge da seg eror si fail la cautare ...
     {
         string show;
-        cout<<"\n";
+        cout << "\n";
         string profileDetails = loggedInUser.userName;
-              //  "traian"; //"loggedInUser.userName"; ///Asta nu afiseaza nimic ; de ce? :)
-       //  cout<<profileDetails;
-       // cout<<"\n";
-         getUserData(profileDetails, show);
+        //  "traian"; //"loggedInUser.userName"; ///Asta nu afiseaza nimic ; de ce? :)
+        //  cout<<profileDetails;
+        // cout<<"\n";
+        getUserData(profileDetails, show);
         cout << show << "\n";
         LoggedInMenu();
     } else if (comanda == 2) {
@@ -819,22 +927,40 @@ void LoggedInMenu() {
         SearchNewsLoggedIn();
         LoggedInMenu();
     } else if (comanda == 4) {
-        ///Search Friend
+        // SearchFriend();
         LoggedInMenu();
     } else if (comanda == 5) {
         SearchGetFriendRequest();
         LoggedInMenu();
-        ///Search Friend Request
+    } else if (comanda == 6) {
+        string s;
+        cout<<"Please Insert a string \n";
+        cin>> s;
+        ServerSearchUser(s);
+        LoggedInMenu();
+    } else if (comanda == 7) {
+        string s1;
+        string s2;
+        cout<<"Please Input user that u want to add \n";
+        cin>>s1;
+        cout<<"Please Input the type of friend \n";
+        cin>>s2;
+        AddFriendRequest(s1,s2);
+        LoggedInMenu();
     } else if (comanda == 8) {
         SendMessage();
         LoggedInMenu();
         ///Search Friend Request
     } else if (comanda == 9) {
+        // SearchMessage();
         LoggedInMenu();
         ///Search Friend Request
     } else if (comanda == 10) {
         LoggedInMenu();
         ///Search Friend Request
+    } else if (comanda == 11) {
+        //AddFriend();
+        LoggedInMenu();
     } else {
         cout << "Wrong Command \n";
         LoggedInMenu();

@@ -84,61 +84,59 @@ int main() {
             ////
             string userDetails = json;
             string userActual;
-            for(int i=0;i<strlen(json);i++)
-            {
-                int sw =0;
-                  if(json[i]!= '\n' && sw==0)
-                      userDetails[i] = json[i];
-                  else
-                  {
-                      sw=1;
-                      i++;
-                  }
-                  if(sw == 1)
-                  {
-                      userActual[i]=json[i];
-                  }
+            for (int i = 0; i < strlen(json); i++) {
+                int sw = 0;
+                if (json[i] != '\n' && sw == 0)
+                    userDetails[i] = json[i];
+                else {
+                    sw = 1;
+                    i++;
+                }
+                if (sw == 1) {
+                    userActual[i] = json[i];
+                }
             }
             HandlerFriendRequestDB handler;
             ///Acum trbuie in baza de date sa aplicam functia ce ne returneaza dupa userName.
             // getUser
             vector<string> usersGet;
-            usersGet = handler.GetRequestNames(userDetails,userActual);
+            usersGet = handler.GetRequestNames(userDetails, userActual);
             for (int i = 0; i < usersGet.size(); i++)
                 getUser += usersGet[i] + "\n";
-        }
 
-        int success;
-        if (getUser.size() >= 0)
-            success = 1;
-        else
-            success = 0;
 
-        if (success) {
-            string json2 = getUser;  ///POSIBILA EROARE
-            if (write(client, json2.c_str(), BUFSIZ) <= 0) {
-                perror("Server GetUser Could Not Respond To Client!");
+            int success;
+            if (getUser.size() >= 0)
+                success = 1;
+            else
+                success = 0;
+
+            if (success) {
+                string json2 = getUser;  ///POSIBILA EROARE
+                if (write(client, json2.c_str(), BUFSIZ) <= 0) {
+                    perror("Server GetUser Could Not Respond To Client!");
+                    close(client);
+                    exit(0);
+                } else {
+                    cout << "UserFriendReq Getted \n";
+                }
                 close(client);
                 exit(0);
             } else {
-                cout << "UserFriendReq Getted \n";
-            }
-            close(client);
-            exit(0);
-        } else {
-              ///POSIBILA EROARE
-            string json2 = "";
-            if (write(client, json2.c_str(), BUFSIZ) <= 0) {
-                perror("Server GetUser Could Not Respond To Client!");
+                ///POSIBILA EROARE
+                string json2 = "";
+                if (write(client, json2.c_str(), BUFSIZ) <= 0) {
+                    perror("Server GetUser Could Not Respond To Client!");
+                    close(client);
+                    exit(0);
+                } else {
+                    cout << "That user Request doesn't Match \n";
+                }
+                //  cout << "Fail To getUser in for user \n";
                 close(client);
                 exit(0);
-            } else {
-                cout << "That user Request doesn't Match \n";
             }
-          //  cout << "Fail To getUser in for user \n";
-            close(client);
-            exit(0);
+            /////
         }
-        /////
     }
 }

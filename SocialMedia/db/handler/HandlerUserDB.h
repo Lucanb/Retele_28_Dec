@@ -147,6 +147,51 @@ struct HandlerUserDB {
         }
     }
 
+
+    vector<string> getUserByUsernameAnother(string username) {
+        sqlite3 *db;
+        sqlite3_stmt *stmt;
+
+        char *err_msg = 0;
+        sqlite3_stmt *res;
+
+        int rc = sqlite3_open("db/mydb.db", &db);
+
+        if (rc != SQLITE_OK) {
+
+            fprintf(stderr, "Cannot open database on get user: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            vector<string> s1;
+            s1.push_back("fail");
+            return s1;
+        }
+
+        string sqlVerif = "SELECT userName FROM Users WHERE userName LIKE" + string("\'") + "%" + username + "%" + string("\'");
+
+        rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
+
+        if (rc != SQLITE_OK) {
+            fprintf(stderr, "Cannot use existance select: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            vector<string> s1;
+            s1.push_back("fail");
+            return s1;
+        } else {
+            vector<string> s;
+            parsing(returningStr, s);
+            if (s.size() == 0) {
+                fprintf(stderr, "Cannot find any user: %s\n", sqlite3_errmsg(db));
+                sqlite3_close(db);
+                vector<string> s1;
+                s1.push_back("fail");
+                return s;
+            } else {
+                cout << "User Names" << '\n';
+                return s;
+                }
+            }
+        }
+
     User getUser(int id) {
 
         sqlite3 *db;
@@ -318,6 +363,48 @@ struct HandlerUserDB {
             }
         }
     }
+
+         int GetUserId(string username)
+         {
+             sqlite3 *db;
+             sqlite3_stmt *stmt;
+
+             char *err_msg = 0;
+             sqlite3_stmt *res;
+
+             int rc = sqlite3_open("db/mydb.db", &db); // aici am schimbat din database.db in mydb.db
+
+             if (rc != SQLITE_OK) {
+
+                 fprintf(stderr, "Cannot open database on get id after username user: %s\n", sqlite3_errmsg(db));
+                 sqlite3_close(db);
+                 return 0;
+             }
+
+             string sqlVerif = "SELECT id FROM Users WHERE userName = " + string("\'") + username + string("\'"); // Da seg fault
+
+             rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
+              if(rc != SQLITE_OK)
+              {
+                  cout<<"sqlVerif doesn't work \n";
+                  return 0;
+              }
+
+             vector<string> s;
+             parsing(returningStr,s);
+
+             if(s.size() == 1)
+             {
+                  return stoi(s[0]);
+             }
+             else
+             {
+                 cout<<"That user name doesn't exists \n";
+                 return 0;
+             }
+         }
+
 };
+
 
 #endif // SOCIALMEDIA_HANDLERUSERDB_H
