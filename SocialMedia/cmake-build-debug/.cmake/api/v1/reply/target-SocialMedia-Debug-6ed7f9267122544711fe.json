@@ -62,7 +62,8 @@
 				22,
 				23,
 				24,
-				25
+				25,
+				26
 			]
 		}
 	],
@@ -108,7 +109,8 @@
 				22,
 				23,
 				24,
-				25
+				25,
+				26
 			]
 		},
 		{
@@ -274,6 +276,12 @@
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
 			"path" : "ServerAddFriendRequest.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "testare.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],
