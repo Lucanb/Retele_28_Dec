@@ -1,0 +1,43 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/SocialMedia.dir/Client.cpp.o"
+  "CMakeFiles/SocialMedia.dir/Client.cpp.o.d"
+  "CMakeFiles/SocialMedia.dir/ServerAddFriendRequest.cpp.o"
+  "CMakeFiles/SocialMedia.dir/ServerAddFriendRequest.cpp.o.d"
+  "CMakeFiles/SocialMedia.dir/ServerCreeateFriendRequest.cpp.o"
+  "CMakeFiles/SocialMedia.dir/ServerCreeateFriendRequest.cpp.o.d"
+  "CMakeFiles/SocialMedia.dir/ServerCreeateNews.cpp.o"
+  "CMakeFiles/SocialMedia.dir/ServerCreeateNews.cpp.o.d"
+  "CMakeFiles/SocialMedia.dir/ServerGetFriendRequests.cpp.o"
+  "CMakeFiles/SocialMedia.dir/ServerGetFriendRequests.cpp.o.d"
+  "CMakeFiles/SocialMedia.dir/ServerGetMessage.cpp.o"
+  "CMakeFiles/SocialMedia.dir/ServerGetMessage.cpp.o.d"
+  "CMakeFiles/SocialMedia.dir/ServerGetUser.cpp.o"
+  "CMakeFiles/SocialMedia.dir/ServerGetUser.cpp.o.d"
+  "CMakeFiles/SocialMedia.dir/ServerLogin.cpp.o"
+  "CMakeFiles/SocialMedia.dir/ServerLogin.cpp.o.d"
+  "CMakeFiles/SocialMedia.dir/ServerNewsGet.cpp.o"
+  "CMakeFiles/SocialMedia.dir/ServerNewsGet.cpp.o.d"
+  "CMakeFiles/SocialMedia.dir/ServerRegister.cpp.o"
+  "CMakeFiles/SocialMedia.dir/ServerRegister.cpp.o.d"
+  "CMakeFiles/SocialMedia.dir/ServerSearchNewsLogged.cpp.o"
+  "CMakeFiles/SocialMedia.dir/ServerSearchNewsLogged.cpp.o.d"
+  "CMakeFiles/SocialMedia.dir/ServerSearchUser.cpp.o"
+  "CMakeFiles/SocialMedia.dir/ServerSearchUser.cpp.o.d"
+  "CMakeFiles/SocialMedia.dir/ServerSendMessage.cpp.o"
+  "CMakeFiles/SocialMedia.dir/ServerSendMessage.cpp.o.d"
+  "CMakeFiles/SocialMedia.dir/db/InitializeDB.cpp.o"
+  "CMakeFiles/SocialMedia.dir/db/InitializeDB.cpp.o.d"
+  "CMakeFiles/SocialMedia.dir/db/testare.cpp.o"
+  "CMakeFiles/SocialMedia.dir/db/testare.cpp.o.d"
+  "CMakeFiles/SocialMedia.dir/main.cpp.o"
+  "CMakeFiles/SocialMedia.dir/main.cpp.o.d"
+  "CMakeFiles/SocialMedia.dir/testare.cpp.o"
+  "CMakeFiles/SocialMedia.dir/testare.cpp.o.d"
+  "SocialMedia"
+  "SocialMedia.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/SocialMedia.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

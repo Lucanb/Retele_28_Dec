@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="SocialMedia"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="SocialMedia">
+				<Option output="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/SocialMedia" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/11"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/11"/>
+					<Add directory="/usr/include/c++/11/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/11/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 SocialMedia"/>
+					<CompileFile command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="SocialMedia/fast">
+				<Option output="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/SocialMedia" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/11"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/11"/>
+					<Add directory="/usr/include/c++/11/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/11/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 SocialMedia/fast"/>
+					<CompileFile command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j8 -f &quot;/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/Client.cpp">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/ServerAddFriendRequest.cpp">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/ServerCreeateFriendRequest.cpp">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/ServerCreeateNews.cpp">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/ServerGetFriendRequests.cpp">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/ServerGetMessage.cpp">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/ServerGetUser.cpp">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/ServerLogin.cpp">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/ServerNewsGet.cpp">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/ServerRegister.cpp">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/ServerSearchNewsLogged.cpp">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/ServerSearchUser.cpp">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/ServerSendMessage.cpp">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/db/InitializeDB.cpp">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/db/handler/GlobalFunction.h">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/db/handler/HandlerFriendDB.h">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/db/handler/HandlerFriendRequest.h">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/db/handler/HandlerMessageDB.h">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/db/handler/HandlerNewsDB.h">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/db/handler/HandlerPasswordsDB.h">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/db/handler/HandlerUserDB.h">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/db/testare.cpp">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/main.cpp">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/models/Chat.h">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/models/Friend.h">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/models/FriendRequest.h">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/models/Message.h">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/models/Passwords.h">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/testare.cpp">
+			<Option target="SocialMedia"/>
+		</Unit>
+		<Unit filename="/home/lolluckestar/Desktop/Retele_28_Dec/SocialMedia/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
