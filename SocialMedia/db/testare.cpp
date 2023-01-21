@@ -58,7 +58,7 @@ int main() {
    //       cout<<userGet.id;
 
 /*
-
+*/
    News news;
    news.type="public";
    news.content="epist";
@@ -73,11 +73,11 @@ int main() {
      //  newss.id=0;
    HandlerNewsDB handler;
 
-   handler.createNews(news);
+  // handler.createNews(news);
    // News getNews=handler.getNews(1,0);
 
-    string getNews ="jel";
-    handler.getNewsByTitle(getNews);
+   // string getNews ="as";
+   // handler.getNewsByTitle(getNews);
 
     //News test = handler.getNews(1,0);
    // cout<<test.title<<'\n';
@@ -85,9 +85,9 @@ int main() {
     //handler.deleteNews(test.id,test.authorId);
    // handler.getNews(1,2);
 
-  // vector<string> v = handler.getNewsByTitle("ura");
-  // for(int i=0;i<v.size();i++)
-   //cout<<v[i];
+   vector<string> v = handler.getNewsByTitle("afd");
+   for(int i=0;i<v.size();i++)
+   cout<<v[i];
 /*
 
   //  Message message;

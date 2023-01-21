@@ -86,8 +86,10 @@ int main() {
             //Testeaza daca vrei.
             HandlerNewsDB handler;
 
-            cout<<newsObj.authorId<<" "<<newsObj.id<<" "<<newsObj.title<<" "<<newsObj.type << " " <<newsObj.content;
+            cout<<newsObj.authorId<<" "<<newsObj.id<<" "<<newsObj.title<<" "<<newsObj.type << " " <<newsObj.content<<'\n';
+
             int succes = handler.createNews(newsObj);
+
             if (write(client, to_string(succes).c_str(), BUFSIZ) <= 0) {
                 perror("Server Create News Could Not Respond To Client!");
                 close(client);

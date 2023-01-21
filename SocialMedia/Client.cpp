@@ -958,6 +958,8 @@ void CreeateNews() {
     news.authorId = loggedInUser.id;
     //cout<< news.authorId<<'\n';
 
+    cout<<news.title<<'\n';
+ cout<<"ajunge";
     string newsJson;
     newsJson = news.toJson();   //Timit la server , identific id ul dupa userName-ul userului actual;
     cout << newsJson;

@@ -203,6 +203,9 @@ struct HandlerNewsDB {
                           string copy = title + "\n" + s[i] + "\n";
                           collect.push_back(copy);
                       }
+
+                      cout<<'\n';
+                      cout<<"News Getted with Succes \n";
                       return collect;
                   }
                   else {

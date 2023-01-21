@@ -41,6 +41,7 @@ struct News {
         bool parsingSuccesful = reader.parse(json, jsonObj);
         if (parsingSuccesful) {
             authorId = jsonObj["authorId"].asInt();
+            title = jsonObj["title"].asString();
             content = jsonObj["content"].asString();
             type = jsonObj["type"].asString();
             id = jsonObj["id"].asInt();
@@ -50,6 +51,7 @@ struct News {
     std::string toJson() {
         Json::Value jsonObj;
         jsonObj["id"] = id;
+        jsonObj["title"] = title;
         jsonObj["authorId"] = authorId;
         jsonObj["content"] = content;
         jsonObj["type"] = type;

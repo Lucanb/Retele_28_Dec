@@ -113,7 +113,7 @@ int main() {
                 } else {
                     cout << "Fail To  respond getUser in for user \n";
                 }
-                cout << "Fail To getUser in for user \n";
+                cout << "Didn't found any user \n";
                 close(client);
                 exit(0);
             }
