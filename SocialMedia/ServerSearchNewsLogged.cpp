@@ -13,6 +13,7 @@
 #include <sys/wait.h>
 #include <jsoncpp/json/json.h>
 #include <unistd.h>
+
 #define PORT_SEARCHNEWSLOGGED 2029
 
 int main() {
@@ -77,20 +78,17 @@ int main() {
                 close(client);
                 continue;
             }
-            string firstpart,myint;
-            int sw =0;
+            string firstpart, myint;
+            int sw = 0;
 
-            for(int i=0;i<strlen(json);i++)
-            {
-                while(json[i]!='\n')
+            for (int i = 0; i < strlen(json); i++) {
+                while (json[i] != '\n')
                     firstpart.push_back(json[i]);
-                if(json[i] == '\n')
-                {
-                    sw=1;
+                if (json[i] == '\n') {
+                    sw = 1;
                     i++;
                 }
-                if(sw == 1)
-                {
+                if (sw == 1) {
                     myint.push_back(json[i]);
                 }
             }
@@ -98,15 +96,15 @@ int main() {
 
             HandlerNewsDB handler;
             ///Acum trbuie in baza de date sa aplicam functia ce ne returneaza dupa userName.
-            v1 = handler.getNewsLoggedByTitle(firstpart,myint); ///Merge!   (vect de content uri)
+            v1 = handler.getNewsLoggedByTitle(firstpart, myint); ///Merge!   (vect de content uri)
             // cout<<"a ajuns";
         }
         ////
-        if(v1[0] != "fail")  ///
+        if (v1[0] != "fail")  ///
         {
             ///Vectorul este oke deci pun in stringul final toate elementele gasite.
             string json2;
-            for(int i=0;i<v1.size();i++)
+            for (int i = 0; i < v1.size(); i++)
                 json2 = json2 + v1[i] + string("\n");
 
             if (write(client, json2.c_str(), BUFSIZ) <= 0) {
@@ -114,14 +112,12 @@ int main() {
                 close(client);
                 exit(0);
             } else {
-                cout<<json2;
+                cout << json2;
                 cout << "News Getted \n";    ///Aici am scris mesajul final;
             }
             close(client);
             exit(0);
-        }
-        else
-        {
+        } else {
             string json2 = "fail";  ///POSIBILA EROARE
             if (write(client, json2.c_str(), BUFSIZ) <= 0) {
                 perror("Server GetUser Could Not Respond To Client!");

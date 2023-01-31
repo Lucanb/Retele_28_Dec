@@ -86,7 +86,8 @@ int main() {
             //Testeaza daca vrei.
             HandlerNewsDB handler;
 
-            cout<<newsObj.authorId<<" "<<newsObj.id<<" "<<newsObj.title<<" "<<newsObj.type << " " <<newsObj.content<<'\n';
+            cout << newsObj.authorId << " " << newsObj.id << " " << newsObj.title << " " << newsObj.type << " "
+                 << newsObj.content << '\n';
 
             int succes = handler.createNews(newsObj);
 
@@ -96,7 +97,7 @@ int main() {
                 exit(0);
             }
             if (succes) {
-                cout<<json<<'\n';
+                cout << json << '\n';
                 cout << "News Successfully Created!";
             } else {
                 cout << "Couldn't Creeate News";

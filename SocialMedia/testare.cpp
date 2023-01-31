@@ -14,6 +14,7 @@
 #include "db/handler/HandlerFriendRequest.h"
 #include "db/handler/HandlerMessageDB.h"
 #include "db/handler/HandlerNewsDB.h"
+
 using namespace std;
 
 int main() {

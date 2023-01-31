@@ -97,9 +97,9 @@ int main() {
 
         if (success) {
             string NewString;
-            for(int k=0;k<s.size();k++)
-              NewString += s[k] + "\n";  ///POSIBILA EROARE
-             if (write(client, NewString.c_str(), BUFSIZ) <= 0) {
+            for (int k = 0; k < s.size(); k++)
+                NewString += s[k] + "\n";  ///POSIBILA EROARE
+            if (write(client, NewString.c_str(), BUFSIZ) <= 0) {
                 perror("Server GetUser Could Not Respond To Client!");
                 close(client);
                 exit(0);
@@ -108,9 +108,7 @@ int main() {
             }
             close(client);
             exit(0);
-        }
-        else
-        {
+        } else {
             string json2 = "fail";  ///POSIBILA EROARE
             if (write(client, json2.c_str(), BUFSIZ) <= 0) {
                 perror("Server GetUser Could Not Respond To Client!");

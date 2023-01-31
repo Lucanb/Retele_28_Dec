@@ -49,119 +49,108 @@ struct HandlerNewsDB {
         }
     }
 
-   vector<string> getNewsLoggedByTitle(string title,string id1)
-   {
-       vector<string> collect;
-       sqlite3 *db;
-       sqlite3_stmt *stmt;
+    vector<string> getNewsLoggedByTitle(string title, string id1) {
+        vector<string> collect;
+        sqlite3 *db;
+        sqlite3_stmt *stmt;
 
-       char *err_msg = 0;
-       sqlite3_stmt *res;
+        char *err_msg = 0;
+        sqlite3_stmt *res;
 
-       int rc = sqlite3_open("db/mydb.db", &db);
+        int rc = sqlite3_open("db/mydb.db", &db);
 
-       if (rc != SQLITE_OK) {
+        if (rc != SQLITE_OK) {
 
-           fprintf(stderr, "Cannot open database on get news: %s\n", sqlite3_errmsg(db));
-           sqlite3_close(db);
-           collect.push_back("fail");
-           return collect;
-       }
+            fprintf(stderr, "Cannot open database on get news: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            collect.push_back("fail");
+            return collect;
+        }
 
-       vector<int> verif;
+        vector<int> verif;
 
-       string sqlVerif1="SELECT authorId from News WHERE title LIKE" + string("\'")+"%"+ title + "%" +string("\'");
-       string sqlAlltypes = "SELECT type from News WHERE title LIKE" + string("\'")+"%"+ title + "%" +string("\'");
-       rc = sqlite3_exec(db, sqlVerif1.c_str(), callback, 0, &err_msg);
-       if(rc != SQLITE_OK)
-       {
-           fprintf(stderr, "Cannot Verify authorID: %s\n", sqlite3_errmsg(db));
-           sqlite3_close(db);
-           collect.push_back("fail");
-           return collect;
-       }
-       int rc2 = sqlite3_exec(db, sqlAlltypes.c_str(), callback2, 0, &err_msg);
-       if(rc2 != SQLITE_OK)
-       {
-           fprintf(stderr, "Cannot Verify author type: %s\n", sqlite3_errmsg(db));
-           sqlite3_close(db);
-           collect.push_back("fail");
-           return collect;
-       }
+        string sqlVerif1 =
+                "SELECT authorId from News WHERE title LIKE" + string("\'") + "%" + title + "%" + string("\'");
+        string sqlAlltypes = "SELECT type from News WHERE title LIKE" + string("\'") + "%" + title + "%" + string("\'");
+        rc = sqlite3_exec(db, sqlVerif1.c_str(), callback, 0, &err_msg);
+        if (rc != SQLITE_OK) {
+            fprintf(stderr, "Cannot Verify authorID: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            collect.push_back("fail");
+            return collect;
+        }
+        int rc2 = sqlite3_exec(db, sqlAlltypes.c_str(), callback2, 0, &err_msg);
+        if (rc2 != SQLITE_OK) {
+            fprintf(stderr, "Cannot Verify author type: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            collect.push_back("fail");
+            return collect;
+        }
 
-       vector<string> allId;
-       parsing(returningStr,allId);
+        vector<string> allId;
+        parsing(returningStr, allId);
 
-       vector<string>allTypes;
-       parsing(returningStr2,allTypes);
+        vector<string> allTypes;
+        parsing(returningStr2, allTypes);
 ///Asta daca e private;
-       for(int i=0;i<allId.size();i++) {
-           string sqlVerif2 = "SELECT type from Friend WHERE id1=" + id1
-                   + " AND" + "id2=" + allId[i] ;
-           rc= sqlite3_exec(db,sqlVerif2.c_str(), callback2,0,&err_msg);
-           if(rc!=SQLITE_OK)
-           {
-               fprintf(stderr, "Error in or finding if those 2 are friends: %s\n", sqlite3_errmsg(db));
-               sqlite3_close(db);
-               collect.push_back("fail");
-               return collect;
-           }
-           else
-           {
-                  vector<string> stype;
-                  parsing(returningStr2,stype);
-                  if(stype.size() == 1) {
-                      if (stype[0] == "private") {
-                          verif.push_back(1);
-                      } else {
-                          verif.push_back(1);
-                      }
-                  }
-                  else
-                  { //daca e publica stirea acum;
-                      if(allTypes[i] == "public")
-                      {
-                          verif.push_back(1);
-                      }
-                      else
-                      {
-                          verif.push_back(0);
-                      }
-                  }
-           }
-       }
+        for (int i = 0; i < allId.size(); i++) {
+            string sqlVerif2 = "SELECT type from Friend WHERE id1=" + id1
+                               + " AND" + "id2=" + allId[i];
+            rc = sqlite3_exec(db, sqlVerif2.c_str(), callback2, 0, &err_msg);
+            if (rc != SQLITE_OK) {
+                fprintf(stderr, "Error in or finding if those 2 are friends: %s\n", sqlite3_errmsg(db));
+                sqlite3_close(db);
+                collect.push_back("fail");
+                return collect;
+            } else {
+                vector<string> stype;
+                parsing(returningStr2, stype);
+                if (stype.size() == 1) {
+                    if (stype[0] == "private") {
+                        verif.push_back(1);
+                    } else {
+                        verif.push_back(1);
+                    }
+                } else { //daca e publica stirea acum;
+                    if (allTypes[i] == "public") {
+                        verif.push_back(1);
+                    } else {
+                        verif.push_back(0);
+                    }
+                }
+            }
+        }
 
         ///Verificarea daca s prieteni ; daca nu s; nu avem acces;
 
-               string sqlQuery =
-               "SELECT content FROM News WHERE title LIKE" +string("\'")+"%"+ title + "%" +string("\'");  //
+        string sqlQuery =
+                "SELECT content FROM News WHERE title LIKE" + string("\'") + "%" + title + "%" + string("\'");  //
 
-       rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
+        rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
 
-       if (rc != SQLITE_OK) {
-           fprintf(stderr, "Cannot use existance of title: %s\n", sqlite3_errmsg(db));
-           sqlite3_close(db);
-           collect.push_back("fail");
-           return collect;
-       } else {
-           vector<string> s;
-           cout<<returningStr;
-           parsing(returningStr, s);
-           if(s.size() != 0) {
-               for (int i = 0; i < s.size(); i++) {
-                   if(verif[i] == 1) {
-                       string copy = title + "\n" + s[i] + "\n";
-                       collect.push_back(copy);
-                   }
-               }
-               return collect;
-           }
-           else {
-               cout << "Doesn t exist a refference \n";
-               collect.push_back("fail");
-           }
-       }
-   }
+        if (rc != SQLITE_OK) {
+            fprintf(stderr, "Cannot use existance of title: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            collect.push_back("fail");
+            return collect;
+        } else {
+            vector<string> s;
+            cout << returningStr;
+            parsing(returningStr, s);
+            if (s.size() != 0) {
+                for (int i = 0; i < s.size(); i++) {
+                    if (verif[i] == 1) {
+                        string copy = title + "\n" + s[i] + "\n";
+                        collect.push_back(copy);
+                    }
+                }
+                return collect;
+            } else {
+                cout << "Doesn t exist a refference \n";
+                collect.push_back("fail");
+            }
+        }
+    }
 
     vector<string>
     getNewsByTitle(string title) //In asta pun la inceput de text Numele autorului din Users si dupa descriere + data
@@ -184,7 +173,8 @@ struct HandlerNewsDB {
         }
 
         string sqlQuery =
-                "SELECT content FROM News WHERE title LIKE" +string("\'")+"%"+ title + "%" +string("\'") + " AND " +
+                "SELECT content FROM News WHERE title LIKE" + string("\'") + "%" + title + "%" + string("\'") +
+                " AND " +
                 "type =" + string("\'") + "public" + string("\'");  //
 
         rc = sqlite3_exec(db, sqlQuery.c_str(), callback, 0, &err_msg);
@@ -195,24 +185,23 @@ struct HandlerNewsDB {
             collect.push_back("fail");
             return collect;
         } else {
-                  vector<string> s;
-                  cout<<returningStr;
-                  parsing(returningStr, s);
-                  if(s.size() != 0) {
-                      for (int i = 0; i < s.size(); i++) {
-                          string copy = title + "\n" + s[i] + "\n";
-                          collect.push_back(copy);
-                      }
-
-                      cout<<'\n';
-                      cout<<"News Getted with Succes \n";
-                      return collect;
-                  }
-                  else {
-                      cout << "Doesn t exist a refference \n";
-                      collect.push_back("fail");
-                  }
+            vector<string> s;
+            cout << returningStr;
+            parsing(returningStr, s);
+            if (s.size() != 0) {
+                for (int i = 0; i < s.size(); i++) {
+                    string copy = title + "\n" + s[i] + "\n";
+                    collect.push_back(copy);
                 }
+
+                cout << '\n';
+                cout << "News Getted with Succes \n";
+                return collect;
+            } else {
+                cout << "Doesn t exist a refference \n";
+                collect.push_back("fail");
+            }
+        }
     }
 
     News getNews(int id, int authorId) {

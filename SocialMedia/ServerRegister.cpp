@@ -83,13 +83,13 @@ int main() {
             // std::cout << json;
 
             User user = User(json);;
-        //    std::cout << user.userName << '\n';
-        //    std::cout << user.lastname << '\n';
-        //    std::cout << user.firstname << '\n';
-         //   std::cout << user.isAdmin << '\n';
-        //    std::cout << user.accountCreationDate << '\n';
-        //    std::cout << user.birthday << '\n';
-        //    std::cout << user.profileDescription << '\n';
+            //    std::cout << user.userName << '\n';
+            //    std::cout << user.lastname << '\n';
+            //    std::cout << user.firstname << '\n';
+            //   std::cout << user.isAdmin << '\n';
+            //    std::cout << user.accountCreationDate << '\n';
+            //    std::cout << user.birthday << '\n';
+            //    std::cout << user.profileDescription << '\n';
             HandlerUserDB handlerUser;
 
             int succes = handlerUser.createUser(user);

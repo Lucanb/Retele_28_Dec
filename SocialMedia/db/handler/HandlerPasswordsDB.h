@@ -80,7 +80,7 @@ struct HandlerPasswordsDB {
     }
 
 
-    Passwords getPasswordId(int  id) {
+    Passwords getPasswordId(int id) {
 
         sqlite3 *db;
         sqlite3_stmt *stmt;
@@ -98,7 +98,7 @@ struct HandlerPasswordsDB {
         }
 
         string sqlVerif =
-                "SELECT id FROM Passwords WHERE id=" + to_string(id) ; ///Careful
+                "SELECT id FROM Passwords WHERE id=" + to_string(id); ///Careful
 
         rc = sqlite3_exec(db, sqlVerif.c_str(), callback, 0, &err_msg);
 

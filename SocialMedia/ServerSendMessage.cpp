@@ -25,7 +25,6 @@
 #define PORT_SERVERSENDMESSAGE 2030
 
 
-
 int main() {
     struct sockaddr_in server;
     struct sockaddr_in form;
@@ -177,16 +176,14 @@ int main() {
                 close(client);
                 exit(0);
             }
-        }
-        else
-        {
-            cout<<"Can't find the read json \n";
+        } else {
+            cout << "Can't find the read json \n";
             close(client);
             exit(0);
         }
     }
 
-   // std::cout << "qbc";
+    // std::cout << "qbc";
     //return 0;
 }
 

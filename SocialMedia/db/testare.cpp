@@ -14,6 +14,7 @@
 #include "handler/HandlerFriendRequest.h"
 #include "handler/HandlerMessageDB.h"
 #include "handler/HandlerNewsDB.h"
+
 using namespace std;
 
 int main() {
@@ -59,35 +60,35 @@ int main() {
 
 /*
 */
-   News news;
-   news.type="public";
-   news.content="epist";
-   news.title="moaretas";
-   news.authorId=2;
+    News news;
+    news.type = "public";
+    news.content = "epist";
+    news.title = "moaretas";
+    news.authorId = 2;
 
 
- //  string s = news.toJson();
-  //    cout<<s;
-   //   News newss;
+    //  string s = news.toJson();
+    //    cout<<s;
+    //   News newss;
     //   newss =News(s);
-     //  newss.id=0;
-   HandlerNewsDB handler;
+    //  newss.id=0;
+    HandlerNewsDB handler;
 
-  // handler.createNews(news);
-   // News getNews=handler.getNews(1,0);
+    // handler.createNews(news);
+    // News getNews=handler.getNews(1,0);
 
-   // string getNews ="as";
-   // handler.getNewsByTitle(getNews);
+    // string getNews ="as";
+    // handler.getNewsByTitle(getNews);
 
     //News test = handler.getNews(1,0);
-   // cout<<test.title<<'\n';
+    // cout<<test.title<<'\n';
 
     //handler.deleteNews(test.id,test.authorId);
-   // handler.getNews(1,2);
+    // handler.getNews(1,2);
 
-   vector<string> v = handler.getNewsByTitle("afd");
-   for(int i=0;i<v.size();i++)
-   cout<<v[i];
+    vector<string> v = handler.getNewsByTitle("afd");
+    for (int i = 0; i < v.size(); i++)
+        cout << v[i];
 /*
 
   //  Message message;

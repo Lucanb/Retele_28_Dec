@@ -129,10 +129,8 @@ int main() {
                 } else {
                     succes = "0";
                 }
-            }
-            else
-            {
-                cout<<"You don t have any Request";
+            } else {
+                cout << "You don t have any Request";
                 succes = "0"; // ca nu am cerere de prietenie.
             }
 

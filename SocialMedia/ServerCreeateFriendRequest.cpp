@@ -110,23 +110,18 @@ int main() {
 
             int ids1 = handlerUser.GetUserId(userActual);
             int ids2 = handlerUser.GetUserId(userDetails);
-            if(ids1 != 0 && ids2 !=0) {
-                FriendRequest friendRequestObj = FriendRequest(0,ids1,ids2,type,accepted);
+            if (ids1 != 0 && ids2 != 0) {
+                FriendRequest friendRequestObj = FriendRequest(0, ids1, ids2, type, accepted);
                 HandlerFriendRequestDB handlerAdd;
-                 Vf = handlerAdd.createFriendRequest(friendRequestObj);
-                 if(Vf != 0)
-                 {
-                     succes = "1";
-                 }
-                 else
-                 {
-                     succes = "0";
-                 }
-            }
-            else
-            {
-                cout<< "A user doesn't exist \n";
-                succes ="0";
+                Vf = handlerAdd.createFriendRequest(friendRequestObj);
+                if (Vf != 0) {
+                    succes = "1";
+                } else {
+                    succes = "0";
+                }
+            } else {
+                cout << "A user doesn't exist \n";
+                succes = "0";
             }
 
             if (write(client, succes.c_str(), BUFSIZ) <= 0) {

@@ -91,12 +91,11 @@ int main() {
             vector<string> vec = handlerMess.getMessageAfterName(title);
 
 
-
-                    string succes;
+            string succes;
             if (vec.size() != 0) {
                 if (vec[0] != "fail") {
                     succes = "1";
-                    for(int i= 0 ;i<vec.size();i++)
+                    for (int i = 0; i < vec.size(); i++)
                         response += vec[i] + "\n";
                 } else {
                     succes = "0";
